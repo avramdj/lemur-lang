@@ -56,6 +56,15 @@ public:
   virtual void enterExpr(AvrlangParser::ExprContext *ctx) = 0;
   virtual void exitExpr(AvrlangParser::ExprContext *ctx) = 0;
 
+  virtual void enterNumber(AvrlangParser::NumberContext *ctx) = 0;
+  virtual void exitNumber(AvrlangParser::NumberContext *ctx) = 0;
+
+  virtual void enterVar(AvrlangParser::VarContext *ctx) = 0;
+  virtual void exitVar(AvrlangParser::VarContext *ctx) = 0;
+
+  virtual void enterCallexpr(AvrlangParser::CallexprContext *ctx) = 0;
+  virtual void exitCallexpr(AvrlangParser::CallexprContext *ctx) = 0;
+
   virtual void enterArglist(AvrlangParser::ArglistContext *ctx) = 0;
   virtual void exitArglist(AvrlangParser::ArglistContext *ctx) = 0;
 
@@ -64,6 +73,9 @@ public:
 
   virtual void enterBinoperator(AvrlangParser::BinoperatorContext *ctx) = 0;
   virtual void exitBinoperator(AvrlangParser::BinoperatorContext *ctx) = 0;
+
+  virtual void enterBracedexpr(AvrlangParser::BracedexprContext *ctx) = 0;
+  virtual void exitBracedexpr(AvrlangParser::BracedexprContext *ctx) = 0;
 
 
 };

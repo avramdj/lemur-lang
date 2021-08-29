@@ -58,6 +58,15 @@ public:
   virtual void enterExpr(AvrlangParser::ExprContext * /*ctx*/) override { }
   virtual void exitExpr(AvrlangParser::ExprContext * /*ctx*/) override { }
 
+  virtual void enterNumber(AvrlangParser::NumberContext * /*ctx*/) override { }
+  virtual void exitNumber(AvrlangParser::NumberContext * /*ctx*/) override { }
+
+  virtual void enterVar(AvrlangParser::VarContext * /*ctx*/) override { }
+  virtual void exitVar(AvrlangParser::VarContext * /*ctx*/) override { }
+
+  virtual void enterCallexpr(AvrlangParser::CallexprContext * /*ctx*/) override { }
+  virtual void exitCallexpr(AvrlangParser::CallexprContext * /*ctx*/) override { }
+
   virtual void enterArglist(AvrlangParser::ArglistContext * /*ctx*/) override { }
   virtual void exitArglist(AvrlangParser::ArglistContext * /*ctx*/) override { }
 
@@ -66,6 +75,9 @@ public:
 
   virtual void enterBinoperator(AvrlangParser::BinoperatorContext * /*ctx*/) override { }
   virtual void exitBinoperator(AvrlangParser::BinoperatorContext * /*ctx*/) override { }
+
+  virtual void enterBracedexpr(AvrlangParser::BracedexprContext * /*ctx*/) override { }
+  virtual void exitBracedexpr(AvrlangParser::BracedexprContext * /*ctx*/) override { }
 
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

@@ -14,7 +14,7 @@ file : (globalstmt | NEWLINE)* EOF;
 
 globalstmt : functiondef;
 
-functiondef : DEF NAME OPEN paramlist CLOSED block;
+functiondef : DEF fName=NAME OPEN params=paramlist CLOSED body=block;
 
 paramlist : (NAME(',' NAME)*)?;
 
@@ -26,19 +26,27 @@ assign : NAME '=' expr;
 
 ret : RET expr;
 
-whileloop : WHILE OPEN expr CLOSED block;
+whileloop : WHILE bracedexpr block;
 
-if_expr : IF OPEN expr CLOSED block;
+if_expr : IF bracedexpr block;
 
-ifelse_expr : IF OPEN expr CLOSED block ELSE block;
+ifelse_expr : IF bracedexpr block ELSE block;
 
-expr : NUM | NAME | NAME OPEN arglist CLOSED | expr binoperator expr | neg | OPEN expr CLOSED;
+expr : number | var | callexpr | leftOp=expr binoperator rightOp=expr | neg | bracedexpr;
+
+number : NUM;
+
+var : NAME;
+
+callexpr : fName=NAME OPEN args=arglist CLOSED;
 
 arglist : (expr (',' expr)*)?;
 
 neg : NEG expr;
 
 binoperator : '+' | '-' | '*' | '/' | AND | OR  | XOR | '>' | '<' | '>=' | '<=' | '==' | '!=';
+
+bracedexpr : OPEN expr CLOSED;
 
 OPEN : '(';
 CLOSED : ')';

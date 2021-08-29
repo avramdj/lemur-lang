@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 set(CMAKE_CXX_STANDARD 14)
 set(PROJECT_NAME avrlang)
-
 project(${PROJECT_NAME})
 
 #execute_process(
