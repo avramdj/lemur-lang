@@ -1,4 +1,10 @@
 
+    #include <iostream>
+    #include <ast.hpp>
+    using namespace std;
+    using namespace llvm;
+
+
 // Generated from Avrlang.g4 by ANTLR 4.7.2
 
 #pragma once
@@ -12,11 +18,11 @@
 class  AvrlangParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2
+    T__0 = 1, NAME = 2, WHITESPACE = 3, NEWLINE = 4
   };
 
   enum {
-    RuleFile = 0, RuleGlobalcmd = 1
+    RuleFile = 0, RuleGlobalstmt = 1, RuleFunctiondef = 2
   };
 
   AvrlangParser(antlr4::TokenStream *input);
@@ -30,14 +36,18 @@ public:
 
 
   class FileContext;
-  class GlobalcmdContext; 
+  class GlobalstmtContext;
+  class FunctiondefContext; 
 
   class  FileContext : public antlr4::ParserRuleContext {
   public:
     FileContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<GlobalcmdContext *> globalcmd();
-    GlobalcmdContext* globalcmd(size_t i);
+    antlr4::tree::TerminalNode *EOF();
+    std::vector<GlobalstmtContext *> globalstmt();
+    GlobalstmtContext* globalstmt(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> NEWLINE();
+    antlr4::tree::TerminalNode* NEWLINE(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -46,17 +56,31 @@ public:
 
   FileContext* file();
 
-  class  GlobalcmdContext : public antlr4::ParserRuleContext {
+  class  GlobalstmtContext : public antlr4::ParserRuleContext {
   public:
-    GlobalcmdContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    GlobalstmtContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    FunctiondefContext *functiondef();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
    
   };
 
-  GlobalcmdContext* globalcmd();
+  GlobalstmtContext* globalstmt();
+
+  class  FunctiondefContext : public antlr4::ParserRuleContext {
+  public:
+    FunctiondefContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *NAME();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  FunctiondefContext* functiondef();
 
 
 private:

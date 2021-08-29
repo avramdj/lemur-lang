@@ -2,8 +2,9 @@
 #include <strstream>
 #include <string>
 #include <antlr4-runtime.h>
-#include "AvrlangLexer.h"
-#include "AvrlangParser.h"
+#include <AvrlangLexer.h>
+#include <AvrlangParser.h>
+#include <ast.hpp>
 
 class MyParserErrorListener: public antlr4::BaseErrorListener {
     virtual void syntaxError(
@@ -20,7 +21,13 @@ class MyParserErrorListener: public antlr4::BaseErrorListener {
 };
 
 int main(int argc, char *argv[]) {
-    antlr4::ANTLRInputStream input(argv[1]);
+    InitializeModuleAndPassManager();
+
+    std::ifstream infile(argv[1]);
+    std::string str((std::istreambuf_iterator<char>(infile)),
+                    std::istreambuf_iterator<char>());
+
+    antlr4::ANTLRInputStream input(str);
     AvrlangLexer lexer(&input);
     antlr4::CommonTokenStream tokens(&lexer);
 
@@ -37,7 +44,6 @@ int main(int argc, char *argv[]) {
     parser.addErrorListener(&errorListner);
     try {
         antlr4::tree::ParseTree* tree = parser.file();
-        std::cout << tree->toStringTree() << std::endl;
         return 0;
     } catch (std::invalid_argument &e) {
         std::cout << e.what() << std::endl;

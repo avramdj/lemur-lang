@@ -1,5 +1,24 @@
 grammar Avrlang;
 
-file : globalcmd+;
+@header {
+    #include <iostream>
+    #include <ast.hpp>
+    using namespace std;
+    using namespace llvm;
+}
+@after {
 
-globalcmd : 'hello' | 'world';
+}
+
+file : (globalstmt | NEWLINE)* EOF;
+
+globalstmt : functiondef;
+
+functiondef : 'def' NAME;
+
+NAME : [a-zA-Z_][a-zA-Z_0-9]* {
+
+};
+
+WHITESPACE : ' ' -> skip;
+NEWLINE : '\n';

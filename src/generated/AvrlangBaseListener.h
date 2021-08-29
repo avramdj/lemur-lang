@@ -1,4 +1,10 @@
 
+    #include <iostream>
+    #include <ast.hpp>
+    using namespace std;
+    using namespace llvm;
+
+
 // Generated from Avrlang.g4 by ANTLR 4.7.2
 
 #pragma once
@@ -19,8 +25,11 @@ public:
   virtual void enterFile(AvrlangParser::FileContext * /*ctx*/) override { }
   virtual void exitFile(AvrlangParser::FileContext * /*ctx*/) override { }
 
-  virtual void enterGlobalcmd(AvrlangParser::GlobalcmdContext * /*ctx*/) override { }
-  virtual void exitGlobalcmd(AvrlangParser::GlobalcmdContext * /*ctx*/) override { }
+  virtual void enterGlobalstmt(AvrlangParser::GlobalstmtContext * /*ctx*/) override { }
+  virtual void exitGlobalstmt(AvrlangParser::GlobalstmtContext * /*ctx*/) override { }
+
+  virtual void enterFunctiondef(AvrlangParser::FunctiondefContext * /*ctx*/) override { }
+  virtual void exitFunctiondef(AvrlangParser::FunctiondefContext * /*ctx*/) override { }
 
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }
