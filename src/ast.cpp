@@ -226,7 +226,7 @@ namespace backend {
 
         Value *Body = body.get()->codegen();
         if (Body != nullptr) {
-            // Builder.CreateRet(ret);
+             Builder.CreateRet(ConstantInt::get(TheContext, APInt(32, 0)));
 
             verifyFunction(*f);
 

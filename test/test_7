@@ -4,5 +4,4 @@ def f(x){
 
 def main(){
 	print(f(5))
-	return 0
 }
