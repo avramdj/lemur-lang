@@ -22,7 +22,10 @@ def fib(x) {
 }
 
 def main() {
-  print(fib(42))
+  i = 0
+  while(i < 10) {
+    print(fib(i))  
+  }
 }
 ```
 
