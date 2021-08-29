@@ -22,9 +22,15 @@ class MyParserErrorListener: public antlr4::BaseErrorListener {
 
 int main(int argc, char *argv[]) {
     InitializeModuleAndPassManager();
-
-    std::ifstream infile(argv[1]);
-    std::string str((std::istreambuf_iterator<char>(infile)),
+    std::basic_istream<char>* source;
+    std::ifstream infile;
+    if(argc > 1) {
+        infile.open(argv[1]);
+        source = &infile;
+    } else {
+        source = &cin;
+    }
+    std::string str((std::istreambuf_iterator<char>(*source)),
                     std::istreambuf_iterator<char>());
 
     antlr4::ANTLRInputStream input(str);

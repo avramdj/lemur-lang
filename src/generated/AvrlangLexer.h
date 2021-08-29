@@ -18,7 +18,11 @@
 class  AvrlangLexer : public antlr4::Lexer {
 public:
   enum {
-    T__0 = 1, NAME = 2, WHITESPACE = 3, NEWLINE = 4
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, OPEN = 13, CLOSED = 14, 
+    LEFTBRACE = 15, RIGHTBRACE = 16, RET = 17, WHILE = 18, IF = 19, ELSE = 20, 
+    AND = 21, OR = 22, XOR = 23, NEG = 24, DEF = 25, WHITESPACE = 26, NEWLINE = 27, 
+    NAME = 28, NUM = 29
   };
 
   AvrlangLexer(antlr4::CharStream *input);
@@ -35,7 +39,6 @@ public:
   virtual const std::vector<uint16_t> getSerializedATN() const override;
   virtual const antlr4::atn::ATN& getATN() const override;
 
-  virtual void action(antlr4::RuleContext *context, size_t ruleIndex, size_t actionIndex) override;
 private:
   static std::vector<antlr4::dfa::DFA> _decisionToDFA;
   static antlr4::atn::PredictionContextCache _sharedContextCache;
@@ -52,7 +55,6 @@ private:
 
 
   // Individual action functions triggered by action() above.
-  void NAMEAction(antlr4::RuleContext *context, size_t actionIndex);
 
   // Individual semantic predicate functions triggered by sempred() above.
 

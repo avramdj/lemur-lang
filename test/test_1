@@ -1,1 +1,15 @@
+def f(x) {
+	return 1
+}
 
+def main(){
+	while(x) {
+		return x
+	}
+	if(123){
+		return 3
+	} else {
+		return 2
+	}
+	return 0
+}
