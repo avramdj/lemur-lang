@@ -20,7 +20,9 @@ paramlist : (NAME(',' NAME)*)?;
 
 block : LEFTBRACE ((stmt NEWLINE) | NEWLINE)+ RIGHTBRACE;
 
-stmt : assign | ret | whileloop | if_expr | ifelse_expr | expr;
+stmt : assign | ret | whileloop | if_expr | ifelse_expr | expr | printstmt;
+
+printstmt : PRINT '(' expr ')';
 
 assign : NAME '=' expr;
 
@@ -28,11 +30,16 @@ ret : RET expr;
 
 whileloop : WHILE bracedexpr block;
 
-if_expr : IF bracedexpr block;
+if_expr : IF cond=bracedexpr then=block;
 
-ifelse_expr : IF bracedexpr block ELSE block;
+ifelse_expr : IF cond=bracedexpr block ELSE block;
 
-expr : number | var | callexpr | leftOp=expr binoperator rightOp=expr | neg | bracedexpr;
+expr : number #NumberRule |
+    var #VarRule |
+    callexpr #CallExprRule|
+    leftOp=expr binoperator rightOp=expr #OpExprRule |
+    neg #NegRule |
+    bracedexpr #BraceExprRule;
 
 number : NUM;
 
@@ -44,10 +51,11 @@ arglist : (expr (',' expr)*)?;
 
 neg : NEG expr;
 
-binoperator : '+' | '-' | '*' | '/' | AND | OR  | XOR | '>' | '<' | '>=' | '<=' | '==' | '!=';
+binoperator : '+' | '-' | '*' | '/' | SHL | SHR | AND | OR  | XOR | GT | LT | GE | LE | EQ | NE;
 
 bracedexpr : OPEN expr CLOSED;
 
+PRINT : 'print';
 OPEN : '(';
 CLOSED : ')';
 LEFTBRACE : '{';
@@ -59,9 +67,18 @@ ELSE : 'else';
 AND : 'and';
 OR : 'or';
 XOR : '^';
+SHL : '<<';
+SHR : '>>';
 NEG : 'not';
 DEF : 'def';
-WHITESPACE : (' ' | '\t') -> skip;
+GT : '>';
+GE : '>=';
+LT : '<';
+LE : '<=';
+EQ : '==';
+NE : '!=';
 NEWLINE : '\n';
 NAME : [a-zA-Z_][a-zA-Z_0-9]*;
 NUM : [1-9][0-9]* | [0];
+WHITESPACE : (' ' | '\t') -> skip;
+COMMENT : '#' ~[\r\n\f]* -> skip;

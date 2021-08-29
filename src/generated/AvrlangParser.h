@@ -18,19 +18,19 @@
 class  AvrlangParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, OPEN = 13, CLOSED = 14, 
-    LEFTBRACE = 15, RIGHTBRACE = 16, RET = 17, WHILE = 18, IF = 19, ELSE = 20, 
-    AND = 21, OR = 22, XOR = 23, NEG = 24, DEF = 25, WHITESPACE = 26, NEWLINE = 27, 
-    NAME = 28, NUM = 29
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, PRINT = 7, 
+    OPEN = 8, CLOSED = 9, LEFTBRACE = 10, RIGHTBRACE = 11, RET = 12, WHILE = 13, 
+    IF = 14, ELSE = 15, AND = 16, OR = 17, XOR = 18, SHL = 19, SHR = 20, 
+    NEG = 21, DEF = 22, GT = 23, GE = 24, LT = 25, LE = 26, EQ = 27, NE = 28, 
+    NEWLINE = 29, NAME = 30, NUM = 31, WHITESPACE = 32, COMMENT = 33
   };
 
   enum {
     RuleFile = 0, RuleGlobalstmt = 1, RuleFunctiondef = 2, RuleParamlist = 3, 
-    RuleBlock = 4, RuleStmt = 5, RuleAssign = 6, RuleRet = 7, RuleWhileloop = 8, 
-    RuleIf_expr = 9, RuleIfelse_expr = 10, RuleExpr = 11, RuleNumber = 12, 
-    RuleVar = 13, RuleCallexpr = 14, RuleArglist = 15, RuleNeg = 16, RuleBinoperator = 17, 
-    RuleBracedexpr = 18
+    RuleBlock = 4, RuleStmt = 5, RulePrintstmt = 6, RuleAssign = 7, RuleRet = 8, 
+    RuleWhileloop = 9, RuleIf_expr = 10, RuleIfelse_expr = 11, RuleExpr = 12, 
+    RuleNumber = 13, RuleVar = 14, RuleCallexpr = 15, RuleArglist = 16, 
+    RuleNeg = 17, RuleBinoperator = 18, RuleBracedexpr = 19
   };
 
   AvrlangParser(antlr4::TokenStream *input);
@@ -49,6 +49,7 @@ public:
   class ParamlistContext;
   class BlockContext;
   class StmtContext;
+  class PrintstmtContext;
   class AssignContext;
   class RetContext;
   class WhileloopContext;
@@ -166,6 +167,7 @@ public:
     If_exprContext *if_expr();
     Ifelse_exprContext *ifelse_expr();
     ExprContext *expr();
+    PrintstmtContext *printstmt();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -175,6 +177,24 @@ public:
   };
 
   StmtContext* stmt();
+
+  class  PrintstmtContext : public antlr4::ParserRuleContext {
+  public:
+    PrintstmtContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PRINT();
+    antlr4::tree::TerminalNode *OPEN();
+    ExprContext *expr();
+    antlr4::tree::TerminalNode *CLOSED();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  PrintstmtContext* printstmt();
 
   class  AssignContext : public antlr4::ParserRuleContext {
   public:
@@ -227,6 +247,8 @@ public:
 
   class  If_exprContext : public antlr4::ParserRuleContext {
   public:
+    AvrlangParser::BracedexprContext *cond = nullptr;;
+    AvrlangParser::BlockContext *then = nullptr;;
     If_exprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *IF();
@@ -244,13 +266,14 @@ public:
 
   class  Ifelse_exprContext : public antlr4::ParserRuleContext {
   public:
+    AvrlangParser::BracedexprContext *cond = nullptr;;
     Ifelse_exprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *IF();
-    BracedexprContext *bracedexpr();
     std::vector<BlockContext *> block();
     BlockContext* block(size_t i);
     antlr4::tree::TerminalNode *ELSE();
+    BracedexprContext *bracedexpr();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -263,24 +286,85 @@ public:
 
   class  ExprContext : public antlr4::ParserRuleContext {
   public:
-    AvrlangParser::ExprContext *leftOp = nullptr;;
-    AvrlangParser::ExprContext *rightOp = nullptr;;
     ExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+   
+    ExprContext() = default;
+    void copyFrom(ExprContext *context);
+    using antlr4::ParserRuleContext::copyFrom;
+
     virtual size_t getRuleIndex() const override;
-    NumberContext *number();
-    VarContext *var();
-    CallexprContext *callexpr();
-    NegContext *neg();
-    BracedexprContext *bracedexpr();
+
+   
+  };
+
+  class  OpExprRuleContext : public ExprContext {
+  public:
+    OpExprRuleContext(ExprContext *ctx);
+
+    AvrlangParser::ExprContext *leftOp = nullptr;
+    AvrlangParser::ExprContext *rightOp = nullptr;
     BinoperatorContext *binoperator();
     std::vector<ExprContext *> expr();
     ExprContext* expr(size_t i);
-
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
+  };
+
+  class  NumberRuleContext : public ExprContext {
+  public:
+    NumberRuleContext(ExprContext *ctx);
+
+    NumberContext *number();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  CallExprRuleContext : public ExprContext {
+  public:
+    CallExprRuleContext(ExprContext *ctx);
+
+    CallexprContext *callexpr();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  VarRuleContext : public ExprContext {
+  public:
+    VarRuleContext(ExprContext *ctx);
+
+    VarContext *var();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  NegRuleContext : public ExprContext {
+  public:
+    NegRuleContext(ExprContext *ctx);
+
+    NegContext *neg();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  BraceExprRuleContext : public ExprContext {
+  public:
+    BraceExprRuleContext(ExprContext *ctx);
+
+    BracedexprContext *bracedexpr();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
   ExprContext* expr();
@@ -371,9 +455,17 @@ public:
   public:
     BinoperatorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *SHL();
+    antlr4::tree::TerminalNode *SHR();
     antlr4::tree::TerminalNode *AND();
     antlr4::tree::TerminalNode *OR();
     antlr4::tree::TerminalNode *XOR();
+    antlr4::tree::TerminalNode *GT();
+    antlr4::tree::TerminalNode *LT();
+    antlr4::tree::TerminalNode *GE();
+    antlr4::tree::TerminalNode *LE();
+    antlr4::tree::TerminalNode *EQ();
+    antlr4::tree::TerminalNode *NE();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;

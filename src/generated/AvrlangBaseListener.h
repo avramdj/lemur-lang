@@ -40,6 +40,9 @@ public:
   virtual void enterStmt(AvrlangParser::StmtContext * /*ctx*/) override { }
   virtual void exitStmt(AvrlangParser::StmtContext * /*ctx*/) override { }
 
+  virtual void enterPrintstmt(AvrlangParser::PrintstmtContext * /*ctx*/) override { }
+  virtual void exitPrintstmt(AvrlangParser::PrintstmtContext * /*ctx*/) override { }
+
   virtual void enterAssign(AvrlangParser::AssignContext * /*ctx*/) override { }
   virtual void exitAssign(AvrlangParser::AssignContext * /*ctx*/) override { }
 
@@ -55,8 +58,23 @@ public:
   virtual void enterIfelse_expr(AvrlangParser::Ifelse_exprContext * /*ctx*/) override { }
   virtual void exitIfelse_expr(AvrlangParser::Ifelse_exprContext * /*ctx*/) override { }
 
-  virtual void enterExpr(AvrlangParser::ExprContext * /*ctx*/) override { }
-  virtual void exitExpr(AvrlangParser::ExprContext * /*ctx*/) override { }
+  virtual void enterOpExprRule(AvrlangParser::OpExprRuleContext * /*ctx*/) override { }
+  virtual void exitOpExprRule(AvrlangParser::OpExprRuleContext * /*ctx*/) override { }
+
+  virtual void enterNumberRule(AvrlangParser::NumberRuleContext * /*ctx*/) override { }
+  virtual void exitNumberRule(AvrlangParser::NumberRuleContext * /*ctx*/) override { }
+
+  virtual void enterCallExprRule(AvrlangParser::CallExprRuleContext * /*ctx*/) override { }
+  virtual void exitCallExprRule(AvrlangParser::CallExprRuleContext * /*ctx*/) override { }
+
+  virtual void enterVarRule(AvrlangParser::VarRuleContext * /*ctx*/) override { }
+  virtual void exitVarRule(AvrlangParser::VarRuleContext * /*ctx*/) override { }
+
+  virtual void enterNegRule(AvrlangParser::NegRuleContext * /*ctx*/) override { }
+  virtual void exitNegRule(AvrlangParser::NegRuleContext * /*ctx*/) override { }
+
+  virtual void enterBraceExprRule(AvrlangParser::BraceExprRuleContext * /*ctx*/) override { }
+  virtual void exitBraceExprRule(AvrlangParser::BraceExprRuleContext * /*ctx*/) override { }
 
   virtual void enterNumber(AvrlangParser::NumberContext * /*ctx*/) override { }
   virtual void exitNumber(AvrlangParser::NumberContext * /*ctx*/) override { }

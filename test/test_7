@@ -1,0 +1,8 @@
+def f(x){
+	return x+3
+}
+
+def main(){
+	print(f(5))
+	return 0
+}

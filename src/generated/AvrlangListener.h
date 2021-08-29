@@ -38,6 +38,9 @@ public:
   virtual void enterStmt(AvrlangParser::StmtContext *ctx) = 0;
   virtual void exitStmt(AvrlangParser::StmtContext *ctx) = 0;
 
+  virtual void enterPrintstmt(AvrlangParser::PrintstmtContext *ctx) = 0;
+  virtual void exitPrintstmt(AvrlangParser::PrintstmtContext *ctx) = 0;
+
   virtual void enterAssign(AvrlangParser::AssignContext *ctx) = 0;
   virtual void exitAssign(AvrlangParser::AssignContext *ctx) = 0;
 
@@ -53,8 +56,23 @@ public:
   virtual void enterIfelse_expr(AvrlangParser::Ifelse_exprContext *ctx) = 0;
   virtual void exitIfelse_expr(AvrlangParser::Ifelse_exprContext *ctx) = 0;
 
-  virtual void enterExpr(AvrlangParser::ExprContext *ctx) = 0;
-  virtual void exitExpr(AvrlangParser::ExprContext *ctx) = 0;
+  virtual void enterOpExprRule(AvrlangParser::OpExprRuleContext *ctx) = 0;
+  virtual void exitOpExprRule(AvrlangParser::OpExprRuleContext *ctx) = 0;
+
+  virtual void enterNumberRule(AvrlangParser::NumberRuleContext *ctx) = 0;
+  virtual void exitNumberRule(AvrlangParser::NumberRuleContext *ctx) = 0;
+
+  virtual void enterCallExprRule(AvrlangParser::CallExprRuleContext *ctx) = 0;
+  virtual void exitCallExprRule(AvrlangParser::CallExprRuleContext *ctx) = 0;
+
+  virtual void enterVarRule(AvrlangParser::VarRuleContext *ctx) = 0;
+  virtual void exitVarRule(AvrlangParser::VarRuleContext *ctx) = 0;
+
+  virtual void enterNegRule(AvrlangParser::NegRuleContext *ctx) = 0;
+  virtual void exitNegRule(AvrlangParser::NegRuleContext *ctx) = 0;
+
+  virtual void enterBraceExprRule(AvrlangParser::BraceExprRuleContext *ctx) = 0;
+  virtual void exitBraceExprRule(AvrlangParser::BraceExprRuleContext *ctx) = 0;
 
   virtual void enterNumber(AvrlangParser::NumberContext *ctx) = 0;
   virtual void exitNumber(AvrlangParser::NumberContext *ctx) = 0;

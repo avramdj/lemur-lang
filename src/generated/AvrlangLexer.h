@@ -18,11 +18,11 @@
 class  AvrlangLexer : public antlr4::Lexer {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, OPEN = 13, CLOSED = 14, 
-    LEFTBRACE = 15, RIGHTBRACE = 16, RET = 17, WHILE = 18, IF = 19, ELSE = 20, 
-    AND = 21, OR = 22, XOR = 23, NEG = 24, DEF = 25, WHITESPACE = 26, NEWLINE = 27, 
-    NAME = 28, NUM = 29
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, PRINT = 7, 
+    OPEN = 8, CLOSED = 9, LEFTBRACE = 10, RIGHTBRACE = 11, RET = 12, WHILE = 13, 
+    IF = 14, ELSE = 15, AND = 16, OR = 17, XOR = 18, SHL = 19, SHR = 20, 
+    NEG = 21, DEF = 22, GT = 23, GE = 24, LT = 25, LE = 26, EQ = 27, NE = 28, 
+    NEWLINE = 29, NAME = 30, NUM = 31, WHITESPACE = 32, COMMENT = 33
   };
 
   AvrlangLexer(antlr4::CharStream *input);

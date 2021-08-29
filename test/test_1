@@ -1,15 +1,12 @@
-def f(x) {
-	return 1
-}
+# jezik podrzava jednolinijske komentare
+# i obavezno ima main funkciju
 
-def main(){
-	while(x) {
-		return x
-	}
-	if(123){
-		return 3
-	} else {
-		return 2
-	}
-	return 0
+def main() {
+    print(16 << 4 >> 1)
+    print(16 << (4 >> 1))
+    tmp = 127 << 2
+    print(tmp or 1024 << 1)
+    flag = not 0
+    print(tmp or 1024 << 1)
+    return 0
 }

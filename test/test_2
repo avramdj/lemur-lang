@@ -1,3 +1,16 @@
-def f(x) {
-	return 1
+def f(x, y, z) {
+  a = x or y
+  return a or z
+}
+
+def one(x) {
+  return 1
+}
+
+def main() {
+  tmp = f(8 or 2, 4, 1)
+ # print(tmp)
+#  tmp = one(3)
+  #print(tmp)
+  return 0
 }

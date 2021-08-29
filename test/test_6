@@ -1,0 +1,12 @@
+def retone(x){
+  return 1
+  if(x < 3) {
+    return 100
+  }
+  return x
+}
+
+def main() {
+  print(retone(2))
+  return 0
+}

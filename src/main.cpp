@@ -74,29 +74,29 @@ class AvrlangASTBuilder: public AvrlangBaseVisitor {
         );
     }
     antlrcpp::Any visitWhileloop(AvrlangParser::WhileloopContext *ctx) override {
-        shared_ptr<backend::ExprAST> cond = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->bracedexpr());
+        shared_ptr<backend::ExprAST> cond = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->bracedexpr()->expr());
         shared_ptr<backend::ExprAST> block = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->block());
-        return new backend::WhileExprAST(cond, block);
+        return shared_ptr<backend::ExprAST>(new backend::WhileExprAST(cond, block));
     }
-    antlrcpp::Any visitNumber(AvrlangParser::NumberContext *ctx) override {
+    antlrcpp::Any visitNumberRule(AvrlangParser::NumberRuleContext *ctx) override {
         return std::shared_ptr<backend::ExprAST>(
-                new backend::NumberExprAST(std::stoi(ctx->NUM()->getText()))
+                new backend::NumberExprAST(std::stoi(ctx->number()->NUM()->getText()))
         );
     }
 
-    antlrcpp::Any visitVar(AvrlangParser::VarContext *ctx) override {
-        return std::make_shared<backend::VariableExprAST>(
-                ctx->NAME()->getText()
+    antlrcpp::Any visitVarRule(AvrlangParser::VarRuleContext *ctx) override {
+        return std::shared_ptr<backend::ExprAST>(
+                new backend::VariableExprAST(ctx->var()->NAME()->getText())
         );
     }
 
     antlrcpp::Any visitIf_expr(AvrlangParser::If_exprContext *ctx) override {
-        std::shared_ptr<backend::ExprAST> cond = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->IF());
+        std::shared_ptr<backend::ExprAST> cond = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->cond->expr());
         std::shared_ptr<backend::ExprAST> block = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->block());
         return std::shared_ptr<backend::ExprAST>(new backend::IfExprAST(cond, block));
     }
     antlrcpp::Any visitIfelse_expr(AvrlangParser::Ifelse_exprContext *ctx) override {
-        shared_ptr<backend::ExprAST> cond = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->IF());
+        shared_ptr<backend::ExprAST> cond = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->cond->expr());
         shared_ptr<backend::ExprAST> thenBlock = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->block().at(0));
         shared_ptr<backend::ExprAST> elseBlock = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->block().at(1));
         return shared_ptr<backend::ExprAST>(
@@ -104,25 +104,72 @@ class AvrlangASTBuilder: public AvrlangBaseVisitor {
         );
     }
 
-    antlrcpp::Any visitCallexpr(AvrlangParser::CallexprContext *ctx) override {
-        return visitChildren(ctx);
+    antlrcpp::Any visitCallExprRule(AvrlangParser::CallExprRuleContext *ctx) override {
+        std::string name = ctx->callexpr()->fName->getText();
+        std::vector<std::shared_ptr<backend::ExprAST>> args;
+        for(auto p : ctx->callexpr()->arglist()->expr()){
+            shared_ptr<backend::ExprAST> e = antlr4::tree::AbstractParseTreeVisitor::visit(p);
+            args.push_back(e);
+        }
+        return shared_ptr<backend::ExprAST>(
+                new backend::CallExprAST(name, args)
+                );
     }
 
     antlrcpp::Any visitArglist(AvrlangParser::ArglistContext *ctx) override {
         return visitChildren(ctx);
     }
 
-    antlrcpp::Any visitNeg(AvrlangParser::NegContext *ctx) override {
-        shared_ptr<backend::ExprAST> expr = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->expr());
+    antlrcpp::Any visitNegRule(AvrlangParser::NegRuleContext *ctx) override {
+        shared_ptr<backend::ExprAST> expr = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->neg()->expr());
         return std::shared_ptr<backend::ExprAST>(new backend::NotExprAST(expr));
     }
+    antlrcpp::Any visitOpExprRule(AvrlangParser::OpExprRuleContext *ctx) override {
+        std::string op = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->binoperator());
+        shared_ptr<backend::ExprAST> LHS = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->leftOp);
+        shared_ptr<backend::ExprAST> RHS = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->rightOp);
+        backend::ExprAST* binop = nullptr;
+        if(op == "and") {
+            binop = new backend::AndExprAST(LHS, RHS);
+        } else if (op == "or") {
+            binop = new backend::OrExprAST(LHS, RHS);
+        } else if (op == "xor") {
+            binop = new backend::XorExprAST(LHS, RHS);
+        } else if (op == "+") {
+            binop = new backend::AddExprAST(LHS, RHS);
+        } else if (op == "-") {
+            binop = new backend::SubExprAST(LHS, RHS);
+        } else if (op == "==") {
+            binop = new backend::EqExprAST(LHS, RHS);
+        } else if (op == "!=") {
+            binop = new backend::NeqExprAST(LHS, RHS);
+        } else if (op == "<") {
+            binop = new backend::LtExprAST(LHS, RHS);
+        } else if (op == "<=") {
+            binop = new backend::LteExprAST(LHS, RHS);
+        } else if (op == ">") {
+            binop = new backend::GtExprAST(LHS, RHS);
+        } else if (op == ">=") {
+            binop = new backend::GteExprAST(LHS, RHS);
+        } else if (op == "<<") {
+            binop = new backend::ShlExprAST(LHS, RHS);
+        } else if (op == ">>") {
+            binop = new backend::ShrExprAST(LHS, RHS);
+        }
+            return shared_ptr<backend::ExprAST>(binop);
+    }
 
-//    antlrcpp::Any visitBinoperator(AvrlangParser::BinoperatorContext *ctx) override {
-//        return visitChildren(ctx);
-//    }
+    antlrcpp::Any visitPrintstmt(AvrlangParser::PrintstmtContext *ctx) override {
+        shared_ptr<backend::ExprAST> expr = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->expr());
+        return std::shared_ptr<backend::ExprAST>(new backend::PrintExprAST(expr));
+    }
 
-    antlrcpp::Any visitBracedexpr(AvrlangParser::BracedexprContext *ctx) override {
-        return antlr4::tree::AbstractParseTreeVisitor::visit(ctx->expr());
+    antlrcpp::Any visitBinoperator(AvrlangParser::BinoperatorContext *ctx) override {
+        return ctx->getText();
+    }
+
+    antlrcpp::Any visitBraceExprRule(AvrlangParser::BraceExprRuleContext *ctx) override {
+        return antlr4::tree::AbstractParseTreeVisitor::visit(ctx->bracedexpr()->expr());
     }
 };
 

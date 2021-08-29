@@ -1,3 +1,19 @@
+def rotate_left(x, n) {
+  first_bit_mask = 1 << 31
+  i = 0
+  while (i < n) {
+    first_bit = x and first_bit_mask
+    x = x << 1 or first_bit >> 31
+    i = i + 1
+  }
+  return x
+}
+
 def main() {
-	return 1
+  flag = not 0
+  tmp = 10
+  print(tmp)
+  tmp = rotate_left(tmp, 4)
+  print(tmp)
+  return 0
 }
