@@ -1,6 +1,9 @@
 # untitled-compiler 0.1
 A compiled programing language implemented in ANTLR4 and LLVM-12
 
+### Dependencies
+* LLVM-12 `sudo apt install llvm-12`
+
 ### Build
 * `cmake CMakeList.txt`
 * `make`
