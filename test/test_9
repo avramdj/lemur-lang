@@ -1,0 +1,8 @@
+def main() {
+	x = 6
+	if(x > 5) {
+		print(x+1)
+	} else {
+		print(x-1)
+	}
+}

@@ -66,54 +66,54 @@ namespace backend {
     }
 
     Value *AndExprAST::codegen() const {
-        Value *l = _nodes[0].get()->codegen();
-        Value *d = _nodes[1].get()->codegen();
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
         return Builder.CreateAnd(l, d, "andtmp");
     }
 
     Value *OrExprAST::codegen() const {
-        Value *l = _nodes[0].get()->codegen();
-        Value *d = _nodes[1].get()->codegen();
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
         return Builder.CreateOr(l, d, "ortmp");
     }
 
     Value *XorExprAST::codegen() const {
-        Value *l = _nodes[0].get()->codegen();
-        Value *d = _nodes[1].get()->codegen();
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
         return Builder.CreateXor(l, d, "xortmp");
     }
 
     Value *ShlExprAST::codegen() const {
-        Value *l = _nodes[0].get()->codegen();
-        Value *d = _nodes[1].get()->codegen();
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
         return Builder.CreateShl(l, d, "shltmp");
     }
 
     Value *ShrExprAST::codegen() const {
-        Value *l = _nodes[0].get()->codegen();
-        Value *d = _nodes[1].get()->codegen();
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
         return Builder.CreateLShr(l, d, "shrtmp");
     }
 
     Value *NotExprAST::codegen() const {
-        Value *l = _nodes[0].get()->codegen();
+        Value *l = _nodes[0]->codegen();
         if (l == nullptr)
             return nullptr;
         return Builder.CreateNot(l, "nottmp");
     }
 
     Value *PrintExprAST::codegen() const {
-        Value *l = _nodes[0].get()->codegen();
+        Value *l = _nodes[0]->codegen();
         if (l == nullptr)
             return nullptr;
 
@@ -165,7 +165,7 @@ namespace backend {
     }
 
     Value *SetExprAST::codegen() const {
-        Value *l = _nodes[0].get()->codegen();
+        Value *l = _nodes[0]->codegen();
         if (l == nullptr)
             return nullptr;
         AllocaInst *Alloca = NamedValues[Name];
@@ -180,7 +180,7 @@ namespace backend {
     Value *SeqExprAST::codegen() const {
         Value *tmp = nullptr;
         for (unsigned i = 0; i < _nodes.size(); i++) {
-            tmp = _nodes[i].get()->codegen();
+            tmp = _nodes[i]->codegen();
             if (tmp == nullptr)
                 return nullptr;
         }
@@ -224,9 +224,9 @@ namespace backend {
             Builder.CreateStore(&a, Alloca);
         }
 
-        Value *Body = body.get()->codegen();
+        Value *Body = body->codegen();
         if (Body != nullptr) {
-             Builder.CreateRet(ConstantInt::get(TheContext, APInt(32, 0)));
+            Builder.CreateRet(ConstantInt::get(TheContext, APInt(32, 0)));
 
             verifyFunction(*f);
 
@@ -259,7 +259,7 @@ namespace backend {
 
         vector<Value *> ArgsV;
         for (unsigned i = 0; i < Args.size(); i++) {
-            Value *tmp = Args[i].get()->codegen();
+            Value *tmp = Args[i]->codegen();
             if (!tmp)
                 return nullptr;
             ArgsV.push_back(tmp);
@@ -274,64 +274,64 @@ namespace backend {
     }
 
     Value *AddExprAST::codegen() const {
-        Value *l = _nodes[0].get()->codegen();
-        Value *d = _nodes[1].get()->codegen();
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
         return Builder.CreateAdd(l, d, "andtmp");
     }
 
     Value *SubExprAST::codegen() const {
-        Value *l = _nodes[0].get()->codegen();
-        Value *d = _nodes[1].get()->codegen();
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
         return Builder.CreateSub(l, d, "andtmp");
     }
 
     Value *LtExprAST::codegen() const {
-        Value *L = _nodes[0].get()->codegen();
-        Value *R = _nodes[1].get()->codegen();
+        Value *L = _nodes[0]->codegen();
+        Value *R = _nodes[1]->codegen();
         if (!L || !R)
             return nullptr;
         return Builder.CreateIntCast(Builder.CreateICmpSLT(L, R, "lttmp"), Type::getInt32Ty(TheContext), true);
     }
 
     Value *GtExprAST::codegen() const {
-        Value *L = _nodes[0].get()->codegen();
-        Value *R = _nodes[1].get()->codegen();
+        Value *L = _nodes[0]->codegen();
+        Value *R = _nodes[1]->codegen();
         if (!L || !R)
             return nullptr;
         return Builder.CreateIntCast(Builder.CreateICmpSGT(L, R, "gttmp"), Type::getInt32Ty(TheContext), true);
     }
 
     Value *EqExprAST::codegen() const {
-        Value *L = _nodes[0].get()->codegen();
-        Value *R = _nodes[1].get()->codegen();
+        Value *L = _nodes[0]->codegen();
+        Value *R = _nodes[1]->codegen();
         if (!L || !R)
             return nullptr;
         return Builder.CreateIntCast(Builder.CreateICmpEQ(L, R, "eqtmp"), Type::getInt32Ty(TheContext), true);
     }
 
     Value *NeqExprAST::codegen() const {
-        Value *L = _nodes[0].get()->codegen();
-        Value *R = _nodes[1].get()->codegen();
+        Value *L = _nodes[0]->codegen();
+        Value *R = _nodes[1]->codegen();
         if (!L || !R)
             return nullptr;
         return Builder.CreateIntCast(Builder.CreateICmpNE(L, R, "neqtmp"), Type::getInt32Ty(TheContext), true);
     }
 
     Value *LteExprAST::codegen() const {
-        Value *L = _nodes[0].get()->codegen();
-        Value *R = _nodes[1].get()->codegen();
+        Value *L = _nodes[0]->codegen();
+        Value *R = _nodes[1]->codegen();
         if (!L || !R)
             return nullptr;
         return Builder.CreateIntCast(Builder.CreateICmpSLE(L, R, "ltetmp"), Type::getInt32Ty(TheContext), true);
     }
 
     Value *GteExprAST::codegen() const {
-        Value *L = _nodes[0].get()->codegen();
-        Value *R = _nodes[1].get()->codegen();
+        Value *L = _nodes[0]->codegen();
+        Value *R = _nodes[1]->codegen();
         if (!L || !R)
             return nullptr;
         return Builder.CreateIntCast(Builder.CreateICmpSGE(L, R, "gtetmp"), Type::getInt32Ty(TheContext), true);
@@ -345,14 +345,14 @@ namespace backend {
 //   Builder.CreateBr(Loop1BB);
 
 //   Builder.SetInsertPoint(Loop1BB);
-//   Value* CondVal = cond.get()->codegen();
+//   Value* CondVal = cond->codegen();
 //   if (!CondVal)
 //     return nullptr;
 //   Builder.CreateCondBr(CondVal, Loop2BB, AfterLoopBB);
 //   Loop1BB = Builder.GetInsertBlock();
 
 //   Builder.SetInsertPoint(Loop2BB);
-//   Value* Tmp = block.get()->codegen();
+//   Value* Tmp = block->codegen();
 //   if (Tmp == nullptr)
 //     return nullptr;
 //   Builder.CreateBr(Loop1BB);
@@ -372,7 +372,7 @@ namespace backend {
         //header :
         Builder.CreateBr(HeaderBB);
         Builder.SetInsertPoint(HeaderBB);
-        Value *Cond = cond.get()->codegen();
+        Value *Cond = cond->codegen();
         if (!Cond) {
             return nullptr;
         }
@@ -382,7 +382,7 @@ namespace backend {
 
         //loop :
         Builder.SetInsertPoint(LoopBB);
-        Value *Block = block.get()->codegen();
+        Value *Block = block->codegen();
         if (!Block)
             return nullptr;
         Builder.CreateBr(HeaderBB);
@@ -402,21 +402,18 @@ namespace backend {
         Builder.CreateBr(headerBB);
         Builder.SetInsertPoint(headerBB);
 
-        Value *Cond = cond.get()->codegen();
+        Value *Cond = cond->codegen();
         if (!Cond) {
             return nullptr;
         }
-        headerBB = Builder.GetInsertBlock();
         Value *Cmp = Builder.CreateICmpNE(Cond, ConstantInt::get(TheContext, APInt(32, 0)), "cmptmp");
-        BasicBlock *entryBB = Builder.GetInsertBlock();
         Builder.CreateCondBr(Cmp, thenBB, mergeBB);
 
         Builder.SetInsertPoint(thenBB);
-        Value *ThenV = block.get()->codegen();
+        Value *ThenV = block->codegen();
         if (!ThenV) {
             return nullptr;
         }
-        thenBB = Builder.GetInsertBlock();
         Builder.CreateBr(mergeBB);
 
         Builder.SetInsertPoint(mergeBB);
@@ -433,7 +430,7 @@ namespace backend {
         Builder.CreateBr(headerBB);
         Builder.SetInsertPoint(headerBB);
 
-        Value *Cond = cond.get()->codegen();
+        Value *Cond = cond->codegen();
         if (!Cond) {
             return nullptr;
         }
@@ -442,7 +439,7 @@ namespace backend {
         Builder.CreateCondBr(Cmp, thenBB, elseBB);
 
         Builder.SetInsertPoint(thenBB);
-        Value *ThenV = thenBlock.get()->codegen();
+        Value *ThenV = thenBlock->codegen();
         if (!ThenV) {
             return nullptr;
         }
@@ -450,7 +447,7 @@ namespace backend {
         Builder.CreateBr(mergeBB);
 
         Builder.SetInsertPoint(elseBB);
-        Value *ElseV = elseBlock.get()->codegen();
+        Value *ElseV = elseBlock->codegen();
         if (!ElseV) {
             return nullptr;
         }
@@ -465,7 +462,7 @@ namespace backend {
     Value *RetExprAST::codegen() const {
         // Function *TheFunction = Builder.GetInsertBlock()->getParent();
         // BasicBlock *RetBB = BasicBlock::Create(TheContext, "theret", TheFunction);
-        Value *ret = v.get()->codegen();
+        Value *ret = v->codegen();
         if (!ret) {
             return nullptr;
         }
@@ -491,7 +488,7 @@ namespace backend {
         // Eliminate Common SubExpressions.
         TheFPM->add(createNewGVNPass());
         // Simplify the control flow graph (deleting unreachable blocks, etc).
-        TheFPM->add(createCFGSimplificationPass());
+//        TheFPM->add(createCFGSimplificationPass());
         TheFPM->add(createPromoteMemoryToRegisterPass());
 #endif
         TheFPM->doInitialization();
