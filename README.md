@@ -10,7 +10,7 @@ A compiled programing language implemented in ANTLR4 and LLVM-12
 * `make`
 
 ### Run
-* `./avrlang file`
+* `./avrlang source_file | llc -o out_name`
 
 ### Syntax 
 ```
