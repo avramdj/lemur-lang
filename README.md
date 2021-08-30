@@ -38,5 +38,6 @@ Currently only supports doubles.
 * <strike> *AST builder* </strike>
 * <strike> *hook up llvm backend* </strike>
 * <strike> *unit testing* </strike>
+* string support
 * compiler flags
 * interpretation support
