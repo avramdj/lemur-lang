@@ -10,7 +10,7 @@ A compiled programing language implemented in ANTLR4 and LLVM-12
 * `make`
 
 ### Run
-* `./avrlang file`
+* `./avrlang source_file | llc -o out_name`
 
 ### Syntax 
 ```
@@ -33,6 +33,12 @@ def main() {
 Currently only supports doubles.
 
 ### TODO
-* hook up llvm backend
+* <strike> *AST class hierarchy* </strike>
+* <strike> *antlr parser and lexer* </strike>
+* <strike> *AST builder* </strike>
+* <strike> *hook up llvm backend* </strike>
+* <strike> *unit testing* </strike>
+* string support
 * compiler flags
 * interpretation support
+* vscode extension ???
