@@ -33,6 +33,10 @@ def main() {
 Currently only supports doubles.
 
 ### TODO
-* <strike> *hook up llvm backend*</strike>
+* <strike> *AST class hierarchy* </strike>
+* <strike> *antlr parser and lexer* </strike>
+* <strike> *AST builder* </strike>
+* <strike> *hook up llvm backend* </strike>
+* <strike> *unit testing* </strike>
 * compiler flags
 * interpretation support
