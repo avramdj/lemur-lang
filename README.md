@@ -33,6 +33,6 @@ def main() {
 Currently only supports doubles.
 
 ### TODO
-* hook up llvm backend
+* <strike> *hook up llvm backend*</strike>
 * compiler flags
 * interpretation support
