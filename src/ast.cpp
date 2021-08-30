@@ -13,6 +13,7 @@ namespace backend {
     Value *Str;
     Value *Str1;
     Function *PrintfFja;
+    bool isRet = false;
 
     ExprAST::~ExprAST() {
 
@@ -181,6 +182,10 @@ namespace backend {
         Value *tmp = nullptr;
         for (unsigned i = 0; i < _nodes.size(); i++) {
             tmp = _nodes[i]->codegen();
+            if(isRet) {
+                isRet = false;
+//                return tmp;
+            }
             if (tmp == nullptr)
                 return nullptr;
         }
@@ -232,6 +237,7 @@ namespace backend {
 
             TheFPM->run(*f);
 
+            isRet = true;
             return f;
         }
 
