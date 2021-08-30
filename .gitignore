@@ -4,6 +4,7 @@ avrlang
 # Created by https://www.toptal.com/developers/gitignore/api/c++,clion,cmake,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=c++,clion,cmake,visualstudiocode
 
+.vscode
 ### C++ ###
 # Prerequisites
 *.d
