@@ -18,7 +18,6 @@ using namespace std;
 #include "llvm/Support/FileSystem.h"
 
 using namespace llvm;
-using namespace llvm::legacy;
 
 namespace backend {
 
@@ -199,6 +198,22 @@ namespace backend {
         Value *codegen() const;
     };
 
+    class MulExprAST : public InnerExprAST {
+    public:
+        MulExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
+                : InnerExprAST(l, r) {}
+
+        Value *codegen() const;
+    };
+
+    class DivExprAST : public InnerExprAST {
+    public:
+        DivExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
+                : InnerExprAST(l, r) {}
+
+        Value *codegen() const;
+    };
+
     class LtExprAST : public InnerExprAST {
     public:
         LtExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
@@ -295,11 +310,7 @@ namespace backend {
         shared_ptr<ExprAST> v;
     };
 
-    void InitializeModuleAndPassManager(void);
-
     AllocaInst *CreateEntryBlockAlloca(Function *TheFunction, const string &VarName);
-
-    void printModule();
 
 }
 

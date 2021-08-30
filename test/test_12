@@ -1,0 +1,12 @@
+def square(x) {
+	return x*x
+}
+
+def main() {
+  i = 0
+  while(i < 10) {
+    print(square(i))
+    i = i + 1
+  }
+  return 0
+}

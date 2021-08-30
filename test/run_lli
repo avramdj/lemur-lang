@@ -1,0 +1,15 @@
+#!/bin/bash
+
+scpath=$(dirname "$0")
+compile=$scpath/../avrlang
+filename=$scpath/$1
+
+echo "INPUT: $filename"
+echo
+
+cat $filename
+
+echo "OUTPUT:"
+echo
+
+$compile $filename | lli

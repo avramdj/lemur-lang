@@ -1,18 +1,20 @@
-#include "ast.hpp"
+#include <ast.hpp>
 #include <iostream>
 
 // #define _DISABLE_OPTS_ 1
 #define _LIBCPP_DEBUG 1
 
 namespace backend {
-    LLVMContext TheContext;
+
+    extern Module *TheModule;
+    extern LLVMContext TheContext;
+    extern llvm::legacy::FunctionPassManager *TheFPM;
+    extern Function *PrintfFja;
+
     map<string, AllocaInst *> NamedValues;
     IRBuilder<> Builder(TheContext);
-    Module *TheModule;
-    llvm::legacy::FunctionPassManager *TheFPM;
     Value *Str;
     Value *Str1;
-    Function *PrintfFja;
     bool isRet = false;
 
     ExprAST::~ExprAST() {
@@ -182,11 +184,10 @@ namespace backend {
         Value *tmp = nullptr;
         for (unsigned i = 0; i < _nodes.size(); i++) {
             tmp = _nodes[i]->codegen();
-            if(isRet) {
-                isRet = false;
-//                return tmp;
+            if(llvm::dyn_cast<ReturnInst>(tmp)) {
+                return tmp;
             }
-            if (tmp == nullptr)
+            if (!tmp)
                 return nullptr;
         }
         return tmp;
@@ -231,7 +232,7 @@ namespace backend {
 
         Value *Body = body->codegen();
         if (Body != nullptr) {
-            Builder.CreateRet(ConstantInt::get(TheContext, APInt(32, 0)));
+//            Builder.CreateRet(ConstantInt::get(TheContext, APInt(32, 0)));
 
             verifyFunction(*f);
 
@@ -292,7 +293,23 @@ namespace backend {
         Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
-        return Builder.CreateSub(l, d, "andtmp");
+        return Builder.CreateSub(l, d, "subtmp");
+    }
+
+    Value *MulExprAST::codegen() const {
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
+        if (l == nullptr || d == nullptr)
+            return nullptr;
+        return Builder.CreateMul(l, d, "multmp");
+    }
+
+    Value *DivExprAST::codegen() const {
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
+        if (l == nullptr || d == nullptr)
+            return nullptr;
+        return Builder.CreateSDiv(l, d, "divtmp");
     }
 
     Value *LtExprAST::codegen() const {
@@ -388,10 +405,14 @@ namespace backend {
 
         //loop :
         Builder.SetInsertPoint(LoopBB);
-        Value *Block = block->codegen();
-        if (!Block)
+        Value *BlockV = block->codegen();
+        if (!BlockV)
             return nullptr;
-        Builder.CreateBr(HeaderBB);
+
+        if(!llvm::dyn_cast<ReturnInst>(BlockV)) {
+            Builder.CreateBr(HeaderBB);
+        }
+
         LoopBB = Builder.GetInsertBlock();
         Builder.SetInsertPoint(AfterLoopBB);
 
@@ -420,7 +441,10 @@ namespace backend {
         if (!ThenV) {
             return nullptr;
         }
-        Builder.CreateBr(mergeBB);
+
+        if(!llvm::dyn_cast<ReturnInst>(ThenV)) {
+            Builder.CreateBr(mergeBB);
+        }
 
         Builder.SetInsertPoint(mergeBB);
         return ConstantInt::get(TheContext, APInt(32, 0));
@@ -450,15 +474,18 @@ namespace backend {
             return nullptr;
         }
         thenBB = Builder.GetInsertBlock();
-        Builder.CreateBr(mergeBB);
-
+        if(!llvm::dyn_cast<ReturnInst>(ThenV)) {
+            Builder.CreateBr(mergeBB);
+        }
         Builder.SetInsertPoint(elseBB);
         Value *ElseV = elseBlock->codegen();
         if (!ElseV) {
             return nullptr;
         }
+        if(!llvm::dyn_cast<ReturnInst>(ThenV)) {
+            Builder.CreateBr(mergeBB);
+        }
         elseBB = Builder.GetInsertBlock();
-        Builder.CreateBr(mergeBB);
 
         Builder.SetInsertPoint(mergeBB);
 
@@ -466,8 +493,6 @@ namespace backend {
     }
 
     Value *RetExprAST::codegen() const {
-        // Function *TheFunction = Builder.GetInsertBlock()->getParent();
-        // BasicBlock *RetBB = BasicBlock::Create(TheContext, "theret", TheFunction);
         Value *ret = v->codegen();
         if (!ret) {
             return nullptr;
@@ -475,38 +500,8 @@ namespace backend {
         return Builder.CreateRet(ret);
     }
 
-    void InitializeModuleAndPassManager(void) {
-        TheModule = new Module("my_module", TheContext);
-
-        /* printf fja */
-        FunctionType *FT1 = FunctionType::get(IntegerType::getInt32Ty(TheContext),
-                                              PointerType::get(Type::getInt8Ty(TheContext), 0), true);
-        PrintfFja = Function::Create(FT1, Function::ExternalLinkage, "printf", TheModule);
-
-        // Create a new pass manager attached to it.
-        TheFPM = new llvm::legacy::FunctionPassManager(TheModule);
-
-#ifndef _DISABLE_OPTS_
-        // Do simple "peephole" optimizations and bit-twiddling optzns.
-        TheFPM->add(createInstructionCombiningPass());
-        // Reassociate expressions.
-        TheFPM->add(createReassociatePass());
-        // Eliminate Common SubExpressions.
-        TheFPM->add(createNewGVNPass());
-        // Simplify the control flow graph (deleting unreachable blocks, etc).
-//        TheFPM->add(createCFGSimplificationPass());
-        TheFPM->add(createPromoteMemoryToRegisterPass());
-#endif
-        TheFPM->doInitialization();
-
-    }
-
     AllocaInst *CreateEntryBlockAlloca(Function *TheFunction, const string &VarName) {
         IRBuilder<> TmpB(&TheFunction->getEntryBlock(), TheFunction->getEntryBlock().begin());
         return TmpB.CreateAlloca(Type::getInt32Ty(TheContext), 0, VarName.c_str());
-    }
-
-    void printModule(){
-        TheModule->print(outs(), nullptr);
     }
 }

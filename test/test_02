@@ -9,8 +9,8 @@ def one(x) {
 
 def main() {
   tmp = f(8 or 2, 4, 1)
- # print(tmp)
-#  tmp = one(3)
-  #print(tmp)
+  print(tmp)
+  tmp = one(3)
+  print(tmp)
   return 0
 }
