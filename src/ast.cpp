@@ -15,7 +15,6 @@ namespace backend {
     IRBuilder<> Builder(TheContext);
     Value *Str;
     Value *Str1;
-    bool isRet = false;
 
     ExprAST::~ExprAST() {
 
@@ -184,7 +183,7 @@ namespace backend {
         Value *tmp = nullptr;
         for (unsigned i = 0; i < _nodes.size(); i++) {
             tmp = _nodes[i]->codegen();
-            if(llvm::dyn_cast<ReturnInst>(tmp)) {
+            if(isRet(tmp)) {
                 return tmp;
             }
             if (!tmp)
@@ -232,13 +231,14 @@ namespace backend {
 
         Value *Body = body->codegen();
         if (Body != nullptr) {
-//            Builder.CreateRet(ConstantInt::get(TheContext, APInt(32, 0)));
+            if(!isRet(Body)) {
+                Builder.CreateRet(ConstantInt::get(TheContext, APInt(32, 0)));
+            }
 
             verifyFunction(*f);
 
             TheFPM->run(*f);
 
-            isRet = true;
             return f;
         }
 
@@ -409,7 +409,7 @@ namespace backend {
         if (!BlockV)
             return nullptr;
 
-        if(!llvm::dyn_cast<ReturnInst>(BlockV)) {
+        if(!isRet(BlockV)) {
             Builder.CreateBr(HeaderBB);
         }
 
@@ -442,7 +442,7 @@ namespace backend {
             return nullptr;
         }
 
-        if(!llvm::dyn_cast<ReturnInst>(ThenV)) {
+        if(!isRet(ThenV)) {
             Builder.CreateBr(mergeBB);
         }
 
@@ -455,7 +455,7 @@ namespace backend {
         BasicBlock *headerBB = BasicBlock::Create(TheContext, "header", f);
         BasicBlock *thenBB = BasicBlock::Create(TheContext, "then", f);
         BasicBlock *elseBB = BasicBlock::Create(TheContext, "else", f);
-        BasicBlock *mergeBB = BasicBlock::Create(TheContext, "merge", f);
+        BasicBlock *mergeBB = BasicBlock::Create(TheContext, "merge");
 
         Builder.CreateBr(headerBB);
         Builder.SetInsertPoint(headerBB);
@@ -474,7 +474,8 @@ namespace backend {
             return nullptr;
         }
         thenBB = Builder.GetInsertBlock();
-        if(!llvm::dyn_cast<ReturnInst>(ThenV)) {
+        bool thenRet = isRet(ThenV);
+        if(!thenRet) {
             Builder.CreateBr(mergeBB);
         }
         Builder.SetInsertPoint(elseBB);
@@ -482,11 +483,18 @@ namespace backend {
         if (!ElseV) {
             return nullptr;
         }
-        if(!llvm::dyn_cast<ReturnInst>(ThenV)) {
+        bool elseRet = isRet(ElseV);
+        if(!elseRet) {
             Builder.CreateBr(mergeBB);
         }
         elseBB = Builder.GetInsertBlock();
 
+
+        if(thenRet && elseRet) {
+            return ThenV; //returns ReturnInst*, code after is unreachable
+        }
+
+        f->getBasicBlockList().push_back(mergeBB);
         Builder.SetInsertPoint(mergeBB);
 
         return ConstantInt::get(TheContext, APInt(32, 0));
@@ -503,5 +511,9 @@ namespace backend {
     AllocaInst *CreateEntryBlockAlloca(Function *TheFunction, const string &VarName) {
         IRBuilder<> TmpB(&TheFunction->getEntryBlock(), TheFunction->getEntryBlock().begin());
         return TmpB.CreateAlloca(Type::getInt32Ty(TheContext), 0, VarName.c_str());
+    }
+
+    bool isRet(Value* tmp) {
+        return llvm::dyn_cast<ReturnInst>(tmp);
     }
 }

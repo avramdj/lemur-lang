@@ -4,9 +4,8 @@ def a(x){
 	} else {
 		return x
 	}
-	return 0
 }
 def main(){
-	print(a(1))
+	print(a(5))
 	return 0
 }

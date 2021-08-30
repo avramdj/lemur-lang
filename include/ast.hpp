@@ -311,7 +311,7 @@ namespace backend {
     };
 
     AllocaInst *CreateEntryBlockAlloca(Function *TheFunction, const string &VarName);
-
+    bool isRet(Value* tmp);
 }
 
 #endif
