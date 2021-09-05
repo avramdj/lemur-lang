@@ -41,5 +41,5 @@ Currently only supports doubles.
 * <strike> *unit testing* </strike>
 * string support
 * compiler flags
-* interpretation support
+* JIT support
 * vscode extension ???
