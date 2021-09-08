@@ -1,5 +1,5 @@
 # untitled-compiler 0.1
-A compiled programing language implemented in ANTLR4 and LLVM-12
+A compiled programing language implemented with ANTLR4 and LLVM-12
 
 ### Dependencies
 * LLVM-12
