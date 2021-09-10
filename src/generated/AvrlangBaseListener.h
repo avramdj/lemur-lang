@@ -28,6 +28,12 @@ public:
   virtual void enterGlobalstmt(AvrlangParser::GlobalstmtContext * /*ctx*/) override { }
   virtual void exitGlobalstmt(AvrlangParser::GlobalstmtContext * /*ctx*/) override { }
 
+  virtual void enterClassdef(AvrlangParser::ClassdefContext * /*ctx*/) override { }
+  virtual void exitClassdef(AvrlangParser::ClassdefContext * /*ctx*/) override { }
+
+  virtual void enterClassbody(AvrlangParser::ClassbodyContext * /*ctx*/) override { }
+  virtual void exitClassbody(AvrlangParser::ClassbodyContext * /*ctx*/) override { }
+
   virtual void enterFunctiondef(AvrlangParser::FunctiondefContext * /*ctx*/) override { }
   virtual void exitFunctiondef(AvrlangParser::FunctiondefContext * /*ctx*/) override { }
 
@@ -43,8 +49,17 @@ public:
   virtual void enterPrintstmt(AvrlangParser::PrintstmtContext * /*ctx*/) override { }
   virtual void exitPrintstmt(AvrlangParser::PrintstmtContext * /*ctx*/) override { }
 
+  virtual void enterPrintfstmt(AvrlangParser::PrintfstmtContext * /*ctx*/) override { }
+  virtual void exitPrintfstmt(AvrlangParser::PrintfstmtContext * /*ctx*/) override { }
+
+  virtual void enterVardecl(AvrlangParser::VardeclContext * /*ctx*/) override { }
+  virtual void exitVardecl(AvrlangParser::VardeclContext * /*ctx*/) override { }
+
   virtual void enterAssign(AvrlangParser::AssignContext * /*ctx*/) override { }
   virtual void exitAssign(AvrlangParser::AssignContext * /*ctx*/) override { }
+
+  virtual void enterDeclassign(AvrlangParser::DeclassignContext * /*ctx*/) override { }
+  virtual void exitDeclassign(AvrlangParser::DeclassignContext * /*ctx*/) override { }
 
   virtual void enterRet(AvrlangParser::RetContext * /*ctx*/) override { }
   virtual void exitRet(AvrlangParser::RetContext * /*ctx*/) override { }
@@ -52,17 +67,35 @@ public:
   virtual void enterWhileloop(AvrlangParser::WhileloopContext * /*ctx*/) override { }
   virtual void exitWhileloop(AvrlangParser::WhileloopContext * /*ctx*/) override { }
 
-  virtual void enterIf_expr(AvrlangParser::If_exprContext * /*ctx*/) override { }
-  virtual void exitIf_expr(AvrlangParser::If_exprContext * /*ctx*/) override { }
+  virtual void enterForloop(AvrlangParser::ForloopContext * /*ctx*/) override { }
+  virtual void exitForloop(AvrlangParser::ForloopContext * /*ctx*/) override { }
 
-  virtual void enterIfelse_expr(AvrlangParser::Ifelse_exprContext * /*ctx*/) override { }
-  virtual void exitIfelse_expr(AvrlangParser::Ifelse_exprContext * /*ctx*/) override { }
+  virtual void enterIfExpr(AvrlangParser::IfExprContext * /*ctx*/) override { }
+  virtual void exitIfExpr(AvrlangParser::IfExprContext * /*ctx*/) override { }
+
+  virtual void enterIfElseExpr(AvrlangParser::IfElseExprContext * /*ctx*/) override { }
+  virtual void exitIfElseExpr(AvrlangParser::IfElseExprContext * /*ctx*/) override { }
+
+  virtual void enterStringRule(AvrlangParser::StringRuleContext * /*ctx*/) override { }
+  virtual void exitStringRule(AvrlangParser::StringRuleContext * /*ctx*/) override { }
 
   virtual void enterOpExprRule(AvrlangParser::OpExprRuleContext * /*ctx*/) override { }
   virtual void exitOpExprRule(AvrlangParser::OpExprRuleContext * /*ctx*/) override { }
 
+  virtual void enterIndexRule(AvrlangParser::IndexRuleContext * /*ctx*/) override { }
+  virtual void exitIndexRule(AvrlangParser::IndexRuleContext * /*ctx*/) override { }
+
+  virtual void enterMethodRule(AvrlangParser::MethodRuleContext * /*ctx*/) override { }
+  virtual void exitMethodRule(AvrlangParser::MethodRuleContext * /*ctx*/) override { }
+
+  virtual void enterListRule(AvrlangParser::ListRuleContext * /*ctx*/) override { }
+  virtual void exitListRule(AvrlangParser::ListRuleContext * /*ctx*/) override { }
+
   virtual void enterNumberRule(AvrlangParser::NumberRuleContext * /*ctx*/) override { }
   virtual void exitNumberRule(AvrlangParser::NumberRuleContext * /*ctx*/) override { }
+
+  virtual void enterUminusRule(AvrlangParser::UminusRuleContext * /*ctx*/) override { }
+  virtual void exitUminusRule(AvrlangParser::UminusRuleContext * /*ctx*/) override { }
 
   virtual void enterCallExprRule(AvrlangParser::CallExprRuleContext * /*ctx*/) override { }
   virtual void exitCallExprRule(AvrlangParser::CallExprRuleContext * /*ctx*/) override { }
@@ -75,6 +108,15 @@ public:
 
   virtual void enterBraceExprRule(AvrlangParser::BraceExprRuleContext * /*ctx*/) override { }
   virtual void exitBraceExprRule(AvrlangParser::BraceExprRuleContext * /*ctx*/) override { }
+
+  virtual void enterList(AvrlangParser::ListContext * /*ctx*/) override { }
+  virtual void exitList(AvrlangParser::ListContext * /*ctx*/) override { }
+
+  virtual void enterMethodCall(AvrlangParser::MethodCallContext * /*ctx*/) override { }
+  virtual void exitMethodCall(AvrlangParser::MethodCallContext * /*ctx*/) override { }
+
+  virtual void enterString(AvrlangParser::StringContext * /*ctx*/) override { }
+  virtual void exitString(AvrlangParser::StringContext * /*ctx*/) override { }
 
   virtual void enterNumber(AvrlangParser::NumberContext * /*ctx*/) override { }
   virtual void exitNumber(AvrlangParser::NumberContext * /*ctx*/) override { }

@@ -13,18 +13,25 @@ antlrcpp::Any ASTBuilder::visitGlobalstmt(AvrlangParser::GlobalstmtContext *ctx)
 }
 antlrcpp::Any ASTBuilder::visitFunctiondef(AvrlangParser::FunctiondefContext *ctx) {
     std::string functionName = ctx->fName->getText();
-    std::vector<string> paramList = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->params);
+    pair<vector<string>, vector<string>> fparams = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->params);
+    auto types = fparams.first;
+    auto params = fparams.second;
+    string ret = ctx->retType->getText();
     shared_ptr<backend::ExprAST> functionBody = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->body);
-    auto *f = new backend::FunctionDefintionAST(functionName, paramList, functionBody);
+    auto *f = new backend::FunctionDefintionAST(functionName, types, params, ret, functionBody);
     f->codegen();
     return f;
 }
 antlrcpp::Any ASTBuilder::visitParamlist(AvrlangParser::ParamlistContext *ctx) {
+    std::vector<string> types;
     std::vector<string> params;
-    for(auto& param : ctx->NAME()) {
-        params.push_back(param->getText());
+    for(auto& type : ctx->types) {
+        types.push_back(type);
     }
-    return params;
+    for(auto& param : ctx->vars) {
+        params.push_back(param);
+    }
+    return make_pair(types, params);
 }
 antlrcpp::Any ASTBuilder::visitBlock(AvrlangParser::BlockContext *ctx) {
     std::vector<shared_ptr<backend::ExprAST>> stmtVector;
@@ -65,19 +72,18 @@ antlrcpp::Any ASTBuilder::visitNumberRule(AvrlangParser::NumberRuleContext *ctx)
             new backend::NumberExprAST(std::stoi(ctx->number()->NUM()->getText()))
     );
 }
-
 antlrcpp::Any ASTBuilder::visitVarRule(AvrlangParser::VarRuleContext *ctx) {
     return std::shared_ptr<backend::ExprAST>(
             new backend::VariableExprAST(ctx->var()->NAME()->getText())
     );
 }
 
-antlrcpp::Any ASTBuilder::visitIf_expr(AvrlangParser::If_exprContext *ctx) {
+antlrcpp::Any ASTBuilder::visitIfExpr(AvrlangParser::IfExprContext *ctx) {
     std::shared_ptr<backend::ExprAST> cond = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->cond->expr());
     std::shared_ptr<backend::ExprAST> block = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->block());
     return std::shared_ptr<backend::ExprAST>(new backend::IfExprAST(cond, block));
 }
-antlrcpp::Any ASTBuilder::visitIfelse_expr(AvrlangParser::Ifelse_exprContext *ctx) {
+antlrcpp::Any ASTBuilder::visitIfElseExpr(AvrlangParser::IfElseExprContext *ctx) {
     shared_ptr<backend::ExprAST> cond = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->cond->expr());
     shared_ptr<backend::ExprAST> thenBlock = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->block().at(0));
     shared_ptr<backend::ExprAST> elseBlock = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->block().at(1));
@@ -156,4 +162,28 @@ antlrcpp::Any ASTBuilder::visitBinoperator(AvrlangParser::BinoperatorContext *ct
 
 antlrcpp::Any ASTBuilder::visitBraceExprRule(AvrlangParser::BraceExprRuleContext *ctx) {
     return antlr4::tree::AbstractParseTreeVisitor::visit(ctx->bracedexpr()->expr());
+}
+
+antlrcpp::Any ASTBuilder::visitVardecl(AvrlangParser::VardeclContext *ctx) {
+    string type = ctx->typeName->getText();
+    string name = ctx->varName->getText();
+    return shared_ptr<backend::ExprAST>(new backend::VarDeclExprAST(type, name));
+}
+
+antlrcpp::Any ASTBuilder::visitDeclassign(AvrlangParser::DeclassignContext *ctx) {
+    string type = ctx->typeName->getText();
+    string name = ctx->varName->getText();
+    shared_ptr<backend::ExprAST> expr = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->expr());
+    return shared_ptr<backend::ExprAST>(new backend::DeclAssignExprAST(type, name, expr));
+}
+
+antlrcpp::Any ASTBuilder::visitStringRule(AvrlangParser::StringRuleContext *ctx) {
+    string str = ctx->getText();
+    str = str.substr(1, str.size()-2);
+    return shared_ptr<backend::ExprAST>(new backend::StringExprAST(str));
+}
+
+antlrcpp::Any ASTBuilder::visitPrintfstmt(AvrlangParser::PrintfstmtContext *ctx) {
+    shared_ptr<backend::ExprAST> expr = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->expr());
+    return shared_ptr<backend::ExprAST>(new backend::PrintFormatExprAST(expr));
 }

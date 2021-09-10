@@ -128,6 +128,38 @@ namespace backend {
         Value *codegen() const;
     };
 
+    class PrintFormatExprAST : public InnerExprAST {
+    public:
+        PrintFormatExprAST(shared_ptr<ExprAST> a)
+                : InnerExprAST(a) {}
+
+        Value *codegen() const;
+    };
+
+    class VarDeclExprAST : public ExprAST {
+    public:
+        VarDeclExprAST(string type, string name)
+                : Type(type), Name(name) {}
+
+        Value *codegen() const;
+
+    private:
+        string Name;
+        string Type;
+    };
+
+    class DeclAssignExprAST : public InnerExprAST {
+    public:
+        DeclAssignExprAST(string t, string n, shared_ptr<ExprAST> a)
+                : Type(t), Name(n), InnerExprAST(a) {}
+
+        Value *codegen() const;
+
+    private:
+        string Type;
+        string Name;
+    };
+
     class SetExprAST : public InnerExprAST {
     public:
         SetExprAST(shared_ptr<ExprAST> a, string n)
@@ -151,8 +183,8 @@ namespace backend {
 
     class FunctionDefintionAST : ExprAST {
     public:
-        FunctionDefintionAST(string n, vector<string> p, shared_ptr<ExprAST> b)
-                : name(n), parameters(p), body(b) {}
+        FunctionDefintionAST(string n, vector<string> t, vector<string> p, string retT, shared_ptr<ExprAST> b)
+                : name(n), ptypes(t), parameters(std::move(p)), retType(retT), body(b) {}
 
         string getName() const;
 
@@ -160,7 +192,9 @@ namespace backend {
 
     private:
         string name;
+        string retType;
         vector<string> parameters;
+        vector<string> ptypes;
         shared_ptr<ExprAST> body;
     };
 
@@ -310,8 +344,19 @@ namespace backend {
         shared_ptr<ExprAST> v;
     };
 
+    class StringExprAST : public ExprAST {
+    public:
+        StringExprAST(string s)
+            : Str(s) {}
+        Value *codegen() const;
+    private:
+        string Str;
+    };
+
     AllocaInst *CreateEntryBlockAlloca(Function *TheFunction, const string &VarName);
     bool isRet(Value* tmp);
+    Value *makeInt(int value);
+    Value *makeDouble(double value);
 }
 
 #endif

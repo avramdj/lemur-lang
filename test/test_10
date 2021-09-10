@@ -1,11 +1,11 @@
-def a(x){
+def a(int x) : int {
 	if(x > 5) {
 		return 5
 	} else {
 		return x
 	}
 }
-def main(){
+def main() : int {
 	print(a(5))
 	return 0
 }

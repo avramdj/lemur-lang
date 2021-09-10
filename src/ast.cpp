@@ -122,48 +122,48 @@ namespace backend {
         if (Str == nullptr) {
             Str = Builder.CreateGlobalStringPtr("%d\n");
         }
-        if (Str1 == nullptr) {
-            Str1 = Builder.CreateGlobalStringPtr("0x%x\n");
-        }
-
-        AllocaInst *Alloca = NamedValues["flag"];
-        if (Alloca == nullptr) {
-            Function *F = Builder.GetInsertBlock()->getParent();
-            Alloca = CreateEntryBlockAlloca(F, "flag");
-            NamedValues["flag"] = Alloca;
-            Builder.CreateStore(ConstantInt::get(TheContext, APInt(32, 0)), Alloca);
-        }
-
-        Value *tmp = Builder.CreateLoad(Type::getInt32Ty(TheContext), Alloca, "flag");
-        Value *CondV = Builder.CreateICmpEQ(tmp, ConstantInt::get(TheContext, APInt(32, 0)));
-
-        Function *TheFunction = Builder.GetInsertBlock()->getParent();
-        BasicBlock *ThenBB =
-                BasicBlock::Create(TheContext, "then", TheFunction);
-        BasicBlock *ElseBB = BasicBlock::Create(TheContext, "else");
-        BasicBlock *MergeBB = BasicBlock::Create(TheContext, "ifcont");
-
-        Builder.CreateCondBr(CondV, ThenBB, ElseBB);
-        Builder.SetInsertPoint(ThenBB);
         vector<Value *> ArgsV;
         ArgsV.push_back(Str);
         ArgsV.push_back(l);
         Builder.CreateCall(PrintfFja, ArgsV, "printfCall");
-        Builder.CreateBr(MergeBB);
-        ThenBB = Builder.GetInsertBlock();
+        return l;
+    }
 
-        TheFunction->getBasicBlockList().push_back(ElseBB);
-        Builder.SetInsertPoint(ElseBB);
-        ArgsV.clear();
-        ArgsV.push_back(Str1);
+    Value *PrintFormatExprAST::codegen() const {
+        Value *l = _nodes[0]->codegen();
+        if (l == nullptr)
+            return nullptr;
+
+        if (Str == nullptr) {
+            Str = Builder.CreateGlobalStringPtr("%s\n");
+        }
+        vector<Value *> ArgsV;
+        ArgsV.push_back(Str);
         ArgsV.push_back(l);
         Builder.CreateCall(PrintfFja, ArgsV, "printfCall");
-        Builder.CreateBr(MergeBB);
-        ElseBB = Builder.GetInsertBlock();
-
-        TheFunction->getBasicBlockList().push_back(MergeBB);
-        Builder.SetInsertPoint(MergeBB);
         return l;
+    }
+
+    Value *DeclAssignExprAST::codegen() const {
+        VarDeclExprAST decl = VarDeclExprAST(Type, Name);
+        decl.codegen();
+        AllocaInst *Alloca = NamedValues[Name];
+        Value *l = _nodes[0]->codegen();
+        if (l == nullptr)
+            return nullptr;
+        return Builder.CreateStore(l, Alloca);
+    }
+
+    Value *VarDeclExprAST::codegen() const {
+        AllocaInst *Alloca = NamedValues[Name];
+        if(Alloca) {
+            cerr << "Variable " << Name << " already defined" << endl;
+            return nullptr;
+        }
+        Function *F = Builder.GetInsertBlock()->getParent();
+        Alloca = CreateEntryBlockAlloca(F, Name);
+        NamedValues[Name] = Alloca;
+        return Builder.CreateStore(makeInt(0), Alloca);
     }
 
     Value *SetExprAST::codegen() const {
@@ -171,10 +171,9 @@ namespace backend {
         if (l == nullptr)
             return nullptr;
         AllocaInst *Alloca = NamedValues[Name];
-        if (Alloca == nullptr) {
-            Function *F = Builder.GetInsertBlock()->getParent();
-            Alloca = CreateEntryBlockAlloca(F, Name);
-            NamedValues[Name] = Alloca;
+        if (!Alloca) {
+            std::cerr << "Variable " << Name << " undefined" << std::endl;
+            return nullptr;
         }
         return Builder.CreateStore(l, Alloca);
     }
@@ -200,7 +199,6 @@ namespace backend {
         vector<Type *> tmp;
         for (unsigned i = 0; i < parameters.size(); i++)
             tmp.push_back(Type::getInt32Ty(TheContext));
-
 
         FunctionType *FT = FunctionType::get(Type::getInt32Ty(TheContext), tmp, false);
 
@@ -360,31 +358,6 @@ namespace backend {
         return Builder.CreateIntCast(Builder.CreateICmpSGE(L, R, "gtetmp"), Type::getInt32Ty(TheContext), true);
     }
 
-// Value* WhileExprAST::codegen() const {
-//   Function *F = Builder.GetInsertBlock()->getParent();
-//   BasicBlock *Loop1BB = BasicBlock::Create(TheContext, "loop1", F);
-//   BasicBlock *Loop2BB = BasicBlock::Create(TheContext, "loop2", F);
-//   BasicBlock *AfterLoopBB = BasicBlock::Create(TheContext, "afterloop", F);
-//   Builder.CreateBr(Loop1BB);
-
-//   Builder.SetInsertPoint(Loop1BB);
-//   Value* CondVal = cond->codegen();
-//   if (!CondVal)
-//     return nullptr;
-//   Builder.CreateCondBr(CondVal, Loop2BB, AfterLoopBB);
-//   Loop1BB = Builder.GetInsertBlock();
-
-//   Builder.SetInsertPoint(Loop2BB);
-//   Value* Tmp = block->codegen();
-//   if (Tmp == nullptr)
-//     return nullptr;
-//   Builder.CreateBr(Loop1BB);
-//   Loop2BB = Builder.GetInsertBlock();
-
-//   Builder.SetInsertPoint(AfterLoopBB);
-//   return ConstantInt::get(TheContext, APInt(32, 0));
-// }
-
     Value *WhileExprAST::codegen() const {
 
         Function *f = Builder.GetInsertBlock()->getParent();
@@ -515,5 +488,30 @@ namespace backend {
 
     bool isRet(Value* tmp) {
         return llvm::dyn_cast<ReturnInst>(tmp);
+    }
+    Value *makeInt(int value) {
+        return ConstantInt::get(TheContext, APInt(32, value));
+    }
+    Value *makeDouble(double value) {
+        return ConstantFP::get(Type::getDoubleTy(TheContext), value);
+    }
+
+    Value *StringExprAST::codegen() const {
+        auto charType = llvm::IntegerType::get(TheContext, 8);
+
+        std::vector<llvm::Constant *> chars(Str.length());
+        for(unsigned int i = 0; i < Str.size(); i++) {
+            chars[i] = llvm::ConstantInt::get(charType, Str[i]);
+        }
+        chars.push_back(llvm::ConstantInt::get(charType, 0));
+
+        auto stringType = llvm::ArrayType::get(charType, chars.size());
+        auto globalDeclaration = (llvm::GlobalVariable*) TheModule->getOrInsertGlobal(".str", stringType);
+        globalDeclaration->setInitializer(llvm::ConstantArray::get(stringType, chars));
+        globalDeclaration->setConstant(true);
+        globalDeclaration->setLinkage(llvm::GlobalValue::LinkageTypes::PrivateLinkage);
+        globalDeclaration->setUnnamedAddr (llvm::GlobalValue::UnnamedAddr::Global);
+
+        return llvm::ConstantExpr::getBitCast(globalDeclaration, charType->getPointerTo());
     }
 }

@@ -1,14 +1,14 @@
-def f(x, y, z) {
-  a = x or y
+def f(int x, int y, int z) : int {
+  int a = x or y
   return a or z
 }
 
-def one(x) {
+def one(int x) : int{
   return 1
 }
 
-def main() {
-  tmp = f(8 or 2, 4, 1)
+def main() : int{
+  int tmp = f(8 or 2, 4, 1)
   print(tmp)
   tmp = one(3)
   print(tmp)

@@ -6,7 +6,7 @@
 #include <AvrlangParser.h>
 #include <ASTBuilder.hpp>
 #include <ParserErrorListener.h>
-#include <module.h>
+#include <context.h>
 
 int main(int argc, char *argv[]) {
 

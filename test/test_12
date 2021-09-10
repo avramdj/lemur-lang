@@ -1,9 +1,9 @@
-def square(x) {
-	return x*x
+def square(int x) : int {
+	return x * x
 }
 
-def main() {
-  i = 0
+def main() : int {
+  int i = 0
   while(i < 10) {
     print(square(i))
     i = i + 1

@@ -1,8 +1,8 @@
-def fib(x) {
+def fib(int x) : int {
 	return 1
 }
-def main() {
-	i = 0
+def main() : int {
+	int i = 0
 	while(i < 15) {
 		print(fib(i))
 		i = i + 1

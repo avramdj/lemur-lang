@@ -26,6 +26,12 @@ public:
   virtual void enterGlobalstmt(AvrlangParser::GlobalstmtContext *ctx) = 0;
   virtual void exitGlobalstmt(AvrlangParser::GlobalstmtContext *ctx) = 0;
 
+  virtual void enterClassdef(AvrlangParser::ClassdefContext *ctx) = 0;
+  virtual void exitClassdef(AvrlangParser::ClassdefContext *ctx) = 0;
+
+  virtual void enterClassbody(AvrlangParser::ClassbodyContext *ctx) = 0;
+  virtual void exitClassbody(AvrlangParser::ClassbodyContext *ctx) = 0;
+
   virtual void enterFunctiondef(AvrlangParser::FunctiondefContext *ctx) = 0;
   virtual void exitFunctiondef(AvrlangParser::FunctiondefContext *ctx) = 0;
 
@@ -41,8 +47,17 @@ public:
   virtual void enterPrintstmt(AvrlangParser::PrintstmtContext *ctx) = 0;
   virtual void exitPrintstmt(AvrlangParser::PrintstmtContext *ctx) = 0;
 
+  virtual void enterPrintfstmt(AvrlangParser::PrintfstmtContext *ctx) = 0;
+  virtual void exitPrintfstmt(AvrlangParser::PrintfstmtContext *ctx) = 0;
+
+  virtual void enterVardecl(AvrlangParser::VardeclContext *ctx) = 0;
+  virtual void exitVardecl(AvrlangParser::VardeclContext *ctx) = 0;
+
   virtual void enterAssign(AvrlangParser::AssignContext *ctx) = 0;
   virtual void exitAssign(AvrlangParser::AssignContext *ctx) = 0;
+
+  virtual void enterDeclassign(AvrlangParser::DeclassignContext *ctx) = 0;
+  virtual void exitDeclassign(AvrlangParser::DeclassignContext *ctx) = 0;
 
   virtual void enterRet(AvrlangParser::RetContext *ctx) = 0;
   virtual void exitRet(AvrlangParser::RetContext *ctx) = 0;
@@ -50,17 +65,35 @@ public:
   virtual void enterWhileloop(AvrlangParser::WhileloopContext *ctx) = 0;
   virtual void exitWhileloop(AvrlangParser::WhileloopContext *ctx) = 0;
 
-  virtual void enterIf_expr(AvrlangParser::If_exprContext *ctx) = 0;
-  virtual void exitIf_expr(AvrlangParser::If_exprContext *ctx) = 0;
+  virtual void enterForloop(AvrlangParser::ForloopContext *ctx) = 0;
+  virtual void exitForloop(AvrlangParser::ForloopContext *ctx) = 0;
 
-  virtual void enterIfelse_expr(AvrlangParser::Ifelse_exprContext *ctx) = 0;
-  virtual void exitIfelse_expr(AvrlangParser::Ifelse_exprContext *ctx) = 0;
+  virtual void enterIfExpr(AvrlangParser::IfExprContext *ctx) = 0;
+  virtual void exitIfExpr(AvrlangParser::IfExprContext *ctx) = 0;
+
+  virtual void enterIfElseExpr(AvrlangParser::IfElseExprContext *ctx) = 0;
+  virtual void exitIfElseExpr(AvrlangParser::IfElseExprContext *ctx) = 0;
+
+  virtual void enterStringRule(AvrlangParser::StringRuleContext *ctx) = 0;
+  virtual void exitStringRule(AvrlangParser::StringRuleContext *ctx) = 0;
 
   virtual void enterOpExprRule(AvrlangParser::OpExprRuleContext *ctx) = 0;
   virtual void exitOpExprRule(AvrlangParser::OpExprRuleContext *ctx) = 0;
 
+  virtual void enterIndexRule(AvrlangParser::IndexRuleContext *ctx) = 0;
+  virtual void exitIndexRule(AvrlangParser::IndexRuleContext *ctx) = 0;
+
+  virtual void enterMethodRule(AvrlangParser::MethodRuleContext *ctx) = 0;
+  virtual void exitMethodRule(AvrlangParser::MethodRuleContext *ctx) = 0;
+
+  virtual void enterListRule(AvrlangParser::ListRuleContext *ctx) = 0;
+  virtual void exitListRule(AvrlangParser::ListRuleContext *ctx) = 0;
+
   virtual void enterNumberRule(AvrlangParser::NumberRuleContext *ctx) = 0;
   virtual void exitNumberRule(AvrlangParser::NumberRuleContext *ctx) = 0;
+
+  virtual void enterUminusRule(AvrlangParser::UminusRuleContext *ctx) = 0;
+  virtual void exitUminusRule(AvrlangParser::UminusRuleContext *ctx) = 0;
 
   virtual void enterCallExprRule(AvrlangParser::CallExprRuleContext *ctx) = 0;
   virtual void exitCallExprRule(AvrlangParser::CallExprRuleContext *ctx) = 0;
@@ -73,6 +106,15 @@ public:
 
   virtual void enterBraceExprRule(AvrlangParser::BraceExprRuleContext *ctx) = 0;
   virtual void exitBraceExprRule(AvrlangParser::BraceExprRuleContext *ctx) = 0;
+
+  virtual void enterList(AvrlangParser::ListContext *ctx) = 0;
+  virtual void exitList(AvrlangParser::ListContext *ctx) = 0;
+
+  virtual void enterMethodCall(AvrlangParser::MethodCallContext *ctx) = 0;
+  virtual void exitMethodCall(AvrlangParser::MethodCallContext *ctx) = 0;
+
+  virtual void enterString(AvrlangParser::StringContext *ctx) = 0;
+  virtual void exitString(AvrlangParser::StringContext *ctx) = 0;
 
   virtual void enterNumber(AvrlangParser::NumberContext *ctx) = 0;
   virtual void exitNumber(AvrlangParser::NumberContext *ctx) = 0;

@@ -1,4 +1,4 @@
-def retone(x){
+def retone(int x) : int {
   return 1
   if(x < 3) {
     return 100
@@ -6,7 +6,7 @@ def retone(x){
   return x
 }
 
-def main() {
+def main() : int {
   print(retone(2))
   return 0
 }

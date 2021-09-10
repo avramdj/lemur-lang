@@ -3,7 +3,7 @@
 //
 #include <iostream>
 #include <ast.hpp>
-#include <module.h>
+#include <context.h>
 #include <exception>
 #include <llvm/Support/Host.h>
 #include <llvm/Support/TargetSelect.h>
@@ -21,6 +21,7 @@ namespace backend {
     LLVMContext TheContext;
     llvm::legacy::FunctionPassManager *TheFPM;
     Function *PrintfFja;
+    Function *Sprintf;
 
     void InitializeModuleAndPassManager(void) {
         TheModule = new Module("my_module", TheContext);
@@ -29,6 +30,11 @@ namespace backend {
         FunctionType *FT1 = FunctionType::get(IntegerType::getInt32Ty(TheContext),
                                               PointerType::get(Type::getInt8Ty(TheContext), 0), true);
         PrintfFja = Function::Create(FT1, Function::ExternalLinkage, "printf", TheModule);
+
+        /* sprintf fja */
+        FunctionType *FT2 = FunctionType::get(IntegerType::getInt32Ty(TheContext),
+                                              PointerType::get(Type::getInt8Ty(TheContext), 0), true);
+        Sprintf = Function::Create(FT2, Function::ExternalLinkage, "sprintf", TheModule);
 
         // Create a new pass manager attached to it.
         TheFPM = new llvm::legacy::FunctionPassManager(TheModule);

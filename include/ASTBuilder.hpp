@@ -19,6 +19,14 @@ class ASTBuilder: public AvrlangBaseVisitor {
 
     antlrcpp::Any visitAssign(AvrlangParser::AssignContext *ctx) override;
 
+    antlrcpp::Any visitVardecl(AvrlangParser::VardeclContext *ctx) override;
+
+    antlrcpp::Any visitDeclassign(AvrlangParser::DeclassignContext *ctx) override;
+
+    antlrcpp::Any visitStringRule(AvrlangParser::StringRuleContext *ctx) override;
+
+    antlrcpp::Any visitPrintfstmt(AvrlangParser::PrintfstmtContext *ctx) override;
+
     antlrcpp::Any visitRet(AvrlangParser::RetContext *ctx) override;
 
     antlrcpp::Any visitWhileloop(AvrlangParser::WhileloopContext *ctx) override;
@@ -27,9 +35,9 @@ class ASTBuilder: public AvrlangBaseVisitor {
 
     antlrcpp::Any visitVarRule(AvrlangParser::VarRuleContext *ctx) override;
 
-    antlrcpp::Any visitIf_expr(AvrlangParser::If_exprContext *ctx) override;
+    antlrcpp::Any visitIfExpr(AvrlangParser::IfExprContext *ctx) override;
 
-    antlrcpp::Any visitIfelse_expr(AvrlangParser::Ifelse_exprContext *ctx) override;
+    antlrcpp::Any visitIfElseExpr(AvrlangParser::IfElseExprContext *ctx) override;
 
     antlrcpp::Any visitCallExprRule(AvrlangParser::CallExprRuleContext *ctx) override;
 
