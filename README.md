@@ -60,6 +60,7 @@ Currently only supports doubles.
 * <strike> *hook up llvm backend* </strike>
 * <strike> *unit testing* </strike>
 * string support
+* type infrastructure
 * compiler flags
 * JIT support
 * vscode extension ???
