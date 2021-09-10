@@ -29,7 +29,7 @@ class Base {
 
 class Derived <- Base {
     int y
-    def doSomething() {
+    def doSomething() : int {
         return x*y
     }
 }
