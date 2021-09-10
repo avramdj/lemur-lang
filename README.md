@@ -40,15 +40,12 @@ def someListFun(Base el) : List {
 }
 
 def main() : int {
-
     Base b = Derived()
-
     List list = someListFun(b)
-
+    
     for (int i in list) {
         print(i*10)
     }
-
     return 0
 }
 ```
