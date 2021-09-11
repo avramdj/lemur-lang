@@ -8,11 +8,12 @@ class Based {
 
 def main() : int {
 
+  int z
   Based b
 
   int a = b.getX(3)
 
-#  print(a)
+  print(a)
 
   return 0
 }

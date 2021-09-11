@@ -1,5 +1,5 @@
 def main() : int {
-	string x = "testing"
+	string x = "src\\testing\\hello.cpp\n"
 	print(x)
 	return 0
 }

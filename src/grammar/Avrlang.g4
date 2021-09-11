@@ -1,14 +1,10 @@
 grammar Avrlang;
 
 @header {
-    #include <iostream>
-    #include <ast.hpp>
-    using namespace std;
-    using namespace llvm;
+    #include <vector>
+    #include <string>
 }
-@after {
-
-}
+@after {}
 
 file : (globalstmt | NEWLINE)* EOF;
 
@@ -117,7 +113,7 @@ NE : '!=';
 NEWLINE : '\n';
 NAME : [a-zA-Z_][a-zA-Z_0-9]*;
 NUM : ([0-9]*[.])?[0-9]+;
-STRING : '"'(ESC | ~["\\])* '"';
+STRING : '"'(ESC | ~["\\])*'"';
 fragment ESC : '\\' (["\\/bfnrt]) ;
 WHITESPACE : (' ' | '\t') -> skip;
 COMMENT : '#' ~[\r\n\f]* -> skip;

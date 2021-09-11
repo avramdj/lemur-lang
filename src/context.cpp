@@ -27,7 +27,8 @@ using namespace llvm;
 
 namespace backend {
     namespace Types {
-        std::map<std::string, Type*> typeTable;
+        std::map<std::string, Type *> typeTable;
+        std::map<Type *, std::string> typeNames;
         std::map<std::string, std::map<std::string, int>> classVarTable;
         std::map<std::string, std::vector<std::string>> classFnTable;
     }
@@ -57,6 +58,10 @@ namespace backend {
         Types::typeTable["bool"] = Type::getInt1Ty(TheContext);
         Types::typeTable["float"] = Type::getDoubleTy(TheContext);
         Types::typeTable["string"] = Type::getInt8PtrTy(TheContext);
+        Types::typeNames[Types::typeTable["int"]] = "int";
+        Types::typeNames[Types::typeTable["bool"]] = "bool";
+        Types::typeNames[Types::typeTable["float"]] = "float";
+        Types::typeNames[Types::typeTable["string"]] = "string";
     }
 
     void InitializeModuleAndPassManager(void) {

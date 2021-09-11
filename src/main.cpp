@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
         infile.open(argv[1]);
         source = &infile;
     } else {
-        source = &cin;
+        source = &std::cin;
     }
     std::string str((std::istreambuf_iterator<char>(*source)),
                     std::istreambuf_iterator<char>());

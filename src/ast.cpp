@@ -335,7 +335,8 @@ namespace backend {
         }
 
         if (Args.size() != f->arg_size()) {
-            cerr << "Function " << Callee << " called with wrong number of arguments" << endl;
+            cerr << "Function " << Callee << " called with " << Args.size() << " arguments but takes " <<
+            f->arg_size() << endl;
             return nullptr;
         }
 
@@ -356,21 +357,19 @@ namespace backend {
             cerr << "Variable " + Name + " is undefined" << endl;
             return nullptr;
         }
-        Type *t = NamedValues[Name].second;
-        if(!t) {
-            std::cerr << "Type mismatch with " << Name << std::endl;
+        Type *t = tmp->getAllocatedType();
+
+        bool isPtr = t->isPointerTy();
+        auto cit = Types::typeNames.find(t);
+        if(cit == Types::typeNames.end() || !isPtr) {
+            std::cerr << "Variable " << Name << " is not of class type" << std::endl;
             return nullptr;
         }
-        std::string clsName = tmp->getType()->getStructName().str();
+        std::string clsName = cit->second;
         std::string encodedMethod = encodeFunctionName(Method, clsName);
         Function *f = TheModule->getFunction(encodedMethod);
         if (!f) {
-            cerr << "Call of undefined function " << Method << endl;
-            return nullptr;
-        }
-
-        if (Args.size() != f->arg_size()) {
-            cerr << "Function " << Method << " called with wrong number of arguments" << endl;
+            cerr << "Call of undefined method " << Method << endl;
             return nullptr;
         }
 
@@ -387,7 +386,37 @@ namespace backend {
             ArgsV.push_back(tmpParam);
         }
 
+        if (ArgsV.size() != f->arg_size()) {
+            cerr << "Method " << Method << " called with " << ArgsV.size()-1 << " arguments but takes " <<
+                 f->arg_size()-1 << endl;
+            return nullptr;
+        }
+
         return Builder.CreateCall(f, ArgsV, "methodcalltmp");
+    }
+
+    Value *ClassAccessExprAST::codegen() const {
+        AllocaInst *tmp = NamedValues[Name].first;
+        if (tmp == nullptr) {
+            cerr << "Variable " + Name + " is undefined" << endl;
+            return nullptr;
+        }
+        Type *t = tmp->getAllocatedType();
+
+        bool isPtr = t->isPointerTy();
+        auto cit = Types::typeNames.find(t);
+        if(cit == Types::typeNames.end() || !isPtr) {
+            std::cerr << "Variable " << Name << " is not of class type" << std::endl;
+            return nullptr;
+        }
+        std::string clsName = cit->second;
+        auto it = Types::classVarTable[clsName].find(Var);
+        if(it == Types::classVarTable[clsName].end()) {
+            std::cerr << "Class " << clsName << " doesn't have member " << Var << std::endl;
+            return nullptr;
+        }
+        int memberIdx = it->second;
+        return Builder.CreateStructGEP(tmp, memberIdx);
     }
 
     Value *AddExprAST::codegen() const {
@@ -745,7 +774,8 @@ namespace backend {
             Types::classVarTable[Name][vars[i]] = i;
         }
         StructType* classType = StructType::create(TheContext, subtypes, Name);
-        Types::typeTable[Name] = classType;
+        Types::typeTable[Name] = classType->getPointerTo();
+        Types::typeNames[Types::typeTable[Name]] = Name;
         for(auto& f : functions) {
             f->codegen();
         }

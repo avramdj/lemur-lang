@@ -15,6 +15,7 @@ using namespace legacy;
 namespace backend {
     namespace Types {
         extern std::map<std::string, Type*> typeTable;
+        extern std::map<Type*, std::string> typeNames;
         extern std::map<std::string, std::map<std::string, int>> classVarTable;
         extern std::map<std::string, std::vector<std::string>> classFnTable;
         Value *getTypeConstant(Type *, float);

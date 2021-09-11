@@ -214,6 +214,18 @@ namespace backend {
         std::vector<std::shared_ptr<ExprAST> > Args;
     };
 
+    class ClassAccessExprAST : public ExprAST {
+    public:
+        ClassAccessExprAST(std::string n, std::string s)
+            : Name(n), Var(s) {}
+
+        Value *codegen() const;
+
+    private:
+        std::string Name;
+        std::string Var;
+    };
+
     class AddExprAST : public InnerExprAST {
     public:
         AddExprAST(std::shared_ptr<ExprAST> l, std::shared_ptr<ExprAST> r)
