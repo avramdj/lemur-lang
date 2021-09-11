@@ -51,7 +51,9 @@ def main() : int {
 ```
 
 ### Types
-Currently only supports doubles.
+Weakly typed
+Statically typed
+Class objects passed by reference
 
 ### TODO
 * <strike> *AST class hierarchy* </strike>
@@ -64,4 +66,4 @@ Currently only supports doubles.
 * advanced OOP concepts
 * compiler flags
 * JIT support
-* vscode extension ???
+* vscode extension (???)
