@@ -1,5 +1,5 @@
-def f(int x, int y, int z) : int {
-  int a = x or y
+def f(int x, int y, int z) : bool {
+  int a = x + y
   return a or z
 }
 
@@ -8,9 +8,11 @@ def one(int x) : int{
 }
 
 def main() : int{
-  int tmp = f(8 or 2, 4, 1)
-  print(tmp)
-  tmp = one(3)
-  print(tmp)
+  bool tmp = f(8 * 2, 4, 1)
+  if(tmp) {
+    print(4242)
+  }
+  int o = one(3)
+  print(o)
   return 0
 }

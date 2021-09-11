@@ -33,6 +33,10 @@ public:
 
     virtual antlrcpp::Any visitClassbody(AvrlangParser::ClassbodyContext *context) = 0;
 
+    virtual antlrcpp::Any visitClassvardecl(AvrlangParser::ClassvardeclContext *context) = 0;
+
+    virtual antlrcpp::Any visitClassfunctiondef(AvrlangParser::ClassfunctiondefContext *context) = 0;
+
     virtual antlrcpp::Any visitFunctiondef(AvrlangParser::FunctiondefContext *context) = 0;
 
     virtual antlrcpp::Any visitParamlist(AvrlangParser::ParamlistContext *context) = 0;
@@ -42,8 +46,6 @@ public:
     virtual antlrcpp::Any visitStmt(AvrlangParser::StmtContext *context) = 0;
 
     virtual antlrcpp::Any visitPrintstmt(AvrlangParser::PrintstmtContext *context) = 0;
-
-    virtual antlrcpp::Any visitPrintfstmt(AvrlangParser::PrintfstmtContext *context) = 0;
 
     virtual antlrcpp::Any visitVardecl(AvrlangParser::VardeclContext *context) = 0;
 
@@ -79,6 +81,8 @@ public:
 
     virtual antlrcpp::Any visitVarRule(AvrlangParser::VarRuleContext *context) = 0;
 
+    virtual antlrcpp::Any visitObjVarRule(AvrlangParser::ObjVarRuleContext *context) = 0;
+
     virtual antlrcpp::Any visitNegRule(AvrlangParser::NegRuleContext *context) = 0;
 
     virtual antlrcpp::Any visitBraceExprRule(AvrlangParser::BraceExprRuleContext *context) = 0;
@@ -86,6 +90,8 @@ public:
     virtual antlrcpp::Any visitList(AvrlangParser::ListContext *context) = 0;
 
     virtual antlrcpp::Any visitMethodCall(AvrlangParser::MethodCallContext *context) = 0;
+
+    virtual antlrcpp::Any visitObjVar(AvrlangParser::ObjVarContext *context) = 0;
 
     virtual antlrcpp::Any visitString(AvrlangParser::StringContext *context) = 0;
 

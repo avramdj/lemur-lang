@@ -20,22 +20,22 @@ public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, UMINUS = 10, FOR = 11, IN = 12, CLASS = 13, ARROW = 14, 
-    DEF = 15, PRINTF = 16, PRINT = 17, OPEN = 18, CLOSED = 19, LEFTBRACE = 20, 
-    RIGHTBRACE = 21, RET = 22, WHILE = 23, IF = 24, ELSE = 25, AND = 26, 
-    OR = 27, XOR = 28, SHL = 29, SHR = 30, NEG = 31, GT = 32, GE = 33, LT = 34, 
-    LE = 35, EQ = 36, NE = 37, NEWLINE = 38, NAME = 39, NUM = 40, STRING = 41, 
-    WHITESPACE = 42, COMMENT = 43
+    DEF = 15, PRINT = 16, OPEN = 17, CLOSED = 18, LEFTBRACE = 19, RIGHTBRACE = 20, 
+    RET = 21, WHILE = 22, IF = 23, ELSE = 24, AND = 25, OR = 26, XOR = 27, 
+    SHL = 28, SHR = 29, NEG = 30, GT = 31, GE = 32, LT = 33, LE = 34, EQ = 35, 
+    NE = 36, NEWLINE = 37, NAME = 38, NUM = 39, STRING = 40, WHITESPACE = 41, 
+    COMMENT = 42
   };
 
   enum {
     RuleFile = 0, RuleGlobalstmt = 1, RuleClassdef = 2, RuleClassbody = 3, 
-    RuleFunctiondef = 4, RuleParamlist = 5, RuleBlock = 6, RuleStmt = 7, 
-    RulePrintstmt = 8, RulePrintfstmt = 9, RuleVardecl = 10, RuleAssign = 11, 
-    RuleDeclassign = 12, RuleRet = 13, RuleWhileloop = 14, RuleForloop = 15, 
-    RuleIfExpr = 16, RuleIfElseExpr = 17, RuleExpr = 18, RuleList = 19, 
-    RuleMethodCall = 20, RuleString = 21, RuleNumber = 22, RuleVar = 23, 
-    RuleCallexpr = 24, RuleArglist = 25, RuleNeg = 26, RuleBinoperator = 27, 
-    RuleBracedexpr = 28
+    RuleClassvardecl = 4, RuleClassfunctiondef = 5, RuleFunctiondef = 6, 
+    RuleParamlist = 7, RuleBlock = 8, RuleStmt = 9, RulePrintstmt = 10, 
+    RuleVardecl = 11, RuleAssign = 12, RuleDeclassign = 13, RuleRet = 14, 
+    RuleWhileloop = 15, RuleForloop = 16, RuleIfExpr = 17, RuleIfElseExpr = 18, 
+    RuleExpr = 19, RuleList = 20, RuleMethodCall = 21, RuleObjVar = 22, 
+    RuleString = 23, RuleNumber = 24, RuleVar = 25, RuleCallexpr = 26, RuleArglist = 27, 
+    RuleNeg = 28, RuleBinoperator = 29, RuleBracedexpr = 30
   };
 
   AvrlangParser(antlr4::TokenStream *input);
@@ -52,12 +52,13 @@ public:
   class GlobalstmtContext;
   class ClassdefContext;
   class ClassbodyContext;
+  class ClassvardeclContext;
+  class ClassfunctiondefContext;
   class FunctiondefContext;
   class ParamlistContext;
   class BlockContext;
   class StmtContext;
   class PrintstmtContext;
-  class PrintfstmtContext;
   class VardeclContext;
   class AssignContext;
   class DeclassignContext;
@@ -69,6 +70,7 @@ public:
   class ExprContext;
   class ListContext;
   class MethodCallContext;
+  class ObjVarContext;
   class StringContext;
   class NumberContext;
   class VarContext;
@@ -116,7 +118,7 @@ public:
   class  ClassdefContext : public antlr4::ParserRuleContext {
   public:
     antlr4::Token *cName = nullptr;;
-    antlr4::Token *derName = nullptr;;
+    antlr4::Token *baseName = nullptr;;
     AvrlangParser::ClassbodyContext *body = nullptr;;
     ClassdefContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
@@ -141,8 +143,10 @@ public:
   public:
     ClassbodyContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    VardeclContext *vardecl();
-    FunctiondefContext *functiondef();
+    std::vector<ClassvardeclContext *> classvardecl();
+    ClassvardeclContext* classvardecl(size_t i);
+    std::vector<ClassfunctiondefContext *> classfunctiondef();
+    ClassfunctiondefContext* classfunctiondef(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -152,6 +156,49 @@ public:
   };
 
   ClassbodyContext* classbody();
+
+  class  ClassvardeclContext : public antlr4::ParserRuleContext {
+  public:
+    antlr4::Token *typeName = nullptr;;
+    antlr4::Token *varName = nullptr;;
+    ClassvardeclContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> NAME();
+    antlr4::tree::TerminalNode* NAME(size_t i);
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ClassvardeclContext* classvardecl();
+
+  class  ClassfunctiondefContext : public antlr4::ParserRuleContext {
+  public:
+    antlr4::Token *fName = nullptr;;
+    AvrlangParser::ParamlistContext *params = nullptr;;
+    antlr4::Token *retType = nullptr;;
+    AvrlangParser::BlockContext *body = nullptr;;
+    ClassfunctiondefContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *DEF();
+    antlr4::tree::TerminalNode *OPEN();
+    antlr4::tree::TerminalNode *CLOSED();
+    std::vector<antlr4::tree::TerminalNode *> NAME();
+    antlr4::tree::TerminalNode* NAME(size_t i);
+    ParamlistContext *paramlist();
+    BlockContext *block();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ClassfunctiondefContext* classfunctiondef();
 
   class  FunctiondefContext : public antlr4::ParserRuleContext {
   public:
@@ -232,7 +279,6 @@ public:
     ForloopContext *forloop();
     ExprContext *expr();
     PrintstmtContext *printstmt();
-    PrintfstmtContext *printfstmt();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -260,24 +306,6 @@ public:
   };
 
   PrintstmtContext* printstmt();
-
-  class  PrintfstmtContext : public antlr4::ParserRuleContext {
-  public:
-    PrintfstmtContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *PRINTF();
-    antlr4::tree::TerminalNode *OPEN();
-    ExprContext *expr();
-    antlr4::tree::TerminalNode *CLOSED();
-
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
-  };
-
-  PrintfstmtContext* printfstmt();
 
   class  VardeclContext : public antlr4::ParserRuleContext {
   public:
@@ -545,6 +573,17 @@ public:
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  ObjVarRuleContext : public ExprContext {
+  public:
+    ObjVarRuleContext(ExprContext *ctx);
+
+    ObjVarContext *objVar();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  NegRuleContext : public ExprContext {
   public:
     NegRuleContext(ExprContext *ctx);
@@ -606,6 +645,24 @@ public:
   };
 
   MethodCallContext* methodCall();
+
+  class  ObjVarContext : public antlr4::ParserRuleContext {
+  public:
+    antlr4::Token *objName = nullptr;;
+    antlr4::Token *varName = nullptr;;
+    ObjVarContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> NAME();
+    antlr4::tree::TerminalNode* NAME(size_t i);
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ObjVarContext* objVar();
 
   class  StringContext : public antlr4::ParserRuleContext {
   public:

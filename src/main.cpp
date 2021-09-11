@@ -1,5 +1,4 @@
 #include <iostream>
-#include <memory>
 #include <string>
 #include <antlr4-runtime.h>
 #include <AvrlangLexer.h>
@@ -11,7 +10,7 @@
 int main(int argc, char *argv[]) {
 
     bool printIR = true;
-    backend::InitializeModuleAndPassManager();
+    backend::InitializeContext();
     std::basic_istream<char>* source;
     std::ifstream infile;
     if(argc > 1) {

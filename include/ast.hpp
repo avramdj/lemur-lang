@@ -3,19 +3,10 @@
 
 #include <string>
 #include <vector>
-using namespace std;
+#include <memory>
 
-#include "llvm/Transforms/InstCombine/InstCombine.h"
-#include "llvm/Transforms/Utils.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Support/FileSystem.h"
+#include "llvm/IR/Value.h"
+#include "llvm/IR/Instructions.h"
 
 using namespace llvm;
 
@@ -41,31 +32,31 @@ namespace backend {
 
     class VariableExprAST : public ExprAST {
     public:
-        VariableExprAST(string s)
+        VariableExprAST(std::string s)
                 : Name(s) {}
 
         Value *codegen() const;
 
     private:
-        string Name;
+        std::string Name;
     };
 
     class InnerExprAST : public ExprAST {
     public:
-        InnerExprAST(shared_ptr<ExprAST> a);
+        InnerExprAST(std::shared_ptr<ExprAST> a);
 
-        InnerExprAST(shared_ptr<ExprAST> a, shared_ptr<ExprAST> b);
+        InnerExprAST(std::shared_ptr<ExprAST> a, std::shared_ptr<ExprAST> b);
 
-        InnerExprAST(shared_ptr<ExprAST> a, shared_ptr<ExprAST> b, shared_ptr<ExprAST> c);
+        InnerExprAST(std::shared_ptr<ExprAST> a, std::shared_ptr<ExprAST> b, std::shared_ptr<ExprAST> c);
 
-        InnerExprAST(shared_ptr<ExprAST> a, shared_ptr<ExprAST> b, shared_ptr<ExprAST> c, shared_ptr<ExprAST> d);
+        InnerExprAST(std::shared_ptr<ExprAST> a, std::shared_ptr<ExprAST> b, std::shared_ptr<ExprAST> c, std::shared_ptr<ExprAST> d);
 
-        InnerExprAST(vector<shared_ptr<ExprAST> > a);
+        InnerExprAST(std::vector<std::shared_ptr<ExprAST> > a);
 
         ~InnerExprAST();
 
     protected:
-        vector<shared_ptr<ExprAST> > _nodes;
+        std::vector<std::shared_ptr<ExprAST> > _nodes;
     private:
         InnerExprAST(const InnerExprAST &i);
 
@@ -74,7 +65,7 @@ namespace backend {
 
     class AndExprAST : public InnerExprAST {
     public:
-        AndExprAST(shared_ptr<ExprAST> a, shared_ptr<ExprAST> b)
+        AndExprAST(std::shared_ptr<ExprAST> a, std::shared_ptr<ExprAST> b)
                 : InnerExprAST(a, b) {}
 
         Value *codegen() const;
@@ -82,7 +73,7 @@ namespace backend {
 
     class OrExprAST : public InnerExprAST {
     public:
-        OrExprAST(shared_ptr<ExprAST> a, shared_ptr<ExprAST> b)
+        OrExprAST(std::shared_ptr<ExprAST> a, std::shared_ptr<ExprAST> b)
                 : InnerExprAST(a, b) {}
 
         Value *codegen() const;
@@ -90,7 +81,7 @@ namespace backend {
 
     class XorExprAST : public InnerExprAST {
     public:
-        XorExprAST(shared_ptr<ExprAST> a, shared_ptr<ExprAST> b)
+        XorExprAST(std::shared_ptr<ExprAST> a, std::shared_ptr<ExprAST> b)
                 : InnerExprAST(a, b) {}
 
         Value *codegen() const;
@@ -98,7 +89,7 @@ namespace backend {
 
     class ShlExprAST : public InnerExprAST {
     public:
-        ShlExprAST(shared_ptr<ExprAST> a, shared_ptr<ExprAST> b)
+        ShlExprAST(std::shared_ptr<ExprAST> a, std::shared_ptr<ExprAST> b)
                 : InnerExprAST(a, b) {}
 
         Value *codegen() const;
@@ -106,7 +97,7 @@ namespace backend {
 
     class ShrExprAST : public InnerExprAST {
     public:
-        ShrExprAST(shared_ptr<ExprAST> a, shared_ptr<ExprAST> b)
+        ShrExprAST(std::shared_ptr<ExprAST> a, std::shared_ptr<ExprAST> b)
                 : InnerExprAST(a, b) {}
 
         Value *codegen() const;
@@ -114,7 +105,7 @@ namespace backend {
 
     class NotExprAST : public InnerExprAST {
     public:
-        NotExprAST(shared_ptr<ExprAST> a)
+        NotExprAST(std::shared_ptr<ExprAST> a)
                 : InnerExprAST(a) {}
 
         Value *codegen() const;
@@ -122,15 +113,7 @@ namespace backend {
 
     class PrintExprAST : public InnerExprAST {
     public:
-        PrintExprAST(shared_ptr<ExprAST> a)
-                : InnerExprAST(a) {}
-
-        Value *codegen() const;
-    };
-
-    class PrintFormatExprAST : public InnerExprAST {
-    public:
-        PrintFormatExprAST(shared_ptr<ExprAST> a)
+        PrintExprAST(std::shared_ptr<ExprAST> a)
                 : InnerExprAST(a) {}
 
         Value *codegen() const;
@@ -138,69 +121,69 @@ namespace backend {
 
     class VarDeclExprAST : public ExprAST {
     public:
-        VarDeclExprAST(string type, string name)
+        VarDeclExprAST(std::string type, std::string name)
                 : Type(type), Name(name) {}
 
         Value *codegen() const;
 
     private:
-        string Name;
-        string Type;
+        std::string Name;
+        std::string Type;
     };
 
     class DeclAssignExprAST : public InnerExprAST {
     public:
-        DeclAssignExprAST(string t, string n, shared_ptr<ExprAST> a)
+        DeclAssignExprAST(std::string t, std::string n, std::shared_ptr<ExprAST> a)
                 : Type(t), Name(n), InnerExprAST(a) {}
 
         Value *codegen() const;
 
     private:
-        string Type;
-        string Name;
+        std::string Type;
+        std::string Name;
     };
 
     class SetExprAST : public InnerExprAST {
     public:
-        SetExprAST(shared_ptr<ExprAST> a, string n)
+        SetExprAST(std::shared_ptr<ExprAST> a, std::string n)
                 : InnerExprAST(a), Name(n) {}
 
         Value *codegen() const;
 
     private:
-        string Name;
+        std::string Name;
     };
 
     class SeqExprAST : public InnerExprAST {
     public:
-        SeqExprAST(vector<shared_ptr<ExprAST> > a)
+        SeqExprAST(std::vector<std::shared_ptr<ExprAST> > a)
                 : InnerExprAST(a) {}
 
         Value *codegen() const;
 
-        void add(shared_ptr<ExprAST> node);
+        void add(std::shared_ptr<ExprAST> node);
     };
 
     class FunctionDefintionAST : ExprAST {
     public:
-        FunctionDefintionAST(string n, vector<string> t, vector<string> p, string retT, shared_ptr<ExprAST> b)
+        FunctionDefintionAST(std::string n, std::vector<std::string> t, std::vector<std::string> p, std::string retT, std::shared_ptr<ExprAST> b)
                 : name(n), ptypes(t), parameters(std::move(p)), retType(retT), body(b) {}
 
-        string getName() const;
+        std::string getName() const;
 
         Value *codegen() const;
 
     private:
-        string name;
-        string retType;
-        vector<string> parameters;
-        vector<string> ptypes;
-        shared_ptr<ExprAST> body;
+        std::string name;
+        std::string retType;
+        std::vector<std::string> parameters;
+        std::vector<std::string> ptypes;
+        std::shared_ptr<ExprAST> body;
     };
 
     class CallExprAST : public ExprAST {
     public:
-        CallExprAST(string s, vector<shared_ptr<ExprAST> > v)
+        CallExprAST(std::string s, std::vector<std::shared_ptr<ExprAST> > v)
                 : Callee(s), Args(v) {}
 
         Value *codegen() const;
@@ -212,13 +195,13 @@ namespace backend {
 
         CallExprAST &operator=(const CallExprAST &);
 
-        string Callee;
-        vector<shared_ptr<ExprAST> > Args;
+        std::string Callee;
+        std::vector<std::shared_ptr<ExprAST> > Args;
     };
 
     class AddExprAST : public InnerExprAST {
     public:
-        AddExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
+        AddExprAST(std::shared_ptr<ExprAST> l, std::shared_ptr<ExprAST> r)
                 : InnerExprAST(l, r) {}
 
         Value *codegen() const;
@@ -226,7 +209,7 @@ namespace backend {
 
     class SubExprAST : public InnerExprAST {
     public:
-        SubExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
+        SubExprAST(std::shared_ptr<ExprAST> l, std::shared_ptr<ExprAST> r)
                 : InnerExprAST(l, r) {}
 
         Value *codegen() const;
@@ -234,7 +217,7 @@ namespace backend {
 
     class MulExprAST : public InnerExprAST {
     public:
-        MulExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
+        MulExprAST(std::shared_ptr<ExprAST> l, std::shared_ptr<ExprAST> r)
                 : InnerExprAST(l, r) {}
 
         Value *codegen() const;
@@ -242,7 +225,7 @@ namespace backend {
 
     class DivExprAST : public InnerExprAST {
     public:
-        DivExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
+        DivExprAST(std::shared_ptr<ExprAST> l, std::shared_ptr<ExprAST> r)
                 : InnerExprAST(l, r) {}
 
         Value *codegen() const;
@@ -250,7 +233,7 @@ namespace backend {
 
     class LtExprAST : public InnerExprAST {
     public:
-        LtExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
+        LtExprAST(std::shared_ptr<ExprAST> l, std::shared_ptr<ExprAST> r)
                 : InnerExprAST(l, r) {}
 
         Value *codegen() const;
@@ -258,7 +241,7 @@ namespace backend {
 
     class GtExprAST : public InnerExprAST {
     public:
-        GtExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
+        GtExprAST(std::shared_ptr<ExprAST> l, std::shared_ptr<ExprAST> r)
                 : InnerExprAST(l, r) {}
 
         Value *codegen() const;
@@ -266,7 +249,7 @@ namespace backend {
 
     class LteExprAST : public InnerExprAST {
     public:
-        LteExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
+        LteExprAST(std::shared_ptr<ExprAST> l, std::shared_ptr<ExprAST> r)
                 : InnerExprAST(l, r) {}
 
         Value *codegen() const;
@@ -274,7 +257,7 @@ namespace backend {
 
     class GteExprAST : public InnerExprAST {
     public:
-        GteExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
+        GteExprAST(std::shared_ptr<ExprAST> l, std::shared_ptr<ExprAST> r)
                 : InnerExprAST(l, r) {}
 
         Value *codegen() const;
@@ -282,7 +265,7 @@ namespace backend {
 
     class NeqExprAST : public InnerExprAST {
     public:
-        NeqExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
+        NeqExprAST(std::shared_ptr<ExprAST> l, std::shared_ptr<ExprAST> r)
                 : InnerExprAST(l, r) {}
 
         Value *codegen() const;
@@ -290,7 +273,7 @@ namespace backend {
 
     class EqExprAST : public InnerExprAST {
     public:
-        EqExprAST(shared_ptr<ExprAST> l, shared_ptr<ExprAST> r)
+        EqExprAST(std::shared_ptr<ExprAST> l, std::shared_ptr<ExprAST> r)
                 : InnerExprAST(l, r) {}
 
         Value *codegen() const;
@@ -298,62 +281,79 @@ namespace backend {
 
     class WhileExprAST : public ExprAST {
     public:
-        WhileExprAST(shared_ptr<ExprAST> c, shared_ptr<ExprAST> b)
+        WhileExprAST(std::shared_ptr<ExprAST> c, std::shared_ptr<ExprAST> b)
                 : cond(c), block(b) {}
 
         Value *codegen() const;
 
     private:
-        shared_ptr<ExprAST> cond;
-        shared_ptr<ExprAST> block;
+        std::shared_ptr<ExprAST> cond;
+        std::shared_ptr<ExprAST> block;
     };
 
     class IfExprAST : public ExprAST {
     public:
-        IfExprAST(shared_ptr<ExprAST> c, shared_ptr<ExprAST> b)
+        IfExprAST(std::shared_ptr<ExprAST> c, std::shared_ptr<ExprAST> b)
                 : cond(c), block(b) {}
 
         Value *codegen() const;
 
     private:
-        shared_ptr<ExprAST> cond;
-        shared_ptr<ExprAST> block;
+        std::shared_ptr<ExprAST> cond;
+        std::shared_ptr<ExprAST> block;
     };
 
     class IfElseExprAST : public ExprAST {
     public:
-        IfElseExprAST(shared_ptr<ExprAST> c, shared_ptr<ExprAST> t, shared_ptr<ExprAST> e)
+        IfElseExprAST(std::shared_ptr<ExprAST> c, std::shared_ptr<ExprAST> t, std::shared_ptr<ExprAST> e)
                 : cond(c), thenBlock(t), elseBlock(e) {}
 
         Value *codegen() const;
 
     private:
-        shared_ptr<ExprAST> cond;
-        shared_ptr<ExprAST> thenBlock;
-        shared_ptr<ExprAST> elseBlock;
+        std::shared_ptr<ExprAST> cond;
+        std::shared_ptr<ExprAST> thenBlock;
+        std::shared_ptr<ExprAST> elseBlock;
     };
 
     class RetExprAST : public ExprAST {
     public:
-        RetExprAST(shared_ptr<ExprAST> e)
+        RetExprAST(std::shared_ptr<ExprAST> e)
                 : v(e) {}
 
         Value *codegen() const;
 
     private:
-        shared_ptr<ExprAST> v;
+        std::shared_ptr<ExprAST> v;
     };
 
     class StringExprAST : public ExprAST {
     public:
-        StringExprAST(string s)
-            : Str(s) {}
+        StringExprAST(std::string s)
+                : Str(s) {}
         Value *codegen() const;
     private:
-        string Str;
+        std::string Str;
     };
 
-    AllocaInst *CreateEntryBlockAlloca(Function *TheFunction, const string &VarName);
+    class ClassDefExprAST : public ExprAST {
+    public:
+        ClassDefExprAST(std::string name,
+                        std::string baseName,
+                        std::vector<std::string>& ts,
+                        std::vector<std::string>& vs,
+                        std::vector<FunctionDefintionAST *> fs)
+                : Name(name), BaseName(baseName), types(ts), vars(vs), functions(fs) {};
+        Value *codegen() const;
+    private:
+        std::string Name;
+        std::string BaseName;
+        std::vector<std::string> types;
+        std::vector<std::string> vars;
+        std::vector<FunctionDefintionAST *> functions;
+    };
+
+    AllocaInst *CreateEntryBlockAlloca(Type *t, Function *TheFunction, const std::string &VarName);
     bool isRet(Value* tmp);
     Value *makeInt(int value);
     Value *makeDouble(double value);

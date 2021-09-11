@@ -14,9 +14,13 @@ file : (globalstmt | NEWLINE)* EOF;
 
 globalstmt : classdef | functiondef;
 
-classdef : CLASS cName=NAME (ARROW derName=NAME)? '{' body=classbody '}';
+classdef : CLASS cName=NAME (ARROW baseName=NAME)? '{' body=classbody '}';
 
-classbody: vardecl | functiondef;
+classbody: (classvardecl | classfunctiondef)*;
+
+classvardecl : typeName=NAME varName=NAME;
+
+classfunctiondef : DEF fName=NAME OPEN params=paramlist CLOSED ':' retType=NAME body=block;
 
 functiondef : DEF fName=NAME OPEN params=paramlist CLOSED ':' retType=NAME body=block;
 
@@ -28,11 +32,9 @@ paramlist returns [std::vector<std::string> types, std::vector<std::string> vars
 
 block : LEFTBRACE ((stmt NEWLINE) | NEWLINE)+ RIGHTBRACE;
 
-stmt : vardecl | assign | declassign | ret | whileloop | ifExpr | ifElseExpr | forloop | expr | printstmt | printfstmt;
+stmt : vardecl | assign | declassign | ret | whileloop | ifExpr | ifElseExpr | forloop | expr | printstmt;
 
 printstmt : PRINT '(' expr ')';
-
-printfstmt : PRINTF '(' expr ')';
 
 vardecl : typeName=NAME varName=NAME;
 
@@ -55,6 +57,7 @@ expr : number #NumberRule |
     var #VarRule |
     string #StringRule |
     methodCall #MethodRule |
+    objVar #ObjVarRule |
     expr '[' expr ']' #IndexRule |
     callexpr #CallExprRule|
     leftOp=expr binoperator rightOp=expr #OpExprRule |
@@ -65,6 +68,8 @@ expr : number #NumberRule |
 list : '[' (expr (',' expr)?)? ']';
 
 methodCall : varName=NAME '.' mathodName=NAME OPEN args=arglist CLOSED;
+
+objVar : objName=NAME '.' varName=NAME;
 
 string : STRING;
 
@@ -88,7 +93,6 @@ IN : 'in';
 CLASS : 'class';
 ARROW : '<-';
 DEF : 'def';
-PRINTF : 'printf';
 PRINT : 'print';
 OPEN : '(';
 CLOSED : ')';

@@ -1,16 +1,16 @@
 def rotate_left(int x, int n) : int {
-  int first_bit_mask = 1 << 31
+  int first_bit_mask = 1 + 31
   int i = 0
   while (i < n) {
-    int first_bit = x and first_bit_mask
-    x = x << 1 or first_bit >> 31
+    bool first_bit = x and first_bit_mask
+    x = x - 1;
     i = i + 1
   }
   return x
 }
 
 def main() : int {
-  int flag = not 0
+  bool flag = not 0
   int tmp = 10
   print(tmp)
   tmp = rotate_left(tmp, 4)

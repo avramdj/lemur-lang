@@ -34,6 +34,12 @@ public:
   virtual void enterClassbody(AvrlangParser::ClassbodyContext * /*ctx*/) override { }
   virtual void exitClassbody(AvrlangParser::ClassbodyContext * /*ctx*/) override { }
 
+  virtual void enterClassvardecl(AvrlangParser::ClassvardeclContext * /*ctx*/) override { }
+  virtual void exitClassvardecl(AvrlangParser::ClassvardeclContext * /*ctx*/) override { }
+
+  virtual void enterClassfunctiondef(AvrlangParser::ClassfunctiondefContext * /*ctx*/) override { }
+  virtual void exitClassfunctiondef(AvrlangParser::ClassfunctiondefContext * /*ctx*/) override { }
+
   virtual void enterFunctiondef(AvrlangParser::FunctiondefContext * /*ctx*/) override { }
   virtual void exitFunctiondef(AvrlangParser::FunctiondefContext * /*ctx*/) override { }
 
@@ -48,9 +54,6 @@ public:
 
   virtual void enterPrintstmt(AvrlangParser::PrintstmtContext * /*ctx*/) override { }
   virtual void exitPrintstmt(AvrlangParser::PrintstmtContext * /*ctx*/) override { }
-
-  virtual void enterPrintfstmt(AvrlangParser::PrintfstmtContext * /*ctx*/) override { }
-  virtual void exitPrintfstmt(AvrlangParser::PrintfstmtContext * /*ctx*/) override { }
 
   virtual void enterVardecl(AvrlangParser::VardeclContext * /*ctx*/) override { }
   virtual void exitVardecl(AvrlangParser::VardeclContext * /*ctx*/) override { }
@@ -103,6 +106,9 @@ public:
   virtual void enterVarRule(AvrlangParser::VarRuleContext * /*ctx*/) override { }
   virtual void exitVarRule(AvrlangParser::VarRuleContext * /*ctx*/) override { }
 
+  virtual void enterObjVarRule(AvrlangParser::ObjVarRuleContext * /*ctx*/) override { }
+  virtual void exitObjVarRule(AvrlangParser::ObjVarRuleContext * /*ctx*/) override { }
+
   virtual void enterNegRule(AvrlangParser::NegRuleContext * /*ctx*/) override { }
   virtual void exitNegRule(AvrlangParser::NegRuleContext * /*ctx*/) override { }
 
@@ -114,6 +120,9 @@ public:
 
   virtual void enterMethodCall(AvrlangParser::MethodCallContext * /*ctx*/) override { }
   virtual void exitMethodCall(AvrlangParser::MethodCallContext * /*ctx*/) override { }
+
+  virtual void enterObjVar(AvrlangParser::ObjVarContext * /*ctx*/) override { }
+  virtual void exitObjVar(AvrlangParser::ObjVarContext * /*ctx*/) override { }
 
   virtual void enterString(AvrlangParser::StringContext * /*ctx*/) override { }
   virtual void exitString(AvrlangParser::StringContext * /*ctx*/) override { }

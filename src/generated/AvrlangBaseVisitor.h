@@ -37,6 +37,14 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitClassvardecl(AvrlangParser::ClassvardeclContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitClassfunctiondef(AvrlangParser::ClassfunctiondefContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitFunctiondef(AvrlangParser::FunctiondefContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -54,10 +62,6 @@ public:
   }
 
   virtual antlrcpp::Any visitPrintstmt(AvrlangParser::PrintstmtContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitPrintfstmt(AvrlangParser::PrintfstmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -129,6 +133,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitObjVarRule(AvrlangParser::ObjVarRuleContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitNegRule(AvrlangParser::NegRuleContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -142,6 +150,10 @@ public:
   }
 
   virtual antlrcpp::Any visitMethodCall(AvrlangParser::MethodCallContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitObjVar(AvrlangParser::ObjVarContext *ctx) override {
     return visitChildren(ctx);
   }
 

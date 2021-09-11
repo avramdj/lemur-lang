@@ -1,5 +1,5 @@
 def main() : int {
-	int x = "testing"
+	string x = "testing"
 	printf(x)
 	return 0
 }

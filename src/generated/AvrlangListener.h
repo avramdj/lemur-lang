@@ -32,6 +32,12 @@ public:
   virtual void enterClassbody(AvrlangParser::ClassbodyContext *ctx) = 0;
   virtual void exitClassbody(AvrlangParser::ClassbodyContext *ctx) = 0;
 
+  virtual void enterClassvardecl(AvrlangParser::ClassvardeclContext *ctx) = 0;
+  virtual void exitClassvardecl(AvrlangParser::ClassvardeclContext *ctx) = 0;
+
+  virtual void enterClassfunctiondef(AvrlangParser::ClassfunctiondefContext *ctx) = 0;
+  virtual void exitClassfunctiondef(AvrlangParser::ClassfunctiondefContext *ctx) = 0;
+
   virtual void enterFunctiondef(AvrlangParser::FunctiondefContext *ctx) = 0;
   virtual void exitFunctiondef(AvrlangParser::FunctiondefContext *ctx) = 0;
 
@@ -46,9 +52,6 @@ public:
 
   virtual void enterPrintstmt(AvrlangParser::PrintstmtContext *ctx) = 0;
   virtual void exitPrintstmt(AvrlangParser::PrintstmtContext *ctx) = 0;
-
-  virtual void enterPrintfstmt(AvrlangParser::PrintfstmtContext *ctx) = 0;
-  virtual void exitPrintfstmt(AvrlangParser::PrintfstmtContext *ctx) = 0;
 
   virtual void enterVardecl(AvrlangParser::VardeclContext *ctx) = 0;
   virtual void exitVardecl(AvrlangParser::VardeclContext *ctx) = 0;
@@ -101,6 +104,9 @@ public:
   virtual void enterVarRule(AvrlangParser::VarRuleContext *ctx) = 0;
   virtual void exitVarRule(AvrlangParser::VarRuleContext *ctx) = 0;
 
+  virtual void enterObjVarRule(AvrlangParser::ObjVarRuleContext *ctx) = 0;
+  virtual void exitObjVarRule(AvrlangParser::ObjVarRuleContext *ctx) = 0;
+
   virtual void enterNegRule(AvrlangParser::NegRuleContext *ctx) = 0;
   virtual void exitNegRule(AvrlangParser::NegRuleContext *ctx) = 0;
 
@@ -112,6 +118,9 @@ public:
 
   virtual void enterMethodCall(AvrlangParser::MethodCallContext *ctx) = 0;
   virtual void exitMethodCall(AvrlangParser::MethodCallContext *ctx) = 0;
+
+  virtual void enterObjVar(AvrlangParser::ObjVarContext *ctx) = 0;
+  virtual void exitObjVar(AvrlangParser::ObjVarContext *ctx) = 0;
 
   virtual void enterString(AvrlangParser::StringContext *ctx) = 0;
   virtual void exitString(AvrlangParser::StringContext *ctx) = 0;

@@ -25,9 +25,11 @@ class ASTBuilder: public AvrlangBaseVisitor {
 
     antlrcpp::Any visitStringRule(AvrlangParser::StringRuleContext *ctx) override;
 
-    antlrcpp::Any visitPrintfstmt(AvrlangParser::PrintfstmtContext *ctx) override;
-
     antlrcpp::Any visitRet(AvrlangParser::RetContext *ctx) override;
+
+    antlrcpp::Any visitClassdef(AvrlangParser::ClassdefContext *ctx) override;
+
+    antlrcpp::Any visitClassbody(AvrlangParser::ClassbodyContext *ctx) override;
 
     antlrcpp::Any visitWhileloop(AvrlangParser::WhileloopContext *ctx) override;
 

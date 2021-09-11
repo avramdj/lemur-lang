@@ -1,18 +1,22 @@
-#include <ast.hpp>
 #include <iostream>
 
-// #define _DISABLE_OPTS_ 1
+#include <ast.hpp>
+#include <context.h>
+
+#include "llvm/IR/Module.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/Verifier.h"
+#include "llvm/IR/LegacyPassManager.h"
+#include "llvm/Transforms/Scalar.h"
+#include "llvm/Support/TargetRegistry.h"
+#include "llvm/Target/TargetOptions.h"
+
 #define _LIBCPP_DEBUG 1
+
+using namespace std;
 
 namespace backend {
 
-    extern Module *TheModule;
-    extern LLVMContext TheContext;
-    extern llvm::legacy::FunctionPassManager *TheFPM;
-    extern Function *PrintfFja;
-
-    map<string, AllocaInst *> NamedValues;
-    IRBuilder<> Builder(TheContext);
     Value *Str;
     Value *Str1;
 
@@ -59,12 +63,17 @@ namespace backend {
     }
 
     Value *VariableExprAST::codegen() const {
-        AllocaInst *tmp = NamedValues[Name];
+        AllocaInst *tmp = NamedValues[Name].first;
         if (tmp == nullptr) {
             cerr << "Promenljiva " + Name + " nije definisana" << endl;
             return nullptr;
         }
-        return Builder.CreateLoad(Type::getInt32Ty(TheContext), tmp, Name.c_str());
+        Type *t = NamedValues[Name].second;
+        if(!t) {
+            std::cerr << "Type mismatch with " << Name << std::endl;
+            return nullptr;
+        }
+        return Builder.CreateLoad(t, tmp, Name.c_str());
     }
 
     Value *AndExprAST::codegen() const {
@@ -72,7 +81,17 @@ namespace backend {
         Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
-        return Builder.CreateAnd(l, d, "andtmp");
+        Value *lC = Types::boolCast(l);
+        if(!lC){
+            std::cerr << "Cant bool cast" << std::endl;
+            return nullptr;
+        }
+        Value *dC = Types::boolCast(l);
+        if(!dC){
+            std::cerr << "Cant bool cast" << std::endl;
+            return nullptr;
+        }
+        return Builder.CreateAnd(lC, dC, "andtmp");
     }
 
     Value *OrExprAST::codegen() const {
@@ -80,7 +99,17 @@ namespace backend {
         Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
-        return Builder.CreateOr(l, d, "ortmp");
+        Value *lC = Types::boolCast(l);
+        if(!lC){
+            std::cerr << "Cant bool cast" << std::endl;
+            return nullptr;
+        }
+        Value *dC = Types::boolCast(l);
+        if(!dC){
+            std::cerr << "Cant bool cast" << std::endl;
+            return nullptr;
+        }
+        return Builder.CreateOr(lC, dC, "ortmp");
     }
 
     Value *XorExprAST::codegen() const {
@@ -88,7 +117,17 @@ namespace backend {
         Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
-        return Builder.CreateXor(l, d, "xortmp");
+        Value *lC = Types::boolCast(l);
+        if(!lC){
+            std::cerr << "Cant bool cast" << std::endl;
+            return nullptr;
+        }
+        Value *dC = Types::boolCast(l);
+        if(!dC){
+            std::cerr << "Cant bool cast" << std::endl;
+            return nullptr;
+        }
+        return Builder.CreateXor(lC, dC, "xortmp");
     }
 
     Value *ShlExprAST::codegen() const {
@@ -96,7 +135,11 @@ namespace backend {
         Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
-        return Builder.CreateShl(l, d, "shltmp");
+        Type *lT = l->getType();
+        Type *dT = d->getType();
+        Value *lC = l;
+        Value *dC = d;
+        return Builder.CreateShl(lC, dC, "shltmp");
     }
 
     Value *ShrExprAST::codegen() const {
@@ -104,14 +147,23 @@ namespace backend {
         Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
-        return Builder.CreateLShr(l, d, "shrtmp");
+        Type *lT = l->getType();
+        Type *dT = d->getType();
+        Value *lC = l;
+        Value *dC = d;
+        return Builder.CreateLShr(lC, dC, "shrtmp");
     }
 
     Value *NotExprAST::codegen() const {
         Value *l = _nodes[0]->codegen();
         if (l == nullptr)
             return nullptr;
-        return Builder.CreateNot(l, "nottmp");
+        Value *lC = Types::boolCast(l);
+        if(!lC){
+            std::cerr << "Cant bool cast" << std::endl;
+            return nullptr;
+        }
+        return Builder.CreateNot(lC, "nottmp");
     }
 
     Value *PrintExprAST::codegen() const {
@@ -129,48 +181,46 @@ namespace backend {
         return l;
     }
 
-    Value *PrintFormatExprAST::codegen() const {
-        Value *l = _nodes[0]->codegen();
-        if (l == nullptr)
-            return nullptr;
-
-        if (Str == nullptr) {
-            Str = Builder.CreateGlobalStringPtr("%s\n");
-        }
-        vector<Value *> ArgsV;
-        ArgsV.push_back(Str);
-        ArgsV.push_back(l);
-        Builder.CreateCall(PrintfFja, ArgsV, "printfCall");
-        return l;
-    }
-
     Value *DeclAssignExprAST::codegen() const {
         VarDeclExprAST decl = VarDeclExprAST(Type, Name);
         decl.codegen();
-        AllocaInst *Alloca = NamedValues[Name];
+        AllocaInst *Alloca = NamedValues[Name].first;
         Value *l = _nodes[0]->codegen();
         if (l == nullptr)
             return nullptr;
+        if(l->getType() != NamedValues[Name].second) {
+            std::cerr << "Type mismatch with " << Name << std::endl;
+            return nullptr;
+        }
         return Builder.CreateStore(l, Alloca);
     }
 
     Value *VarDeclExprAST::codegen() const {
-        AllocaInst *Alloca = NamedValues[Name];
+        AllocaInst *Alloca = NamedValues[Name].first;
         if(Alloca) {
             cerr << "Variable " << Name << " already defined" << endl;
             return nullptr;
         }
         Function *F = Builder.GetInsertBlock()->getParent();
-        Alloca = CreateEntryBlockAlloca(F, Name);
-        NamedValues[Name] = Alloca;
-        return Builder.CreateStore(makeInt(0), Alloca);
+        llvm::Type* t = Types::getType(Type);
+        if(!t) {
+            std::cerr << "Unknown type " << Type << std::endl;
+            return nullptr;
+        }
+        Alloca = CreateEntryBlockAlloca(t, F, Name);
+        NamedValues[Name] = {Alloca, t};
+        return Alloca;
     }
 
     Value *SetExprAST::codegen() const {
         Value *l = _nodes[0]->codegen();
         if (l == nullptr)
             return nullptr;
-        AllocaInst *Alloca = NamedValues[Name];
+        if(l->getType() != NamedValues[Name].second) {
+            std::cerr << "Type mismatch with " << Name << std::endl;
+            return nullptr;
+        }
+        AllocaInst *Alloca = NamedValues[Name].first;
         if (!Alloca) {
             std::cerr << "Variable " << Name << " undefined" << std::endl;
             return nullptr;
@@ -197,10 +247,19 @@ namespace backend {
 
     Value *FunctionDefintionAST::codegen() const {
         vector<Type *> tmp;
-        for (unsigned i = 0; i < parameters.size(); i++)
-            tmp.push_back(Type::getInt32Ty(TheContext));
+        for (auto& typeName : ptypes) {
+            Type *t = Types::getType(typeName);
+            if(!t) {
+                return nullptr;
+            }
+            tmp.push_back(t);
+        }
 
-        FunctionType *FT = FunctionType::get(Type::getInt32Ty(TheContext), tmp, false);
+        Type * retT= Types::getType(this->retType);
+        if(!retT) {
+            return nullptr;
+        }
+        FunctionType *FT = FunctionType::get(retT, tmp, false);
 
         Function *f = Function::Create(FT, Function::ExternalLinkage, name, TheModule);
 
@@ -214,7 +273,7 @@ namespace backend {
         }
 
         if (!f->empty()) {
-            cerr << "Funkcija " << name << " ne moze da se redefinise" << endl;
+            cerr << "Function " << name << " can't be redefined" << endl;
             return nullptr;
         }
         BasicBlock *BB = BasicBlock::Create(TheContext, "entry", f);
@@ -222,15 +281,20 @@ namespace backend {
 
         NamedValues.clear();
         for (auto &a: f->args()) {
-            AllocaInst *Alloca = CreateEntryBlockAlloca(f, string(a.getName()));
-            NamedValues[string(a.getName())] = Alloca;
+            AllocaInst *Alloca = CreateEntryBlockAlloca(a.getType(), f, string(a.getName()));
+            NamedValues[string(a.getName())] = {Alloca, a.getType()};
             Builder.CreateStore(&a, Alloca);
         }
 
         Value *Body = body->codegen();
         if (Body != nullptr) {
             if(!isRet(Body)) {
-                Builder.CreateRet(ConstantInt::get(TheContext, APInt(32, 0)));
+                auto retV = Types::getTypeConstant(retType, 0);
+                if(!retV) {
+                    std::cerr << "Function " << name << " can't create implicit return" << std::endl;
+                    return nullptr;
+                }
+                Builder.CreateRet(retV);
             }
 
             verifyFunction(*f);
@@ -283,7 +347,17 @@ namespace backend {
         Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
-        return Builder.CreateAdd(l, d, "andtmp");
+        Type *lT = l->getType();
+        Type *dT = d->getType();
+        if(lT == dT && lT == Types::getType("float")){
+            return Builder.CreateFAdd(l, d, "addtmp");
+        }
+        if(lT == dT && lT == Types::getType("int")){
+            return Builder.CreateAdd(l, d, "addtmp");
+        }
+        Value *lC = Types::floatCast(l);
+        Value *dC = Types::floatCast(d);
+        return Builder.CreateFAdd(lC, dC, "addtmp");
     }
 
     Value *SubExprAST::codegen() const {
@@ -291,7 +365,17 @@ namespace backend {
         Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
-        return Builder.CreateSub(l, d, "subtmp");
+        Type *lT = l->getType();
+        Type *dT = d->getType();
+        if(lT == dT && lT == Types::getType("float")){
+            return Builder.CreateFSub(l, d, "subtmp");
+        }
+        if(lT == dT && lT == Types::getType("int")){
+            return Builder.CreateSub(l, d, "subtmp");
+        }
+        Value *lC = Types::floatCast(l);
+        Value *dC = Types::floatCast(d);
+        return Builder.CreateFSub(lC, dC, "subtmp");
     }
 
     Value *MulExprAST::codegen() const {
@@ -299,7 +383,17 @@ namespace backend {
         Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
-        return Builder.CreateMul(l, d, "multmp");
+        Type *lT = l->getType();
+        Type *dT = d->getType();
+        if(lT == dT && lT == Types::getType("float")){
+            return Builder.CreateFMul(l, d, "multmp");
+        }
+        if(lT == dT && lT == Types::getType("int")){
+            return Builder.CreateMul(l, d, "multmp");
+        }
+        Value *lC = Types::floatCast(l);
+        Value *dC = Types::floatCast(d);
+        return Builder.CreateFMul(lC, dC, "multmp");
     }
 
     Value *DivExprAST::codegen() const {
@@ -307,55 +401,125 @@ namespace backend {
         Value *d = _nodes[1]->codegen();
         if (l == nullptr || d == nullptr)
             return nullptr;
-        return Builder.CreateSDiv(l, d, "divtmp");
+        Type *lT = l->getType();
+        Type *dT = d->getType();
+        if(lT == dT && lT == Types::getType("float")){
+            return Builder.CreateFDiv(l, d, "divtmp");
+        }
+        if(lT == dT && lT == Types::getType("int")){
+            return Builder.CreateSDiv(l, d, "divtmp");
+        }
+        Value *lC = Types::floatCast(l);
+        Value *dC = Types::floatCast(d);
+        return Builder.CreateFDiv(lC, dC, "divtmp");
     }
 
     Value *LtExprAST::codegen() const {
-        Value *L = _nodes[0]->codegen();
-        Value *R = _nodes[1]->codegen();
-        if (!L || !R)
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
+        if (!l || !d)
             return nullptr;
-        return Builder.CreateIntCast(Builder.CreateICmpSLT(L, R, "lttmp"), Type::getInt32Ty(TheContext), true);
+        Type *lT = l->getType();
+        Type *dT = d->getType();
+        if(lT == dT && lT == Types::getType("float")){
+            return Builder.CreateFCmpOLT(l, d, "lttmp");
+        }
+        if(lT == dT && lT == Types::getType("int")){
+            return Builder.CreateICmpSLT(l, d, "lttmp");
+        }
+        Value *lC = Types::floatCast(l);
+        Value *dC = Types::floatCast(d);
+        return Builder.CreateFCmpOLT(lC, dC, "lttmp");
     }
 
     Value *GtExprAST::codegen() const {
-        Value *L = _nodes[0]->codegen();
-        Value *R = _nodes[1]->codegen();
-        if (!L || !R)
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
+        if (!l || !d)
             return nullptr;
-        return Builder.CreateIntCast(Builder.CreateICmpSGT(L, R, "gttmp"), Type::getInt32Ty(TheContext), true);
+        Type *lT = l->getType();
+        Type *dT = d->getType();
+        if(lT == dT && lT == Types::getType("float")){
+            return Builder.CreateFCmpOGT(l, d, "lttmp");
+        }
+        if(lT == dT && lT == Types::getType("int")){
+            return Builder.CreateICmpSGT(l, d, "lttmp");
+        }
+        Value *lC = Types::floatCast(l);
+        Value *dC = Types::floatCast(d);
+        return Builder.CreateFCmpOGT(lC, dC, "lttmp");
     }
 
     Value *EqExprAST::codegen() const {
-        Value *L = _nodes[0]->codegen();
-        Value *R = _nodes[1]->codegen();
-        if (!L || !R)
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
+        if (!l || !d)
             return nullptr;
-        return Builder.CreateIntCast(Builder.CreateICmpEQ(L, R, "eqtmp"), Type::getInt32Ty(TheContext), true);
+        Type *lT = l->getType();
+        Type *dT = d->getType();
+        if(lT == dT && lT == Types::getType("float")){
+            return Builder.CreateFCmpOEQ(l, d, "eqtmp");
+        }
+        if(lT == dT && lT == Types::getType("int")){
+            return Builder.CreateICmpEQ(l, d, "eqtmp");
+        }
+        Value *lC = Types::floatCast(l);
+        Value *dC = Types::floatCast(d);
+        return Builder.CreateFCmpOEQ(lC, dC, "eqtmp");
     }
 
     Value *NeqExprAST::codegen() const {
-        Value *L = _nodes[0]->codegen();
-        Value *R = _nodes[1]->codegen();
-        if (!L || !R)
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
+        if (!l || !d)
             return nullptr;
-        return Builder.CreateIntCast(Builder.CreateICmpNE(L, R, "neqtmp"), Type::getInt32Ty(TheContext), true);
+        Type *lT = l->getType();
+        Type *dT = d->getType();
+        if(lT == dT && lT == Types::getType("float")){
+            return Builder.CreateFCmpONE(l, d, "netmp");
+        }
+        if(lT == dT && lT == Types::getType("int")){
+            return Builder.CreateICmpNE(l, d, "netmp");
+        }
+        Value *lC = Types::floatCast(l);
+        Value *dC = Types::floatCast(d);
+        return Builder.CreateFCmpONE(lC, dC, "netmp");
     }
 
     Value *LteExprAST::codegen() const {
-        Value *L = _nodes[0]->codegen();
-        Value *R = _nodes[1]->codegen();
-        if (!L || !R)
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
+        if (!l || !d)
             return nullptr;
-        return Builder.CreateIntCast(Builder.CreateICmpSLE(L, R, "ltetmp"), Type::getInt32Ty(TheContext), true);
+        Type *lT = l->getType();
+        Type *dT = d->getType();
+        if(lT == dT && lT == Types::getType("float")){
+            return Builder.CreateFCmpOLE(l, d, "letmp");
+        }
+        if(lT == dT && lT == Types::getType("int")){
+            return Builder.CreateICmpSLE(l, d, "letmp");
+        }
+        Value *lC = Types::floatCast(l);
+        Value *dC = Types::floatCast(d);
+        return Builder.CreateFCmpOLE(lC, dC, "letmp");
     }
 
     Value *GteExprAST::codegen() const {
-        Value *L = _nodes[0]->codegen();
-        Value *R = _nodes[1]->codegen();
-        if (!L || !R)
+        Value *l = _nodes[0]->codegen();
+        Value *d = _nodes[1]->codegen();
+        if (!l || !d)
             return nullptr;
-        return Builder.CreateIntCast(Builder.CreateICmpSGE(L, R, "gtetmp"), Type::getInt32Ty(TheContext), true);
+        Type *lT = l->getType();
+        Type *dT = d->getType();
+        if(lT == dT && lT == Types::getType("float")){
+            return Builder.CreateFCmpOGE(l, d, "getmp");
+        }
+        if(lT == dT && lT == Types::getType("int")){
+            return Builder.CreateICmpSGE(l, d, "getmp");
+        }
+        Value *lC = Types::floatCast(l);
+        Value *dC = Types::floatCast(d);
+        return Builder.CreateFCmpOGE(lC, dC, "getmp");
     }
 
     Value *WhileExprAST::codegen() const {
@@ -372,7 +536,7 @@ namespace backend {
         if (!Cond) {
             return nullptr;
         }
-        Value *Cmp = Builder.CreateICmpNE(Cond, ConstantInt::get(TheContext, APInt(32, 0)), "loopcond");
+        Value *Cmp = Builder.CreateICmpNE(Types::boolCast(Cond), ConstantInt::get(TheContext, APInt(1, 0)), "loopcond");
         Builder.CreateCondBr(Cmp, LoopBB, AfterLoopBB);
         HeaderBB = Builder.GetInsertBlock();
 
@@ -389,7 +553,7 @@ namespace backend {
         LoopBB = Builder.GetInsertBlock();
         Builder.SetInsertPoint(AfterLoopBB);
 
-        return ConstantInt::get(TheContext, APInt(32, 0));
+        return ConstantInt::get(TheContext, APInt(1, 0));
     }
 
 
@@ -406,7 +570,7 @@ namespace backend {
         if (!Cond) {
             return nullptr;
         }
-        Value *Cmp = Builder.CreateICmpNE(Cond, ConstantInt::get(TheContext, APInt(32, 0)), "cmptmp");
+        Value *Cmp = Builder.CreateICmpNE(Types::boolCast(Cond), ConstantInt::get(TheContext, APInt(1, 0)), "cmptmp");
         Builder.CreateCondBr(Cmp, thenBB, mergeBB);
 
         Builder.SetInsertPoint(thenBB);
@@ -420,7 +584,7 @@ namespace backend {
         }
 
         Builder.SetInsertPoint(mergeBB);
-        return ConstantInt::get(TheContext, APInt(32, 0));
+        return ConstantInt::get(TheContext, APInt(1, 0));
     }
 
     Value *IfElseExprAST::codegen() const {
@@ -438,7 +602,7 @@ namespace backend {
             return nullptr;
         }
         headerBB = Builder.GetInsertBlock();
-        Value *Cmp = Builder.CreateICmpNE(Cond, ConstantInt::get(TheContext, APInt(32, 0)), "cmptmp");
+        Value *Cmp = Builder.CreateICmpNE(Types::boolCast(Cond), ConstantInt::get(TheContext, APInt(1, 0)), "cmptmp");
         Builder.CreateCondBr(Cmp, thenBB, elseBB);
 
         Builder.SetInsertPoint(thenBB);
@@ -481,9 +645,9 @@ namespace backend {
         return Builder.CreateRet(ret);
     }
 
-    AllocaInst *CreateEntryBlockAlloca(Function *TheFunction, const string &VarName) {
+    AllocaInst *CreateEntryBlockAlloca(Type *t, Function *TheFunction, const string &VarName) {
         IRBuilder<> TmpB(&TheFunction->getEntryBlock(), TheFunction->getEntryBlock().begin());
-        return TmpB.CreateAlloca(Type::getInt32Ty(TheContext), 0, VarName.c_str());
+        return TmpB.CreateAlloca(t, nullptr, VarName.c_str());
     }
 
     bool isRet(Value* tmp) {
@@ -513,5 +677,31 @@ namespace backend {
         globalDeclaration->setUnnamedAddr (llvm::GlobalValue::UnnamedAddr::Global);
 
         return llvm::ConstantExpr::getBitCast(globalDeclaration, charType->getPointerTo());
+    }
+
+    Value *ClassDefExprAST::codegen() const {
+        if(Types::typeTable.find(Name) != Types::typeTable.end()) {
+            std::cerr << "Class " << Name << " already exists" << std::endl;
+        }
+        StructType* classType = StructType::create(TheContext);
+        vector<Type *> subtypes;
+        for(int i = 0; i < types.size(); i++){
+            Type * t = Types::getType(types[i]);
+            if(!t){
+                return nullptr;
+            }
+            if(Types::classVarTable[Name].find(vars[i]) != Types::classVarTable[Name].end()) {
+                std::cerr << "Class variable " << types[i] << " already defined" << std::endl;
+                return nullptr;
+            }
+            subtypes.push_back(t);
+            Types::classVarTable[Name][vars[i]] = i;
+        }
+        classType->setBody(subtypes);
+        Types::typeTable[Name] = classType;
+        for(auto& f : functions) {
+            f->codegen();
+        }
+        return nullptr;
     }
 }

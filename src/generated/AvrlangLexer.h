@@ -20,11 +20,11 @@ public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, UMINUS = 10, FOR = 11, IN = 12, CLASS = 13, ARROW = 14, 
-    DEF = 15, PRINTF = 16, PRINT = 17, OPEN = 18, CLOSED = 19, LEFTBRACE = 20, 
-    RIGHTBRACE = 21, RET = 22, WHILE = 23, IF = 24, ELSE = 25, AND = 26, 
-    OR = 27, XOR = 28, SHL = 29, SHR = 30, NEG = 31, GT = 32, GE = 33, LT = 34, 
-    LE = 35, EQ = 36, NE = 37, NEWLINE = 38, NAME = 39, NUM = 40, STRING = 41, 
-    WHITESPACE = 42, COMMENT = 43
+    DEF = 15, PRINT = 16, OPEN = 17, CLOSED = 18, LEFTBRACE = 19, RIGHTBRACE = 20, 
+    RET = 21, WHILE = 22, IF = 23, ELSE = 24, AND = 25, OR = 26, XOR = 27, 
+    SHL = 28, SHR = 29, NEG = 30, GT = 31, GE = 32, LT = 33, LE = 34, EQ = 35, 
+    NE = 36, NEWLINE = 37, NAME = 38, NUM = 39, STRING = 40, WHITESPACE = 41, 
+    COMMENT = 42
   };
 
   AvrlangLexer(antlr4::CharStream *input);
