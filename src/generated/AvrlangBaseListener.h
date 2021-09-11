@@ -104,9 +104,6 @@ public:
   virtual void enterVarRule(AvrlangParser::VarRuleContext * /*ctx*/) override { }
   virtual void exitVarRule(AvrlangParser::VarRuleContext * /*ctx*/) override { }
 
-  virtual void enterObjVarRule(AvrlangParser::ObjVarRuleContext * /*ctx*/) override { }
-  virtual void exitObjVarRule(AvrlangParser::ObjVarRuleContext * /*ctx*/) override { }
-
   virtual void enterNegRule(AvrlangParser::NegRuleContext * /*ctx*/) override { }
   virtual void exitNegRule(AvrlangParser::NegRuleContext * /*ctx*/) override { }
 
@@ -118,9 +115,6 @@ public:
 
   virtual void enterMethodCall(AvrlangParser::MethodCallContext * /*ctx*/) override { }
   virtual void exitMethodCall(AvrlangParser::MethodCallContext * /*ctx*/) override { }
-
-  virtual void enterObjVar(AvrlangParser::ObjVarContext * /*ctx*/) override { }
-  virtual void exitObjVar(AvrlangParser::ObjVarContext * /*ctx*/) override { }
 
   virtual void enterString(AvrlangParser::StringContext * /*ctx*/) override { }
   virtual void exitString(AvrlangParser::StringContext * /*ctx*/) override { }

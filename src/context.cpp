@@ -29,7 +29,8 @@ namespace backend {
     namespace Types {
         std::map<std::string, Type *> typeTable;
         std::map<Type *, std::string> typeNames;
-        std::map<std::string, std::map<std::string, int>> classVarTable;
+        std::map<std::string, std::map<std::string, unsigned>> classVarTable;
+        std::map<std::string, std::map<std::string, Type *>> classVarTypeTable;
         std::map<std::string, std::vector<std::string>> classFnTable;
     }
     Module *TheModule;
@@ -189,6 +190,11 @@ namespace backend {
         } else {
             return nullptr;
         }
+    }
+
+    bool Types::isClassType(Type *t) {
+        std::string ts = Types::typeNames[t];
+        return Types::classVarTable.find(ts) != Types::classVarTable.end();
     }
 //    Value *Types::stringCast(Value *v) {
 //        Type *strType = Types::getType("string");

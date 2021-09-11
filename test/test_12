@@ -2,18 +2,20 @@ class Based {
   int x
   bool b
   def getX(int a) : int {
-    return a*2
+    return a + this.x
   }
 }
 
 def main() : int {
 
   int z
-  Based b
+  Based a
 
-  int a = b.getX(3)
+  a.x = 4
 
-  print(a)
+  int c = a.getX(3)
+
+  print(c)
 
   return 0
 }

@@ -34,7 +34,7 @@ printstmt : PRINT '(' expr ')';
 
 vardecl : typeName=NAME varName=NAME;
 
-assign : varName=NAME '=' expr;
+assign : varName=NAME ('.'subName=NAME)? '=' expr;
 
 declassign : typeName=NAME varName=NAME '=' expr;
 
@@ -53,7 +53,6 @@ expr : number #NumberRule |
     var #VarRule |
     string #StringRule |
     methodCall #MethodRule |
-    objVar #ObjVarRule |
     expr '[' expr ']' #IndexRule |
     callexpr #CallExprRule|
     leftOp=expr binoperator rightOp=expr #OpExprRule |
@@ -65,13 +64,11 @@ list : '[' (expr (',' expr)?)? ']';
 
 methodCall : varName=NAME '.' methodName=NAME OPEN args=arglist CLOSED;
 
-objVar : objName=NAME '.' varName=NAME;
-
 string : STRING;
 
 number : NUM;
 
-var : NAME;
+var : varName=NAME('.'subName=NAME)?;
 
 callexpr : fName=NAME OPEN args=arglist CLOSED;
 

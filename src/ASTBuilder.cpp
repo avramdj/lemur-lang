@@ -50,11 +50,17 @@ antlrcpp::Any ASTBuilder::visitStmt(AvrlangParser::StmtContext *ctx) {
     return antlr4::tree::AbstractParseTreeVisitor::visitChildren(ctx);
 }
 antlrcpp::Any ASTBuilder::visitAssign(AvrlangParser::AssignContext *ctx) {
-    std::string varName = ctx->NAME()->getText();
+    std::string varName = ctx->varName->getText();
+    std::string subName = ctx->subName ? ctx->subName->getText() : std::string("");
     std::shared_ptr<backend::ExprAST> expr =
             antlr4::tree::AbstractParseTreeVisitor::visit(ctx->expr());
+    if(subName.empty()) {
+        return std::shared_ptr<backend::ExprAST>(
+                new backend::SetExprAST(expr, varName)
+        );
+    }
     return std::shared_ptr<backend::ExprAST>(
-            new backend::SetExprAST(expr, varName)
+            new backend::SetExprAST(expr, varName, subName)
     );
 }
 antlrcpp::Any ASTBuilder::visitRet(AvrlangParser::RetContext *ctx) {
@@ -75,9 +81,17 @@ antlrcpp::Any ASTBuilder::visitNumberRule(AvrlangParser::NumberRuleContext *ctx)
     );
 }
 antlrcpp::Any ASTBuilder::visitVarRule(AvrlangParser::VarRuleContext *ctx) {
-    return std::shared_ptr<backend::ExprAST>(
-            new backend::VariableExprAST(ctx->var()->NAME()->getText())
-    );
+    std::string Name = ctx->var()->varName->getText();
+    std::string Sub = ctx->var()->subName ? ctx->var()->subName->getText() : std::string("");
+    if(Sub.empty()){
+        return std::shared_ptr<backend::ExprAST>(
+                new backend::VariableExprAST(Name)
+        );
+    } else {
+        return std::shared_ptr<backend::ExprAST>(
+                new backend::VariableExprAST(Name, Sub)
+        );
+    }
 }
 
 antlrcpp::Any ASTBuilder::visitIfExpr(AvrlangParser::IfExprContext *ctx) {
@@ -201,23 +215,12 @@ antlrcpp::Any ASTBuilder::visitClassdef(AvrlangParser::ClassdefContext *ctx) {
         std::string functionName = backend::encodeFunctionName(fn->fName->getText(), ctx->cName->getText());
         std::pair<std::vector<std::string>, std::vector<std::string>> fparams = antlr4::tree::AbstractParseTreeVisitor::visit(fn->params);
         auto types = fparams.first;
-//        types.insert(types.begin(), 0, ctx->cName->getText());
-        std::vector<std::string> typesext;
-        typesext.push_back(ctx->cName->getText());
-        for(auto& t : types) {
-            typesext.push_back(t);
-        }
+        types.insert(types.begin(), Name);
         auto params = fparams.second;
-        std::vector<std::string> paramsext;
-        paramsext.emplace_back("this");
-        for(auto& p : params) {
-            paramsext.push_back(p);
-        }
-//        params.insert(params.begin(), 0, std::string("this"));
-
+        params.insert(params.begin(), std::string(".tmpthis"));
         std::string ret = fn->retType->getText();
         std::shared_ptr<backend::ExprAST> functionBody = antlr4::tree::AbstractParseTreeVisitor::visit(fn->body);
-        auto *f = new backend::FunctionDefintionAST(functionName, typesext, paramsext, ret, functionBody);
+        auto *f = new backend::FunctionDefintionAST(functionName, types, params, ret, functionBody, true);
         functions.push_back(f);
     }
 
@@ -240,13 +243,5 @@ antlrcpp::Any ASTBuilder::visitMethodCall(AvrlangParser::MethodCallContext *ctx)
     }
     return std::shared_ptr<backend::ExprAST>(
             new backend::MethodCallExprAST(var, method, args)
-    );
-}
-
-antlrcpp::Any ASTBuilder::visitObjVar(AvrlangParser::ObjVarContext *ctx) {
-    std::string var = ctx->varName->getText();
-    std::string subvar = ctx->varName->getText();
-    return std::shared_ptr<backend::ExprAST>(
-            new backend::ClassAccessExprAST(var, subvar)
     );
 }

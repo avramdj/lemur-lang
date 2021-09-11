@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <ast.hpp>
+#include <ASTUtil.h>
 #include <context.h>
 
 #include "llvm/IR/Module.h"
@@ -63,17 +64,21 @@ namespace backend {
     }
 
     Value *VariableExprAST::codegen() const {
-        AllocaInst *tmp = NamedValues[Name].first;
-        if (tmp == nullptr) {
-            cerr << "Variable " + Name + " is undefined" << endl;
-            return nullptr;
+        Value *v;
+        Type *t;
+        if(Sub.empty()){
+            AllocaInst *tmp = NamedValues[Name].first;
+            if (tmp == nullptr) {
+                cerr << "Variable " + Name + " is undefined" << endl;
+                return nullptr;
+            }
+            v = tmp;
+            t = NamedValues[Name].second;
+        } else {
+            v = GetMemberPointer(Name, Sub);
+            t = v->getType()->getPointerElementType();
         }
-        Type *t = NamedValues[Name].second;
-        if(!t) {
-            std::cerr << "Type mismatch with " << Name << std::endl;
-            return nullptr;
-        }
-        return Builder.CreateLoad(t, tmp, Name.c_str());
+        return Builder.CreateLoad(t, v, Name);
     }
 
     Value *AndExprAST::codegen() const {
@@ -220,6 +225,9 @@ namespace backend {
             std::cerr << "Unknown type " << Type << std::endl;
             return nullptr;
         }
+        if(Types::isClassType(t)) {
+
+        }
         Alloca = CreateEntryBlockAlloca(t, F, Name);
         NamedValues[Name] = {Alloca, t};
         return Alloca;
@@ -229,16 +237,26 @@ namespace backend {
         Value *l = _nodes[0]->codegen();
         if (l == nullptr)
             return nullptr;
-        if(l->getType() != NamedValues[Name].second) {
-            std::cerr << "Type mismatch with " << Name << std::endl;
-            return nullptr;
+        Value *el;
+        if(Sub.empty()){
+            if(l->getType() != NamedValues[Name].second) {
+                std::cerr << "Type mismatch with " << Name << std::endl;
+                return nullptr;
+            }
+            AllocaInst *Alloca = NamedValues[Name].first;
+            if (!Alloca) {
+                std::cerr << "Variable " << Name << " undefined" << std::endl;
+                return nullptr;
+            }
+            el = Alloca;
+        } else {
+            el = GetMemberPointer(Name, Sub);
+            if(l->getType()->getPointerTo() != el->getType()) {
+                std::cerr << "Type mismatch with " << Name << std::endl;
+                return nullptr;
+            }
         }
-        AllocaInst *Alloca = NamedValues[Name].first;
-        if (!Alloca) {
-            std::cerr << "Variable " << Name << " undefined" << std::endl;
-            return nullptr;
-        }
-        return Builder.CreateStore(l, Alloca);
+        return Builder.CreateStore(l, el);
     }
 
     Value *SeqExprAST::codegen() const {
@@ -260,12 +278,19 @@ namespace backend {
 
     Value *FunctionDefintionAST::codegen() const {
         vector<Type *> tmp;
-        for (auto& typeName : ptypes) {
-            Type *t = Types::getType(typeName);
-            if(!t) {
-                return nullptr;
+        {
+            bool fst = true;
+            for (auto& typeName : ptypes) {
+                Type *t = Types::getType(typeName);
+                if(!t) {
+                    return nullptr;
+                }
+                if(fst && isMember) {
+                    fst = false;
+                    t = t->getPointerTo();
+                }
+                tmp.push_back(t);
             }
-            tmp.push_back(t);
         }
 
         Type * retT= Types::getType(this->retType);
@@ -293,10 +318,22 @@ namespace backend {
         Builder.SetInsertPoint(BB);
 
         NamedValues.clear();
-        for (auto &a: f->args()) {
-            AllocaInst *Alloca = CreateEntryBlockAlloca(a.getType(), f, string(a.getName()));
-            NamedValues[string(a.getName())] = {Alloca, a.getType()};
-            Builder.CreateStore(&a, Alloca);
+        {
+            bool fst = true;
+            for (auto &a: f->args()) {
+                AllocaInst *Alloca = CreateEntryBlockAlloca(a.getType(), f, string(a.getName()));
+                NamedValues[string(a.getName())] = {Alloca, a.getType()};
+                Builder.CreateStore(&a, Alloca);
+                if(fst && isMember) {
+                    Type * clsTy = a.getType()->getPointerElementType();
+                    Alloca = CreateEntryBlockAlloca(clsTy, f, string("this"));
+                    NamedValues[string("this")] = {Alloca, clsTy};
+                    Value *deref = Builder.CreateLoad(clsTy, &a, "derefThis");
+                    Builder.CreateStore(deref, Alloca);
+                    fst = false;
+                    continue;
+                }
+            }
         }
 
         Value *Body = body->codegen();
@@ -317,11 +354,91 @@ namespace backend {
             return f;
         }
 
-//        cerr << "DIDNT CREATE FUNCTION" << endl;
         f->eraseFromParent();
 
         return nullptr;
     }
+
+//    Value *MemberFunctionDefAST::codegen() const {
+//        vector<Type *> tmp;
+//        Type *clsPtrTy = Types::typeTable[cls]->getPointerTo();
+//        tmp.push_back(clsPtrTy);
+//        for (auto& typeName : ptypes) {
+//            Type *t = Types::getType(typeName);
+//            if(!t) {
+//                return nullptr;
+//            }
+//            tmp.push_back(t);
+//        }
+//
+//        Type * retT= Types::getType(this->retType);
+//        if(!retT) {
+//            return nullptr;
+//        }
+//        FunctionType *FT = FunctionType::get(retT, tmp, false);
+//
+//        Function *f = Function::Create(FT, Function::ExternalLinkage, name, TheModule);
+//
+//        if (!f) {
+//            return nullptr;
+//        }
+//
+//        unsigned i = 0;
+//        std::vector<std::string> newparams;
+//        newparams.emplace_back("__tmpptr_this");
+//        for(auto &p: parameters){
+//            newparams.push_back(p);
+//        }
+//        for (auto &a: f->args()) {
+//            a.setName(newparams[i++]);
+//        }
+//
+//        if (!f->empty()) {
+//            cerr << "Function " << name << " can't be redefined" << endl;
+//            return nullptr;
+//        }
+//        BasicBlock *BB = BasicBlock::Create(TheContext, "entry", f);
+//        Builder.SetInsertPoint(BB);
+//
+//        NamedValues.clear();
+//        Type *clsTy = Types::getType(cls);
+//        Value *zis = Builder.CreateGEP(clsTy, f->args().begin(), Types::getTypeConstant("int", 0), "thiscast");
+//        i = 0;
+//        for (auto &a: f->args()) {
+//            if(i == 0) {
+//                AllocaInst *Alloca = CreateEntryBlockAlloca(clsTy, f, string("this"));
+//                NamedValues[string("this")] = {Alloca, clsTy};
+//                Builder.CreateStore(zis, Alloca);
+//            } else {
+//                AllocaInst *Alloca = CreateEntryBlockAlloca(a.getType(), f, string(a.getName()));
+//                NamedValues[string(a.getName())] = {Alloca, a.getType()};
+//                Builder.CreateStore(&a, Alloca);
+//            }
+//            i++;
+//        }
+//
+//        Value *Body = body->codegen();
+//        if (Body != nullptr) {
+//            if(!isRet(Body)) {
+//                auto retV = Types::getTypeConstant(retType, 0);
+//                if(!retV) {
+//                    std::cerr << "Function " << name << " can't create implicit return" << std::endl;
+//                    return nullptr;
+//                }
+//                Builder.CreateRet(retV);
+//            }
+//
+//            verifyFunction(*f);
+//
+//            TheFPM->run(*f);
+//
+//            return f;
+//        }
+//
+//        f->eraseFromParent();
+//
+//        return nullptr;
+//    }
 
     string FunctionDefintionAST::getName() const {
         return name;
@@ -359,9 +476,9 @@ namespace backend {
         }
         Type *t = tmp->getAllocatedType();
 
-        bool isPtr = t->isPointerTy();
+//        bool isPtr = t->isPointerTy();
         auto cit = Types::typeNames.find(t);
-        if(cit == Types::typeNames.end() || !isPtr) {
+        if(cit == Types::typeNames.end()) {
             std::cerr << "Variable " << Name << " is not of class type" << std::endl;
             return nullptr;
         }
@@ -374,11 +491,7 @@ namespace backend {
         }
 
         vector<Value *> ArgsV;
-        Value *obj = Builder.CreateLoad(t, tmp, Name);
-        if(!obj) {
-            return nullptr;
-        }
-        ArgsV.push_back(obj);
+        ArgsV.push_back(tmp);
         for (unsigned i = 0; i < Args.size(); i++) {
             Value *tmpParam = Args[i]->codegen();
             if (!tmpParam)
@@ -395,29 +508,11 @@ namespace backend {
         return Builder.CreateCall(f, ArgsV, "methodcalltmp");
     }
 
-    Value *ClassAccessExprAST::codegen() const {
-        AllocaInst *tmp = NamedValues[Name].first;
-        if (tmp == nullptr) {
-            cerr << "Variable " + Name + " is undefined" << endl;
-            return nullptr;
-        }
-        Type *t = tmp->getAllocatedType();
-
-        bool isPtr = t->isPointerTy();
-        auto cit = Types::typeNames.find(t);
-        if(cit == Types::typeNames.end() || !isPtr) {
-            std::cerr << "Variable " << Name << " is not of class type" << std::endl;
-            return nullptr;
-        }
-        std::string clsName = cit->second;
-        auto it = Types::classVarTable[clsName].find(Var);
-        if(it == Types::classVarTable[clsName].end()) {
-            std::cerr << "Class " << clsName << " doesn't have member " << Var << std::endl;
-            return nullptr;
-        }
-        int memberIdx = it->second;
-        return Builder.CreateStructGEP(tmp, memberIdx);
-    }
+//    Value *ClassAccessExprAST::codegen() const {
+//        Value *gep = GetMemberPointer(Name, Var);
+//        Type *mt = gep->getType();
+//        return Builder.CreateLoad(mt, gep, "membload");
+//    }
 
     Value *AddExprAST::codegen() const {
         Value *l = _nodes[0]->codegen();
@@ -772,9 +867,10 @@ namespace backend {
             }
             subtypes.push_back(t);
             Types::classVarTable[Name][vars[i]] = i;
+            Types::classVarTypeTable[Name][vars[i]] = t;
         }
         StructType* classType = StructType::create(TheContext, subtypes, Name);
-        Types::typeTable[Name] = classType->getPointerTo();
+        Types::typeTable[Name] = classType;
         Types::typeNames[Types::typeTable[Name]] = Name;
         for(auto& f : functions) {
             f->codegen();

@@ -131,10 +131,6 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitObjVarRule(AvrlangParser::ObjVarRuleContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual antlrcpp::Any visitNegRule(AvrlangParser::NegRuleContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -148,10 +144,6 @@ public:
   }
 
   virtual antlrcpp::Any visitMethodCall(AvrlangParser::MethodCallContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitObjVar(AvrlangParser::ObjVarContext *ctx) override {
     return visitChildren(ctx);
   }
 

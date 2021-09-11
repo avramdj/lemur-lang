@@ -16,11 +16,13 @@ namespace backend {
     namespace Types {
         extern std::map<std::string, Type*> typeTable;
         extern std::map<Type*, std::string> typeNames;
-        extern std::map<std::string, std::map<std::string, int>> classVarTable;
+        extern std::map<std::string, std::map<std::string, unsigned>> classVarTable;
+        extern std::map<std::string, std::map<std::string, Type *>> classVarTypeTable;
         extern std::map<std::string, std::vector<std::string>> classFnTable;
         Value *getTypeConstant(Type *, float);
         Value *getTypeConstant(std::string, float);
         Type *getType(std::string name);
+        bool isClassType(Type *t);
         Value *boolCast(Value *v);
         Value *floatCast(Value *v);
         Value *stringCast(Value *v);

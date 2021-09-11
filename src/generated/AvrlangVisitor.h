@@ -79,8 +79,6 @@ public:
 
     virtual antlrcpp::Any visitVarRule(AvrlangParser::VarRuleContext *context) = 0;
 
-    virtual antlrcpp::Any visitObjVarRule(AvrlangParser::ObjVarRuleContext *context) = 0;
-
     virtual antlrcpp::Any visitNegRule(AvrlangParser::NegRuleContext *context) = 0;
 
     virtual antlrcpp::Any visitBraceExprRule(AvrlangParser::BraceExprRuleContext *context) = 0;
@@ -88,8 +86,6 @@ public:
     virtual antlrcpp::Any visitList(AvrlangParser::ListContext *context) = 0;
 
     virtual antlrcpp::Any visitMethodCall(AvrlangParser::MethodCallContext *context) = 0;
-
-    virtual antlrcpp::Any visitObjVar(AvrlangParser::ObjVarContext *context) = 0;
 
     virtual antlrcpp::Any visitString(AvrlangParser::StringContext *context) = 0;
 

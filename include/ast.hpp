@@ -32,13 +32,17 @@ namespace backend {
 
     class VariableExprAST : public ExprAST {
     public:
-        VariableExprAST(std::string s)
-                : Name(s) {}
+        VariableExprAST(std::string n)
+                : Name(n) {}
+
+        VariableExprAST(std::string n, std::string s)
+                : Name(n), Sub(s) {}
 
         Value *codegen() const;
 
     private:
         std::string Name;
+        std::string Sub;
     };
 
     class InnerExprAST : public ExprAST {
@@ -148,10 +152,14 @@ namespace backend {
         SetExprAST(std::shared_ptr<ExprAST> a, std::string n)
                 : InnerExprAST(a), Name(n) {}
 
+        SetExprAST(std::shared_ptr<ExprAST> a, std::string n, std::string s)
+                : InnerExprAST(a), Name(n), Sub(s) {}
+
         Value *codegen() const;
 
     private:
         std::string Name;
+        std::string Sub;
     };
 
     class SeqExprAST : public InnerExprAST {
@@ -166,8 +174,13 @@ namespace backend {
 
     class FunctionDefintionAST : ExprAST {
     public:
-        FunctionDefintionAST(std::string n, std::vector<std::string> t, std::vector<std::string> p, std::string retT, std::shared_ptr<ExprAST> b)
-                : name(n), ptypes(t), parameters(std::move(p)), retType(retT), body(b) {}
+        FunctionDefintionAST(std::string n,
+                             std::vector<std::string> t,
+                             std::vector<std::string> p,
+                             std::string retT,
+                             std::shared_ptr<ExprAST> b,
+                             bool isMem = false)
+                : name(n), ptypes(t), parameters(std::move(p)), retType(retT), body(b), isMember(isMem) {}
 
         std::string getName() const;
 
@@ -176,10 +189,31 @@ namespace backend {
     private:
         std::string name;
         std::string retType;
+        std::shared_ptr<ExprAST> body;
+        bool isMember;
+    protected:
         std::vector<std::string> parameters;
         std::vector<std::string> ptypes;
-        std::shared_ptr<ExprAST> body;
     };
+
+//    class MemberFunctionDefAST : ExprAST {
+//    public:
+//        MemberFunctionDefAST(std::string c, std::string n,
+//                             std::vector<std::string> t, std::vector<std::string> p,
+//                             std::string retT, std::shared_ptr<ExprAST> b)
+//                : cls(c), name(n), ptypes(t), parameters(std::move(p)), retType(retT), body(b) {}
+//
+//        Value *codegen() const;
+//
+//    private:
+//        std::string cls;
+//        std::string name;
+//        std::string retType;
+//        std::shared_ptr<ExprAST> body;
+//    protected:
+//        std::vector<std::string> parameters;
+//        std::vector<std::string> ptypes;
+//    };
 
     class CallExprAST : public ExprAST {
     public:
@@ -214,17 +248,17 @@ namespace backend {
         std::vector<std::shared_ptr<ExprAST> > Args;
     };
 
-    class ClassAccessExprAST : public ExprAST {
-    public:
-        ClassAccessExprAST(std::string n, std::string s)
-            : Name(n), Var(s) {}
-
-        Value *codegen() const;
-
-    private:
-        std::string Name;
-        std::string Var;
-    };
+//    class ClassAccessExprAST : public ExprAST {
+//    public:
+//        ClassAccessExprAST(std::string n, std::string s)
+//            : Name(n), Var(s) {}
+//
+//        Value *codegen() const;
+//
+//    private:
+//        std::string Name;
+//        std::string Var;
+//    };
 
     class AddExprAST : public InnerExprAST {
     public:
