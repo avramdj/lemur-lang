@@ -292,7 +292,6 @@ namespace backend {
                 tmp.push_back(t);
             }
         }
-
         Type * retT= Types::getType(this->retType);
         if(!retT) {
             return nullptr;
@@ -321,17 +320,18 @@ namespace backend {
         {
             bool fst = true;
             for (auto &a: f->args()) {
-                AllocaInst *Alloca = CreateEntryBlockAlloca(a.getType(), f, string(a.getName()));
-                NamedValues[string(a.getName())] = {Alloca, a.getType()};
-                Builder.CreateStore(&a, Alloca);
                 if(fst && isMember) {
                     Type * clsTy = a.getType()->getPointerElementType();
-                    Alloca = CreateEntryBlockAlloca(clsTy, f, string("this"));
+                    AllocaInst *Alloca = CreateEntryBlockAlloca(clsTy, f, string("this"));
                     NamedValues[string("this")] = {Alloca, clsTy};
                     Value *deref = Builder.CreateLoad(clsTy, &a, "derefThis");
                     Builder.CreateStore(deref, Alloca);
                     fst = false;
                     continue;
+                } else {
+                    AllocaInst *Alloca = CreateEntryBlockAlloca(a.getType(), f, string(a.getName()));
+                    NamedValues[string(a.getName())] = {Alloca, a.getType()};
+                    Builder.CreateStore(&a, Alloca);
                 }
             }
         }

@@ -1,21 +1,37 @@
 class Based {
   int x
-  bool b
-  def getX(int a) : int {
-    return a + this.x
+  bool zasnovano
+  def getX() : int {
+    return this.x
+  }
+  def setX(int a) : int {
+    this.x = a
+    return a
+  }
+  def check() : bool {
+    return this.zasnovano
+  }
+  def change() : int {
+    if(this.check()) {
+      int i = 4
+      while(i) {
+        this.x = this.x + 1050
+        i = i + 1
+      }
+    }
+    return 0
   }
 }
 
 def main() : int {
 
-  int z
   Based a
 
-  a.x = 4
-
-  int c = a.getX(3)
-
+  a.setX(69)
+  int c = a.getX()
   print(c)
+  a.change()
+  print(a.getX())
 
   return 0
 }

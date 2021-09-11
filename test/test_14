@@ -1,0 +1,20 @@
+class Base {
+  int x
+  def getX() : int {
+    return this.x
+  }
+  def setX(int a) : int {
+    this.x = a
+    return a
+  }
+}
+def main() : int {
+
+  Base a
+  a.x = 10
+  a.setX(69)
+  print(a.x)
+  print(a.getX())
+
+  return 0
+}
