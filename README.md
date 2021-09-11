@@ -1,5 +1,5 @@
 # untitled-compiler 0.1
-A compiled programing language implemented with ANTLR4 and LLVM-12
+A compiled object-oriented programing language implemented with ANTLR4 and LLVM-12
 
 ### Dependencies
 * LLVM-12
@@ -51,7 +51,9 @@ def main() : int {
 ```
 
 ### Types
-Currently only supports doubles.
+Weakly typed
+Statically typed
+Class objects passed by reference
 
 ### TODO
 * <strike> *AST class hierarchy* </strike>
@@ -64,4 +66,4 @@ Currently only supports doubles.
 * advanced OOP concepts
 * compiler flags
 * JIT support
-* vscode extension ???
+* vscode extension (???)
