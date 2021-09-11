@@ -59,8 +59,9 @@ Currently only supports doubles.
 * <strike> *AST builder* </strike>
 * <strike> *hook up llvm backend* </strike>
 * <strike> *unit testing* </strike>
-* string support
-* type infrastructure
+* <strike> *string support* </strike>
+* <strike> *type infrastructure* </strike>
+* advanced OOP concepts
 * compiler flags
 * JIT support
 * vscode extension ???
