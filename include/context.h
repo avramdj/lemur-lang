@@ -13,13 +13,6 @@ using namespace llvm;
 using namespace legacy;
 
 namespace backend {
-    extern Module *TheModule;
-    extern LLVMContext TheContext;
-    extern IRBuilder<> Builder;
-    extern llvm::legacy::FunctionPassManager *TheFPM;
-    extern Function *PrintfFja;
-    extern Function *Sprintf;
-    extern std::map<std::string, std::pair<AllocaInst *, Type *>> NamedValues;
     namespace Types {
         extern std::map<std::string, Type*> typeTable;
         extern std::map<std::string, std::map<std::string, int>> classVarTable;
@@ -29,11 +22,27 @@ namespace backend {
         Type *getType(std::string name);
         Value *boolCast(Value *v);
         Value *floatCast(Value *v);
+        Value *stringCast(Value *v);
     }
+    extern Module *TheModule;
+    extern LLVMContext TheContext;
+    extern IRBuilder<> Builder;
+    extern llvm::legacy::FunctionPassManager *TheFPM;
+    extern Function *PrintfFja;
+
+    extern Value *strIntFormat;
+    extern Value *strFloatFormat;
+    extern Value *strFormat;
+
+    extern std::map<std::string, std::pair<AllocaInst *, Type *>> NamedValues;
+
     void InitializeContext(void);
+    void InitializeStrings(void);
     void InitializeTypeTable(void);
     void InitializeModuleAndPassManager(void);
     void printModule(bool printIR, std::string outPath);
+
+    std::string encodeFunctionName(std::string fnName, std::string clsName);
 
     class TargetErrorException: public std::exception {
     public:

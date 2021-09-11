@@ -65,7 +65,7 @@ namespace backend {
     Value *VariableExprAST::codegen() const {
         AllocaInst *tmp = NamedValues[Name].first;
         if (tmp == nullptr) {
-            cerr << "Promenljiva " + Name + " nije definisana" << endl;
+            cerr << "Variable " + Name + " is undefined" << endl;
             return nullptr;
         }
         Type *t = NamedValues[Name].second;
@@ -83,12 +83,12 @@ namespace backend {
             return nullptr;
         Value *lC = Types::boolCast(l);
         if(!lC){
-            std::cerr << "Cant bool cast" << std::endl;
+            std::cerr << "Can't bool cast" << std::endl;
             return nullptr;
         }
         Value *dC = Types::boolCast(l);
         if(!dC){
-            std::cerr << "Cant bool cast" << std::endl;
+            std::cerr << "Can't bool cast" << std::endl;
             return nullptr;
         }
         return Builder.CreateAnd(lC, dC, "andtmp");
@@ -170,12 +170,25 @@ namespace backend {
         Value *l = _nodes[0]->codegen();
         if (l == nullptr)
             return nullptr;
-
-        if (Str == nullptr) {
-            Str = Builder.CreateGlobalStringPtr("%d\n");
-        }
         vector<Value *> ArgsV;
-        ArgsV.push_back(Str);
+        Type *t = l->getType();
+        Value *ftm;
+        if(!strFormat) {
+            InitializeStrings();
+        }
+        if(t == Types::getType("int")) {
+            ftm = strIntFormat;
+        } else if (t == Types::getType("float")) {
+            ftm = strFloatFormat;
+        } else if (t == Types::getType("string")) {
+            ftm = strFormat;
+        } else if (t == Types::getType("bool")){
+            ftm = strIntFormat;
+        } else {
+            std::cerr << "Unknown type cast to string" << std::endl;
+            return nullptr;
+        }
+        ArgsV.push_back(ftm);
         ArgsV.push_back(l);
         Builder.CreateCall(PrintfFja, ArgsV, "printfCall");
         return l;
@@ -317,12 +330,12 @@ namespace backend {
     Value *CallExprAST::codegen() const {
         Function *f = TheModule->getFunction(Callee);
         if (!f) {
-            cerr << "Poziv nedefinisane funckije " << Callee << endl;
+            cerr << "Call of undefined function " << Callee << endl;
             return nullptr;
         }
 
         if (Args.size() != f->arg_size()) {
-            cerr << "Funkcija " << Callee << " je pozvana sa neodgovarajucim brojem argumenata" << endl;
+            cerr << "Function " << Callee << " called with wrong number of arguments" << endl;
             return nullptr;
         }
 
@@ -337,9 +350,44 @@ namespace backend {
         return Builder.CreateCall(f, ArgsV, "calltmp");
     }
 
+    Value *MethodCallExprAST::codegen() const {
+        AllocaInst *tmp = NamedValues[Name].first;
+        if (tmp == nullptr) {
+            cerr << "Variable " + Name + " is undefined" << endl;
+            return nullptr;
+        }
+        Type *t = NamedValues[Name].second;
+        if(!t) {
+            std::cerr << "Type mismatch with " << Name << std::endl;
+            return nullptr;
+        }
+        std::string clsName = tmp->getType()->getStructName().str();
+        std::string encodedMethod = encodeFunctionName(Method, clsName);
+        Function *f = TheModule->getFunction(encodedMethod);
+        if (!f) {
+            cerr << "Call of undefined function " << Method << endl;
+            return nullptr;
+        }
 
-    CallExprAST::~CallExprAST() {
+        if (Args.size() != f->arg_size()) {
+            cerr << "Function " << Method << " called with wrong number of arguments" << endl;
+            return nullptr;
+        }
 
+        vector<Value *> ArgsV;
+        Value *obj = Builder.CreateLoad(t, tmp, Name);
+        if(!obj) {
+            return nullptr;
+        }
+        ArgsV.push_back(obj);
+        for (unsigned i = 0; i < Args.size(); i++) {
+            Value *tmpParam = Args[i]->codegen();
+            if (!tmpParam)
+                return nullptr;
+            ArgsV.push_back(tmpParam);
+        }
+
+        return Builder.CreateCall(f, ArgsV, "methodcalltmp");
     }
 
     Value *AddExprAST::codegen() const {
@@ -683,7 +731,6 @@ namespace backend {
         if(Types::typeTable.find(Name) != Types::typeTable.end()) {
             std::cerr << "Class " << Name << " already exists" << std::endl;
         }
-        StructType* classType = StructType::create(TheContext);
         vector<Type *> subtypes;
         for(int i = 0; i < types.size(); i++){
             Type * t = Types::getType(types[i]);
@@ -697,7 +744,7 @@ namespace backend {
             subtypes.push_back(t);
             Types::classVarTable[Name][vars[i]] = i;
         }
-        classType->setBody(subtypes);
+        StructType* classType = StructType::create(TheContext, subtypes, Name);
         Types::typeTable[Name] = classType;
         for(auto& f : functions) {
             f->codegen();

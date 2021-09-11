@@ -188,14 +188,29 @@ namespace backend {
 
         Value *codegen() const;
 
-        ~CallExprAST();
-
     private:
         CallExprAST(const CallExprAST &);
 
         CallExprAST &operator=(const CallExprAST &);
 
         std::string Callee;
+        std::vector<std::shared_ptr<ExprAST> > Args;
+    };
+
+    class MethodCallExprAST : public ExprAST {
+    public:
+        MethodCallExprAST(std::string vName, std::string mthName, std::vector<std::shared_ptr<ExprAST> > v)
+                : Name(vName), Method(mthName), Args(v) {}
+
+        Value *codegen() const;
+
+    private:
+        MethodCallExprAST(const MethodCallExprAST &);
+
+        MethodCallExprAST &operator=(const MethodCallExprAST &);
+
+        std::string Name;
+        std::string Method;
         std::vector<std::shared_ptr<ExprAST> > Args;
     };
 

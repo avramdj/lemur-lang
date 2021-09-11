@@ -26,23 +26,30 @@
 using namespace llvm;
 
 namespace backend {
-    Module *TheModule;
-    LLVMContext TheContext;
-    IRBuilder<> Builder(TheContext);
-    llvm::legacy::FunctionPassManager *TheFPM;
-    Function *PrintfFja;
-    Function *Sprintf;
-    std::map<std::string, std::pair<AllocaInst *, Type *>> NamedValues;
-
     namespace Types {
         std::map<std::string, Type*> typeTable;
         std::map<std::string, std::map<std::string, int>> classVarTable;
         std::map<std::string, std::vector<std::string>> classFnTable;
     }
+    Module *TheModule;
+    LLVMContext TheContext;
+    IRBuilder<> Builder(TheContext);
+    llvm::legacy::FunctionPassManager *TheFPM;
+    Function *PrintfFja;
+    Value *strIntFormat = nullptr;
+    Value *strFloatFormat = nullptr;
+    Value *strFormat = nullptr;
+    std::map<std::string, std::pair<AllocaInst *, Type *>> NamedValues;
 
     void InitializeContext(void) {
         InitializeModuleAndPassManager();
         InitializeTypeTable();
+    }
+
+    void InitializeStrings(void) {
+        strIntFormat = Builder.CreateGlobalStringPtr("%d\n");
+        strFloatFormat = Builder.CreateGlobalStringPtr("%f\n");
+        strFormat = Builder.CreateGlobalStringPtr("%s\n");
     }
 
     void InitializeTypeTable(void) {
@@ -59,11 +66,6 @@ namespace backend {
         FunctionType *FT1 = FunctionType::get(IntegerType::getInt32Ty(TheContext),
                                               PointerType::get(Type::getInt8Ty(TheContext), 0), true);
         PrintfFja = Function::Create(FT1, Function::ExternalLinkage, "printf", TheModule);
-
-        /* sprintf fja */
-        FunctionType *FT2 = FunctionType::get(IntegerType::getInt32Ty(TheContext),
-                                              PointerType::get(Type::getInt8Ty(TheContext), 0), true);
-        Sprintf = Function::Create(FT2, Function::ExternalLinkage, "sprintf", TheModule);
 
         // Create a new pass manager attached to it.
         TheFPM = new llvm::legacy::FunctionPassManager(TheModule);
@@ -135,6 +137,10 @@ namespace backend {
         delete TheModule;
     }
 
+    std::string encodeFunctionName(std::string fnName, std::string clsName = "") {
+        return std::string("_FUNC_") + clsName + std::string("_") + fnName;
+    }
+
     Value *Types::getTypeConstant(Type * t, float val) {
         if(t == typeTable["int"]) {
             return ConstantInt::get(Type::getInt32Ty(TheContext), APInt(32, val));
@@ -158,12 +164,12 @@ namespace backend {
     Value *Types::boolCast(Value *v) {
         Type *boolType = Types::getType("bool");
         Type *vT = v->getType();
-        if(vT == Types::getType("float")) {
+        if (vT == boolType) {
+            return v;
+        } else if(vT == Types::getType("float")) {
             return Builder.CreateFPToUI(v, boolType, "boolcast");
         } else if(vT == Types::getType("int")) {
             return Builder.CreateIntCast(v, boolType, false, "boolcast");
-        } else if (vT == Types::getType("bool")) {
-            return v;
         } else {
             return nullptr;
         }
@@ -171,7 +177,7 @@ namespace backend {
     Value *Types::floatCast(Value *v) {
         Type *floatType = Types::getType("float");
         Type *vT = v->getType();
-        if(vT == Types::getType("float")) {
+        if(vT == floatType) {
             return v;
         } else if(vT == Types::getType("int")) {
             return Builder.CreateSIToFP(v, floatType, "boolcast");
@@ -179,5 +185,21 @@ namespace backend {
             return nullptr;
         }
     }
+//    Value *Types::stringCast(Value *v) {
+//        Type *strType = Types::getType("string");
+//        Type *vT = v->getType();
+//        std::vector<Value *> Args;
+//        if(vT == strType) {
+//            return v;
+//        } else if(vT == Types::getType("int")) {
+//            Args.push_back(strIntFormat);
+//        } else if(vT == Types::getType("float")){
+//            Args.push_back(strFloatFormat);
+//        } else {
+//            return nullptr;
+//        }
+//        Args.push_back(v);
+//        return Builder.CreateCall(Sprintf, Args, "sprintfCall");
+//    }
 }
 

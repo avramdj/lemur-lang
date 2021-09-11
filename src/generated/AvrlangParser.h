@@ -147,6 +147,8 @@ public:
     ClassvardeclContext* classvardecl(size_t i);
     std::vector<ClassfunctiondefContext *> classfunctiondef();
     ClassfunctiondefContext* classfunctiondef(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> NEWLINE();
+    antlr4::tree::TerminalNode* NEWLINE(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -627,7 +629,7 @@ public:
   class  MethodCallContext : public antlr4::ParserRuleContext {
   public:
     antlr4::Token *varName = nullptr;;
-    antlr4::Token *mathodName = nullptr;;
+    antlr4::Token *methodName = nullptr;;
     AvrlangParser::ArglistContext *args = nullptr;;
     MethodCallContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;

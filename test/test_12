@@ -1,12 +1,18 @@
-def square(int x) : int {
-	return x * x
+class Based {
+  int x
+  bool b
+  def getX(int a) : int {
+    return a*2
+  }
 }
 
 def main() : int {
-  int i = 0
-  while(i < 10) {
-    print(square(i))
-    i = i + 1
-  }
+
+  Based b
+
+  int a = b.getX(3)
+
+#  print(a)
+
   return 0
 }

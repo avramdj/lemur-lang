@@ -16,7 +16,7 @@ globalstmt : classdef | functiondef;
 
 classdef : CLASS cName=NAME (ARROW baseName=NAME)? '{' body=classbody '}';
 
-classbody: (classvardecl | classfunctiondef)*;
+classbody: (classvardecl | classfunctiondef | NEWLINE)*;
 
 classvardecl : typeName=NAME varName=NAME;
 
@@ -67,7 +67,7 @@ expr : number #NumberRule |
 
 list : '[' (expr (',' expr)?)? ']';
 
-methodCall : varName=NAME '.' mathodName=NAME OPEN args=arglist CLOSED;
+methodCall : varName=NAME '.' methodName=NAME OPEN args=arglist CLOSED;
 
 objVar : objName=NAME '.' varName=NAME;
 

@@ -37,6 +37,8 @@ class ASTBuilder: public AvrlangBaseVisitor {
 
     antlrcpp::Any visitVarRule(AvrlangParser::VarRuleContext *ctx) override;
 
+    antlrcpp::Any visitMethodCall(AvrlangParser::MethodCallContext *ctx) override;
+
     antlrcpp::Any visitIfExpr(AvrlangParser::IfExprContext *ctx) override;
 
     antlrcpp::Any visitIfElseExpr(AvrlangParser::IfElseExprContext *ctx) override;
