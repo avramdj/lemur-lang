@@ -50,8 +50,10 @@ def main() {
 ```
 
 ### Types
-Weakly typed
-Statically typed
+Weakly typed (implicit conversions possible)
+
+Statically typed (variable type must be known at compile time)
+
 Class objects passed by reference
 
 ### TODO
