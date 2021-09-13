@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <ast.hpp>
+#include <AST.h>
 #include <ASTUtil.h>
 #include <context.h>
 
@@ -317,87 +317,6 @@ namespace backend {
         return nullptr;
     }
 
-//    Value *MemberFunctionDefAST::codegen() const {
-//        vector<Type *> tmp;
-//        Type *clsPtrTy = Types::typeTable[cls]->getPointerTo();
-//        tmp.push_back(clsPtrTy);
-//        for (auto& typeName : ptypes) {
-//            Type *t = Types::getType(typeName);
-//            if(!t) {
-//                return nullptr;
-//            }
-//            tmp.push_back(t);
-//        }
-//
-//        Type * retT= Types::getType(this->retType);
-//        if(!retT) {
-//            return nullptr;
-//        }
-//        FunctionType *FT = FunctionType::get(retT, tmp, false);
-//
-//        Function *f = Function::Create(FT, Function::ExternalLinkage, name, TheModule);
-//
-//        if (!f) {
-//            return nullptr;
-//        }
-//
-//        unsigned i = 0;
-//        std::vector<std::string> newparams;
-//        newparams.emplace_back("__tmpptr_this");
-//        for(auto &p: parameters){
-//            newparams.push_back(p);
-//        }
-//        for (auto &a: f->args()) {
-//            a.setName(newparams[i++]);
-//        }
-//
-//        if (!f->empty()) {
-//            cerr << "Function " << name << " can't be redefined" << endl;
-//            return nullptr;
-//        }
-//        BasicBlock *BB = BasicBlock::Create(TheContext, "entry", f);
-//        Builder.SetInsertPoint(BB);
-//
-//        NamedValues.clear();
-//        Type *clsTy = Types::getType(cls);
-//        Value *zis = Builder.CreateGEP(clsTy, f->args().begin(), Types::getTypeConstant("int", 0), "thiscast");
-//        i = 0;
-//        for (auto &a: f->args()) {
-//            if(i == 0) {
-//                AllocaInst *Alloca = CreateEntryBlockAlloca(clsTy, f, string("this"));
-//                NamedValues[string("this")] = {Alloca, clsTy};
-//                Builder.CreateStore(zis, Alloca);
-//            } else {
-//                AllocaInst *Alloca = CreateEntryBlockAlloca(a.getType(), f, string(a.getName()));
-//                NamedValues[string(a.getName())] = {Alloca, a.getType()};
-//                Builder.CreateStore(&a, Alloca);
-//            }
-//            i++;
-//        }
-//
-//        Value *Body = body->codegen();
-//        if (Body != nullptr) {
-//            if(!isRet(Body)) {
-//                auto retV = Types::getTypeConstant(retType, 0);
-//                if(!retV) {
-//                    std::cerr << "Function " << name << " can't create implicit return" << std::endl;
-//                    return nullptr;
-//                }
-//                Builder.CreateRet(retV);
-//            }
-//
-//            verifyFunction(*f);
-//
-//            TheFPM->run(*f);
-//
-//            return f;
-//        }
-//
-//        f->eraseFromParent();
-//
-//        return nullptr;
-//    }
-
     string FunctionDefintionAST::getName() const {
         return name;
     }
@@ -465,12 +384,6 @@ namespace backend {
 
         return Builder.CreateCall(f, ArgsV, "methodcalltmp");
     }
-
-//    Value *ClassAccessExprAST::codegen() const {
-//        Value *gep = GetMemberPointer(Name, Var);
-//        Type *mt = gep->getType();
-//        return Builder.CreateLoad(mt, gep, "membload");
-//    }
 
     Value *AddExprAST::codegen() const {
         Value *l = _nodes[0]->codegen();

@@ -3,7 +3,7 @@
 #include <antlr4-runtime.h>
 #include <LemurLexer.h>
 #include <LemurParser.h>
-#include <ASTBuilder.hpp>
+#include <ASTBuilder.h>
 #include <ParserErrorListener.h>
 #include <context.h>
 

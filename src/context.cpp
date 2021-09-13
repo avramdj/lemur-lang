@@ -4,7 +4,7 @@
 #include <iostream>
 #include <exception>
 
-#include <ast.hpp>
+#include <AST.h>
 #include <context.h>
 
 #include "llvm/IR/IRBuilder.h"

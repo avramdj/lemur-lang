@@ -2,8 +2,8 @@
 // Created by avram on 30.8.21..
 //
 
-#include <ASTBuilder.hpp>
-#include <ast.hpp>
+#include <ASTBuilder.h>
+#include <AST.h>
 #include <context.h>
 #include <ASTUtil.h>
 
