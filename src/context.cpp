@@ -21,7 +21,8 @@
 #include <llvm/Support/TargetRegistry.h>
 #include "llvm/Support/FileSystem.h"
 
- #define _DISABLE_OPTS_ 1
+#define _DISABLE_OPTS_ 1
+#define VOID_BITS 11
 
 using namespace llvm;
 
@@ -37,7 +38,9 @@ namespace backend {
     LLVMContext TheContext;
     IRBuilder<> Builder(TheContext);
     llvm::legacy::FunctionPassManager *TheFPM;
-    Function *PrintfFja;
+    Function *PrintFun;
+    Function *MallocFun;
+    Function *FreeFun;
     Value *strIntFormat = nullptr;
     Value *strFloatFormat = nullptr;
     Value *strFormat = nullptr;
@@ -56,24 +59,35 @@ namespace backend {
 
     void InitializeTypeTable(void) {
         Types::typeTable["int"] = Type::getInt32Ty(TheContext);
-        Types::typeTable["bool"] = Type::getInt1Ty(TheContext);
-        Types::typeTable["float"] = Type::getDoubleTy(TheContext);
-        Types::typeTable["string"] = Type::getInt8PtrTy(TheContext);
         Types::typeNames[Types::typeTable["int"]] = "int";
+        Types::typeTable["bool"] = Type::getInt1Ty(TheContext);
         Types::typeNames[Types::typeTable["bool"]] = "bool";
+        Types::typeTable["float"] = Type::getDoubleTy(TheContext);
         Types::typeNames[Types::typeTable["float"]] = "float";
+        Types::typeTable["string"] = Type::getInt8PtrTy(TheContext);
         Types::typeNames[Types::typeTable["string"]] = "string";
+        Types::typeTable["void"] = Type::getIntNTy(TheContext, VOID_BITS);
+        Types::typeNames[Types::typeTable["void"]] = "void";
     }
 
     void InitializeModuleAndPassManager(void) {
         TheModule = new Module("my_module", TheContext);
 
-        /* printf fja */
-        FunctionType *FT1 = FunctionType::get(IntegerType::getInt32Ty(TheContext),
+        /* print function */
+        FunctionType *printFunType = FunctionType::get(IntegerType::getInt32Ty(TheContext),
                                               PointerType::get(Type::getInt8Ty(TheContext), 0), true);
-        PrintfFja = Function::Create(FT1, Function::ExternalLinkage, "printf", TheModule);
+        PrintFun = Function::Create(printFunType, Function::ExternalLinkage, "printf", TheModule);
 
-        // Create a new pass manager attached to it.
+        /* malloc function */
+        FunctionType *mallocFunType = FunctionType::get(IntegerType::getInt8PtrTy(TheContext),
+                                                        IntegerType::getInt32Ty(TheContext), false);
+        MallocFun = Function::Create(mallocFunType, Function::ExternalLinkage, "malloc", TheModule);
+
+        /* malloc function */
+        FunctionType *freeFunType = FunctionType::get(Type::getVoidTy(TheContext),
+                                                      IntegerType::getInt8PtrTy(TheContext), false);
+        FreeFun = Function::Create(freeFunType, Function::ExternalLinkage, "free", TheModule);
+
         TheFPM = new llvm::legacy::FunctionPassManager(TheModule);
 
 #ifndef _DISABLE_OPTS_
@@ -154,6 +168,9 @@ namespace backend {
         if(t == typeTable["float"]) {
             return ConstantFP::get(Type::getDoubleTy(TheContext), val);
         }
+        if(t == typeTable["void"]) {
+            return ConstantInt::get(Type::getInt32Ty(TheContext), APInt(VOID_BITS, val));
+        }
         return nullptr;
     }
     Value *Types::getTypeConstant(std::string type, float val) {
@@ -196,6 +213,12 @@ namespace backend {
         std::string ts = Types::typeNames[t];
         return Types::classVarTable.find(ts) != Types::classVarTable.end();
     }
+
+    Value *Types::getStructSize(Type *t) {
+        Value *nullTypePtr = ConstantPointerNull::get(t->getPointerElementType()->getPointerTo());
+        Value *gepSize = Builder.CreateGEP(t->getPointerElementType(), nullTypePtr, Types::getTypeConstant("int", 1), "gepSize");
+        return Builder.CreatePtrToInt(gepSize, Types::getType("int"));
+    }
 //    Value *Types::stringCast(Value *v) {
 //        Type *strType = Types::getType("string");
 //        Type *vT = v->getType();
@@ -212,5 +235,11 @@ namespace backend {
 //        Args.push_back(v);
 //        return Builder.CreateCall(Sprintf, Args, "sprintfCall");
 //    }
+    bool Types::isVoid(const std::string &typeName) {
+        return typeName == "void";
+    }
+    bool Types::isVoid(Type *type) {
+        return isVoid(typeNames[type]);
+    }
 }
 

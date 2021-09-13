@@ -24,14 +24,12 @@ std::string formatRawStr(std::string s) {
     s = s.substr(1, s.size()-2);
     return s;
 }
-
 Value *getPtrToValue(const std::string& Name, const std::string& Sub) {
     if(Sub.empty()) {
         return getPtrToPrim(Name);
     }
     return getPtrToMember(Name, Sub);
 }
-
 Value *getPtrToPrim(const std::string& Name) {
     AllocaInst *Alloca = NamedValues[Name].first;
     if (!Alloca) {
@@ -40,7 +38,6 @@ Value *getPtrToPrim(const std::string& Name) {
     }
     return Alloca;
 }
-
 Value *getPtrToMember(const std::string& Name, const std::string& Sub){
     AllocaInst *tmp = NamedValues[Name].first;
     if (tmp == nullptr) {
@@ -65,7 +62,6 @@ Value *getPtrToMember(const std::string& Name, const std::string& Sub){
     Value *gep = Builder.CreateStructGEP(tmp2, memberIdx);
     return gep;
 }
-
 Value *GetMemberPointer(const std::string& Name, const std::string& Var){
     AllocaInst *tmp = NamedValues[Name].first;
     if (tmp == nullptr) {

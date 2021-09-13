@@ -16,9 +16,9 @@ classbody: (classvardecl | classfunctiondef | NEWLINE)*;
 
 classvardecl : typeName=NAME varName=NAME;
 
-classfunctiondef : DEF fName=NAME OPEN params=paramlist CLOSED ':' retType=NAME body=block;
+classfunctiondef : DEF fName=NAME OPEN params=paramlist CLOSED (':' retType=NAME)? body=block;
 
-functiondef : DEF fName=NAME OPEN params=paramlist CLOSED ':' retType=NAME body=block;
+functiondef : DEF fName=NAME OPEN params=paramlist CLOSED (':' retType=NAME)? body=block;
 
 paramlist returns [std::vector<std::string> types, std::vector<std::string> vars]
  : (
@@ -38,7 +38,7 @@ assign : varName=NAME ('.'subName=NAME)? '=' expr;
 
 declassign : typeName=NAME varName=NAME '=' expr;
 
-ret : RET expr;
+ret : RET (expr)?;
 
 whileloop : WHILE bracedexpr block;
 

@@ -1,16 +1,38 @@
 class A {
 	int x
-	def setX(int a) : int {
-		this.x = a*2
+	float y
+	float z
+	float a
+	float b
+	float c
+	def setX(int x) {
+		this.x = x
+		return
+	}
+	def setC(float c) {
+		this.c = c
 	}
 }
 
-def main() : int {
+def mkA() : A {
+	A b
+	b.setC(10000.0)
+	return b
+}
+
+def changeA(A tmp) {
+	tmp.c = 42.0
+}
+
+def main() {
 	A a
-	a.x = 1
-
-	a.setX(60)
-	print(a.x)
-
-	return 0
+	return
+	a.c = 5.0
+	print(a.c)
+	a.setC(60.0)
+	print(a.c)
+	A c = mkA()
+	print(c.c)
+	changeA(c)
+	print(c.c)
 }

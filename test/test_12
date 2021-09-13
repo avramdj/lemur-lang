@@ -12,14 +12,12 @@ class Based {
     return this.zasnovano
   }
   def change() : int {
-    if(this.check()) {
       int i = 4
-      while(i) {
+      while(i < 10) {
         this.x = this.x + 1050
         i = i + 1
       }
-    }
-    return 0
+      return 0
   }
 }
 

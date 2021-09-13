@@ -1,0 +1,19 @@
+class A {
+	int x
+	def setX(int a) : int {
+		this.x = a*2
+	}
+}
+
+def change(A a) : int{
+	a.setX(1234)
+}
+
+def main() : int {
+	A a
+	a.x = 1
+	int z = a.setX(60)
+	print(a.x)
+	change(a)
+	print(a.x)
+}

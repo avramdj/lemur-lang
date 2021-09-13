@@ -18,7 +18,7 @@ antlrcpp::Any ASTBuilder::visitFunctiondef(AvrlangParser::FunctiondefContext *ct
     std::pair<std::vector<std::string>, std::vector<std::string>> fparams = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->params);
     auto types = fparams.first;
     auto params = fparams.second;
-    std::string ret = ctx->retType->getText();
+    std::string ret = ctx->retType ? ctx->retType->getText() : "void";
     std::shared_ptr<backend::ExprAST> functionBody = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->body);
     auto *f = new backend::FunctionDefintionAST(functionName, types, params, ret, functionBody);
     f->codegen();
@@ -64,10 +64,15 @@ antlrcpp::Any ASTBuilder::visitAssign(AvrlangParser::AssignContext *ctx) {
     );
 }
 antlrcpp::Any ASTBuilder::visitRet(AvrlangParser::RetContext *ctx) {
-    std::shared_ptr<backend::ExprAST> ret =
-            antlr4::tree::AbstractParseTreeVisitor::visit(ctx->expr());
+    if(ctx->expr()) {
+        std::shared_ptr<backend::ExprAST> ret =
+                antlr4::tree::AbstractParseTreeVisitor::visit(ctx->expr());
+        return std::shared_ptr<backend::ExprAST>(
+                new backend::RetExprAST(ret)
+        );
+    }
     return std::shared_ptr<backend::ExprAST>(
-            new backend::RetExprAST(ret)
+            new backend::RetExprAST()
     );
 }
 antlrcpp::Any ASTBuilder::visitWhileloop(AvrlangParser::WhileloopContext *ctx) {
@@ -223,7 +228,7 @@ antlrcpp::Any ASTBuilder::visitClassdef(AvrlangParser::ClassdefContext *ctx) {
         types.insert(types.begin(), Name);
         auto params = fparams.second;
         params.insert(params.begin(), std::string("this"));
-        std::string ret = fn->retType->getText();
+        std::string ret = fn->retType ? fn->retType->getText() : "void";
         std::shared_ptr<backend::ExprAST> functionBody = antlr4::tree::AbstractParseTreeVisitor::visit(fn->body);
         auto *f = new backend::FunctionDefintionAST(functionName, types, params, ret, functionBody, true);
         functions.push_back(f);

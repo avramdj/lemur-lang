@@ -26,12 +26,17 @@ namespace backend {
         Value *boolCast(Value *v);
         Value *floatCast(Value *v);
         Value *stringCast(Value *v);
+        Value *getStructSize(Type *t);
+        bool isVoid(const std::string &typeName);
+        bool isVoid(Type *type);
     }
     extern Module *TheModule;
     extern LLVMContext TheContext;
     extern IRBuilder<> Builder;
     extern llvm::legacy::FunctionPassManager *TheFPM;
-    extern Function *PrintfFja;
+    extern Function *PrintFun;
+    extern Function *MallocFun;
+    extern Function *FreeFun;
 
     extern Value *strIntFormat;
     extern Value *strFloatFormat;

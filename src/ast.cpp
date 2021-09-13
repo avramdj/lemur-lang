@@ -187,7 +187,7 @@ namespace backend {
         }
         ArgsV.push_back(ftm);
         ArgsV.push_back(l);
-        Builder.CreateCall(PrintfFja, ArgsV, "printfCall");
+        Builder.CreateCall(PrintFun, ArgsV, "printfCall");
         return l;
     }
 
@@ -212,7 +212,10 @@ namespace backend {
         }
         Alloca = CreateEntryBlockAlloca(t, F, Name);
         if(Types::isClassType(t)) {
-            AllocaInst *StructAlloca = CreateEntryBlockAlloca(t->getPointerElementType(), F, Name + string(".RAW"));
+//            Value *StructAlloca = CreateEntryBlockAlloca(t->getPointerElementType(), F, Name + string(".RAW"));
+            Value *structSizeVal = Types::getStructSize(t);
+            Value *StructAllocaRaw = Builder.CreateCall(MallocFun, structSizeVal);
+            Value *StructAlloca = Builder.CreateBitCast(StructAllocaRaw, t);
             Builder.CreateStore(StructAlloca, Alloca);
         }
         NamedValues[Name] = {Alloca, t};
@@ -765,6 +768,14 @@ namespace backend {
     }
 
     Value *RetExprAST::codegen() const {
+        Function *f = Builder.GetInsertBlock()->getParent();
+        if(v == nullptr) {
+            if(f->getReturnType() != Types::getType("void")) {
+                std::cerr << "Void return in non void function " << f->getName().str() << std::endl;
+                return nullptr;
+            }
+            return Builder.CreateRet(Types::getTypeConstant("void", 0));
+        }
         Value *ret = v->codegen();
         if (!ret) {
             return nullptr;

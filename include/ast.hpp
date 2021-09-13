@@ -393,6 +393,9 @@ namespace backend {
         RetExprAST(std::shared_ptr<ExprAST> e)
                 : v(e) {}
 
+        RetExprAST()
+                : v(nullptr) {}
+
         Value *codegen() const;
 
     private:
