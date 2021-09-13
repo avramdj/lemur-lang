@@ -60,7 +60,7 @@ Class objects passed by reference
 ### Dependencies
 * LLVM-12
 * CMake
-* 
+
 ### Build
 * `cmake CMakeList.txt`
 * `make`
