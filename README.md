@@ -1,22 +1,14 @@
-# untitled-compiler 0.1
-A compiled object-oriented programing language implemented with ANTLR4 and LLVM-12
+# Lemur
+A compiled object-oriented programing language implemented with ANTLR4 and LLVM-12.
 
-### Dependencies
-* LLVM-12
-* CMake
-
-### Build
-* `cmake CMakeList.txt`
-* `make`
-
-### Run
-* `./avrlang source_file | llc -o out_name`
+It's pretty boring.
 
 ### Syntax 
 ```
 class Base {
     float x
     string message
+    
     def Base(float x) {
         this.x = x
     }
@@ -64,6 +56,17 @@ Weakly typed (implicit conversions possible)
 Statically typed (variable type must be known at compile time)
 
 Class objects passed by reference
+
+### Dependencies
+* LLVM-12
+* CMake
+* 
+### Build
+* `cmake CMakeList.txt`
+* `make`
+
+### Run
+* `./avrlang source_file | llc -o out_name`
 
 ### TODO
 * <strike> *AST class hierarchy* </strike>
