@@ -43,6 +43,7 @@ class Derived <- Base {
 
 def main() {
     Base b = Derived()
+    
     b.setMessage("We did it!")
 
     while(b.getX() < 10) {
