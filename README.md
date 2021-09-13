@@ -16,14 +16,21 @@ A compiled object-oriented programing language implemented with ANTLR4 and LLVM-
 ```
 class Base {
     float x
+    string message
     def Base(float x) {
         this.x = x
     }
+    def setMessage(string s) {
+        this.message = s
+    }
+    def incX() {
+        this.x = this.x + 1
+    }
     def getX() : int {
-        return x
+        return this.x
     }
     def doSomething() : int {
-        return x*x
+        return this.x*this.x
     }
 }
 
@@ -34,18 +41,19 @@ class Derived <- Base {
     }
 }
 
-def someListFun(Base el) : List {
-    int x = el.doSomething()
-    return [x, x, x]
-}
-
 def main() {
     Base b = Derived()
-    List list = someListFun(b)
-    
-    for (int i in list) {
-        print(i*10)
+    b.setMessage("We did it!")
+
+    while(b.getX() < 10) {
+        if(b.getX() < 5) {
+            print("Not there yet...")
+        } else {
+            print("Keep going!")
+        }
+        b.incX()
     }
+    print(b.getMessage())
 }
 ```
 
