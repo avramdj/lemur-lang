@@ -46,7 +46,7 @@ forloop : FOR '(' varName=NAME IN listName=expr block;
 
 ifExpr : IF cond=bracedexpr then=block;
 
-ifElseExpr : IF cond=bracedexpr block ELSE block;
+ifElseExpr : IF cond=bracedexpr block (NEWLINE)* ELSE block;
 
 expr : number #NumberRule |
     UMINUS expr #UminusRule |
