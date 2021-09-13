@@ -21,8 +21,8 @@ public:
     DEF = 15, PRINT = 16, OPEN = 17, CLOSED = 18, LEFTBRACE = 19, RIGHTBRACE = 20, 
     RET = 21, WHILE = 22, IF = 23, ELSE = 24, AND = 25, OR = 26, XOR = 27, 
     SHL = 28, SHR = 29, NEG = 30, GT = 31, GE = 32, LT = 33, LE = 34, EQ = 35, 
-    NE = 36, NEWLINE = 37, NAME = 38, NUM = 39, STRING = 40, WHITESPACE = 41, 
-    COMMENT = 42
+    NE = 36, NEWLINE = 37, NAME = 38, INT = 39, FLOAT = 40, STRING = 41, 
+    WHITESPACE = 42, COMMENT = 43
   };
 
   AvrlangLexer(antlr4::CharStream *input);

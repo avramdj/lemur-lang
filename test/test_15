@@ -1,0 +1,16 @@
+class A {
+	int x
+	def setX(int a) : int {
+		this.x = a*2
+	}
+}
+
+def main() : int {
+	A a
+	a.x = 1
+
+	a.setX(60)
+	print(a.x)
+
+	return 0
+}

@@ -76,8 +76,13 @@ antlrcpp::Any ASTBuilder::visitWhileloop(AvrlangParser::WhileloopContext *ctx) {
     return std::shared_ptr<backend::ExprAST>(new backend::WhileExprAST(cond, block));
 }
 antlrcpp::Any ASTBuilder::visitNumberRule(AvrlangParser::NumberRuleContext *ctx) {
+    if(ctx->number()->FLOAT()) {
+        return std::shared_ptr<backend::ExprAST>(
+                new backend::FloatExprAST(std::stof(ctx->number()->FLOAT()->getText()))
+        );
+    }
     return std::shared_ptr<backend::ExprAST>(
-            new backend::NumberExprAST(std::stoi(ctx->number()->NUM()->getText()))
+            new backend::IntExprAST(std::stoi(ctx->number()->INT()->getText()))
     );
 }
 antlrcpp::Any ASTBuilder::visitVarRule(AvrlangParser::VarRuleContext *ctx) {
@@ -217,7 +222,7 @@ antlrcpp::Any ASTBuilder::visitClassdef(AvrlangParser::ClassdefContext *ctx) {
         auto types = fparams.first;
         types.insert(types.begin(), Name);
         auto params = fparams.second;
-        params.insert(params.begin(), std::string(".tmpthis"));
+        params.insert(params.begin(), std::string("this"));
         std::string ret = fn->retType->getText();
         std::shared_ptr<backend::ExprAST> functionBody = antlr4::tree::AbstractParseTreeVisitor::visit(fn->body);
         auto *f = new backend::FunctionDefintionAST(functionName, types, params, ret, functionBody, true);

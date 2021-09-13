@@ -19,15 +19,26 @@ namespace backend {
         virtual Value *codegen() const = 0;
     };
 
-    class NumberExprAST : public ExprAST {
+    class IntExprAST : public ExprAST {
     public:
-        NumberExprAST(int v)
+        IntExprAST(int v)
                 : Val(v) {}
 
         Value *codegen() const;
 
     private:
         int Val;
+    };
+
+    class FloatExprAST : public ExprAST {
+    public:
+        FloatExprAST(float v)
+                : Val(v) {}
+
+        Value *codegen() const;
+
+    private:
+        float Val;
     };
 
     class VariableExprAST : public ExprAST {

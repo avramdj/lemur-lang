@@ -50,7 +50,7 @@ namespace backend {
 
     void InitializeStrings(void) {
         strIntFormat = Builder.CreateGlobalStringPtr("%d\n");
-        strFloatFormat = Builder.CreateGlobalStringPtr("%f\n");
+        strFloatFormat = Builder.CreateGlobalStringPtr("%g\n");
         strFormat = Builder.CreateGlobalStringPtr("%s\n");
     }
 

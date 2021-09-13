@@ -59,25 +59,17 @@ namespace backend {
 
     }
 
-    Value *NumberExprAST::codegen() const {
-        return ConstantInt::get(TheContext, APInt(32, Val));
+    Value *IntExprAST::codegen() const {
+        return Types::getTypeConstant("int", Val); // NOLINT(cppcoreguidelines-narrowing-conversions)
+    }
+
+    Value *FloatExprAST::codegen() const {
+        return Types::getTypeConstant("float", Val);
     }
 
     Value *VariableExprAST::codegen() const {
-        Value *v;
-        Type *t;
-        if(Sub.empty()){
-            AllocaInst *tmp = NamedValues[Name].first;
-            if (tmp == nullptr) {
-                cerr << "Variable " + Name + " is undefined" << endl;
-                return nullptr;
-            }
-            v = tmp;
-            t = NamedValues[Name].second;
-        } else {
-            v = GetMemberPointer(Name, Sub);
-            t = v->getType()->getPointerElementType();
-        }
+        Value *v = getPtrToValue(Name, Sub);
+        Type *t = v->getType()->getPointerElementType();
         return Builder.CreateLoad(t, v, Name);
     }
 
@@ -200,17 +192,10 @@ namespace backend {
     }
 
     Value *DeclAssignExprAST::codegen() const {
-        VarDeclExprAST decl = VarDeclExprAST(Type, Name);
+        VarDeclExprAST decl(Type, Name);
         decl.codegen();
-        AllocaInst *Alloca = NamedValues[Name].first;
-        Value *l = _nodes[0]->codegen();
-        if (l == nullptr)
-            return nullptr;
-        if(l->getType() != NamedValues[Name].second) {
-            std::cerr << "Type mismatch with " << Name << std::endl;
-            return nullptr;
-        }
-        return Builder.CreateStore(l, Alloca);
+        SetExprAST set(_nodes[0], Name);
+        return set.codegen();
     }
 
     Value *VarDeclExprAST::codegen() const {
@@ -225,10 +210,11 @@ namespace backend {
             std::cerr << "Unknown type " << Type << std::endl;
             return nullptr;
         }
-        if(Types::isClassType(t)) {
-
-        }
         Alloca = CreateEntryBlockAlloca(t, F, Name);
+        if(Types::isClassType(t)) {
+            AllocaInst *StructAlloca = CreateEntryBlockAlloca(t->getPointerElementType(), F, Name + string(".RAW"));
+            Builder.CreateStore(StructAlloca, Alloca);
+        }
         NamedValues[Name] = {Alloca, t};
         return Alloca;
     }
@@ -237,24 +223,12 @@ namespace backend {
         Value *l = _nodes[0]->codegen();
         if (l == nullptr)
             return nullptr;
-        Value *el;
-        if(Sub.empty()){
-            if(l->getType() != NamedValues[Name].second) {
-                std::cerr << "Type mismatch with " << Name << std::endl;
-                return nullptr;
-            }
-            AllocaInst *Alloca = NamedValues[Name].first;
-            if (!Alloca) {
-                std::cerr << "Variable " << Name << " undefined" << std::endl;
-                return nullptr;
-            }
-            el = Alloca;
-        } else {
-            el = GetMemberPointer(Name, Sub);
-            if(l->getType()->getPointerTo() != el->getType()) {
-                std::cerr << "Type mismatch with " << Name << std::endl;
-                return nullptr;
-            }
+        Value *el = getPtrToValue(Name, Sub);
+        if(l->getType() != el->getType()->getPointerElementType()) {
+            std::cerr << "Type mismatch with "
+                << Name + (Sub.empty()? string("") : string(".") + Sub )
+                << std::endl;
+            return nullptr;
         }
         return Builder.CreateStore(l, el);
     }
@@ -278,19 +252,13 @@ namespace backend {
 
     Value *FunctionDefintionAST::codegen() const {
         vector<Type *> tmp;
-        {
-            bool fst = true;
-            for (auto& typeName : ptypes) {
-                Type *t = Types::getType(typeName);
-                if(!t) {
-                    return nullptr;
-                }
-                if(fst && isMember) {
-                    fst = false;
-                    t = t->getPointerTo();
-                }
-                tmp.push_back(t);
+
+        for (auto& typeName : ptypes) {
+            Type *t = Types::getType(typeName);
+            if(!t) {
+                return nullptr;
             }
+            tmp.push_back(t);
         }
         Type * retT= Types::getType(this->retType);
         if(!retT) {
@@ -317,23 +285,10 @@ namespace backend {
         Builder.SetInsertPoint(BB);
 
         NamedValues.clear();
-        {
-            bool fst = true;
-            for (auto &a: f->args()) {
-                if(fst && isMember) {
-                    Type * clsTy = a.getType()->getPointerElementType();
-                    AllocaInst *Alloca = CreateEntryBlockAlloca(clsTy, f, string("this"));
-                    NamedValues[string("this")] = {Alloca, clsTy};
-                    Value *deref = Builder.CreateLoad(clsTy, &a, "derefThis");
-                    Builder.CreateStore(deref, Alloca);
-                    fst = false;
-                    continue;
-                } else {
-                    AllocaInst *Alloca = CreateEntryBlockAlloca(a.getType(), f, string(a.getName()));
-                    NamedValues[string(a.getName())] = {Alloca, a.getType()};
-                    Builder.CreateStore(&a, Alloca);
-                }
-            }
+        for (auto &a: f->args()) {
+            AllocaInst *Alloca = CreateEntryBlockAlloca(a.getType(), f, string(a.getName()));
+            NamedValues[string(a.getName())] = {Alloca, a.getType()};
+            Builder.CreateStore(&a, Alloca);
         }
 
         Value *Body = body->codegen();
@@ -489,9 +444,9 @@ namespace backend {
             cerr << "Call of undefined method " << Method << endl;
             return nullptr;
         }
-
+        Value *loadTmp = Builder.CreateLoad(t, tmp);
         vector<Value *> ArgsV;
-        ArgsV.push_back(tmp);
+        ArgsV.push_back(loadTmp);
         for (unsigned i = 0; i < Args.size(); i++) {
             Value *tmpParam = Args[i]->codegen();
             if (!tmpParam)
@@ -870,7 +825,7 @@ namespace backend {
             Types::classVarTypeTable[Name][vars[i]] = t;
         }
         StructType* classType = StructType::create(TheContext, subtypes, Name);
-        Types::typeTable[Name] = classType;
+        Types::typeTable[Name] = classType->getPointerTo();
         Types::typeNames[Types::typeTable[Name]] = Name;
         for(auto& f : functions) {
             f->codegen();

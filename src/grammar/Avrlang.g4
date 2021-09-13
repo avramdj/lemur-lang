@@ -66,7 +66,7 @@ methodCall : varName=NAME '.' methodName=NAME OPEN args=arglist CLOSED;
 
 string : STRING;
 
-number : NUM;
+number : INT | FLOAT;
 
 var : varName=NAME('.'subName=NAME)?;
 
@@ -109,7 +109,8 @@ EQ : '==';
 NE : '!=';
 NEWLINE : '\n';
 NAME : [a-zA-Z_][a-zA-Z_0-9]*;
-NUM : ([0-9]*[.])?[0-9]+;
+INT : [0-9]+;
+FLOAT : ([0-9]*[.])?[0-9]+;
 STRING : '"'(ESC | ~["\\])*'"';
 fragment ESC : '\\' (["\\/bfnrt]) ;
 WHITESPACE : (' ' | '\t') -> skip;
