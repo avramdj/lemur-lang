@@ -39,14 +39,13 @@ def someListFun(Base el) : List {
     return [x, x, x]
 }
 
-def main() : int {
+def main() {
     Base b = Derived()
     List list = someListFun(b)
     
     for (int i in list) {
         print(i*10)
     }
-    return 0
 }
 ```
 
