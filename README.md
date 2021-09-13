@@ -39,20 +39,21 @@ def someListFun(Base el) : List {
     return [x, x, x]
 }
 
-def main() : int {
+def main() {
     Base b = Derived()
     List list = someListFun(b)
     
     for (int i in list) {
         print(i*10)
     }
-    return 0
 }
 ```
 
 ### Types
-Weakly typed
-Statically typed
+Weakly typed (implicit conversions possible)
+
+Statically typed (variable type must be known at compile time)
+
 Class objects passed by reference
 
 ### TODO
