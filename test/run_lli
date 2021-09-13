@@ -1,7 +1,7 @@
 #!/bin/bash
 
 scpath=$(dirname "$0")
-compile=$scpath/../avrlang
+compile=$scpath/../lemur
 filename=$scpath/$1
 
 echo "INPUT: $filename"

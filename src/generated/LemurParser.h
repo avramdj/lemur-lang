@@ -3,7 +3,7 @@
     #include <string>
 
 
-// Generated from Avrlang.g4 by ANTLR 4.7.2
+// Generated from Lemur.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -13,7 +13,7 @@
 
 
 
-class  AvrlangParser : public antlr4::Parser {
+class  LemurParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
@@ -36,8 +36,8 @@ public:
     RuleNeg = 27, RuleBinoperator = 28, RuleBracedexpr = 29
   };
 
-  AvrlangParser(antlr4::TokenStream *input);
-  ~AvrlangParser();
+  LemurParser(antlr4::TokenStream *input);
+  ~LemurParser();
 
   virtual std::string getGrammarFileName() const override;
   virtual const antlr4::atn::ATN& getATN() const override { return _atn; };
@@ -116,7 +116,7 @@ public:
   public:
     antlr4::Token *cName = nullptr;;
     antlr4::Token *baseName = nullptr;;
-    AvrlangParser::ClassbodyContext *body = nullptr;;
+    LemurParser::ClassbodyContext *body = nullptr;;
     ClassdefContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *CLASS();
@@ -177,9 +177,9 @@ public:
   class  ClassfunctiondefContext : public antlr4::ParserRuleContext {
   public:
     antlr4::Token *fName = nullptr;;
-    AvrlangParser::ParamlistContext *params = nullptr;;
+    LemurParser::ParamlistContext *params = nullptr;;
     antlr4::Token *retType = nullptr;;
-    AvrlangParser::BlockContext *body = nullptr;;
+    LemurParser::BlockContext *body = nullptr;;
     ClassfunctiondefContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *DEF();
@@ -202,9 +202,9 @@ public:
   class  FunctiondefContext : public antlr4::ParserRuleContext {
   public:
     antlr4::Token *fName = nullptr;;
-    AvrlangParser::ParamlistContext *params = nullptr;;
+    LemurParser::ParamlistContext *params = nullptr;;
     antlr4::Token *retType = nullptr;;
-    AvrlangParser::BlockContext *body = nullptr;;
+    LemurParser::BlockContext *body = nullptr;;
     FunctiondefContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *DEF();
@@ -398,7 +398,7 @@ public:
   class  ForloopContext : public antlr4::ParserRuleContext {
   public:
     antlr4::Token *varName = nullptr;;
-    AvrlangParser::ExprContext *listName = nullptr;;
+    LemurParser::ExprContext *listName = nullptr;;
     ForloopContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *FOR();
@@ -419,8 +419,8 @@ public:
 
   class  IfExprContext : public antlr4::ParserRuleContext {
   public:
-    AvrlangParser::BracedexprContext *cond = nullptr;;
-    AvrlangParser::BlockContext *then = nullptr;;
+    LemurParser::BracedexprContext *cond = nullptr;;
+    LemurParser::BlockContext *then = nullptr;;
     IfExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *IF();
@@ -438,7 +438,7 @@ public:
 
   class  IfElseExprContext : public antlr4::ParserRuleContext {
   public:
-    AvrlangParser::BracedexprContext *cond = nullptr;;
+    LemurParser::BracedexprContext *cond = nullptr;;
     IfElseExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *IF();
@@ -486,8 +486,8 @@ public:
   public:
     OpExprRuleContext(ExprContext *ctx);
 
-    AvrlangParser::ExprContext *leftOp = nullptr;
-    AvrlangParser::ExprContext *rightOp = nullptr;
+    LemurParser::ExprContext *leftOp = nullptr;
+    LemurParser::ExprContext *rightOp = nullptr;
     BinoperatorContext *binoperator();
     std::vector<ExprContext *> expr();
     ExprContext* expr(size_t i);
@@ -620,7 +620,7 @@ public:
   public:
     antlr4::Token *varName = nullptr;;
     antlr4::Token *methodName = nullptr;;
-    AvrlangParser::ArglistContext *args = nullptr;;
+    LemurParser::ArglistContext *args = nullptr;;
     MethodCallContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *OPEN();
@@ -690,7 +690,7 @@ public:
   class  CallexprContext : public antlr4::ParserRuleContext {
   public:
     antlr4::Token *fName = nullptr;;
-    AvrlangParser::ArglistContext *args = nullptr;;
+    LemurParser::ArglistContext *args = nullptr;;
     CallexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *OPEN();

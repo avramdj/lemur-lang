@@ -7,13 +7,13 @@
 #include <context.h>
 #include <ASTUtil.h>
 
-antlrcpp::Any ASTBuilder::visitFile(AvrlangParser::FileContext *ctx) {
+antlrcpp::Any ASTBuilder::visitFile(LemurParser::FileContext *ctx) {
     return antlr4::tree::AbstractParseTreeVisitor::visitChildren(ctx);
 }
-antlrcpp::Any ASTBuilder::visitGlobalstmt(AvrlangParser::GlobalstmtContext *ctx) {
+antlrcpp::Any ASTBuilder::visitGlobalstmt(LemurParser::GlobalstmtContext *ctx) {
     return antlr4::tree::AbstractParseTreeVisitor::visitChildren(ctx);
 }
-antlrcpp::Any ASTBuilder::visitFunctiondef(AvrlangParser::FunctiondefContext *ctx) {
+antlrcpp::Any ASTBuilder::visitFunctiondef(LemurParser::FunctiondefContext *ctx) {
     std::string functionName = ctx->fName->getText();
     std::pair<std::vector<std::string>, std::vector<std::string>> fparams = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->params);
     auto types = fparams.first;
@@ -24,7 +24,7 @@ antlrcpp::Any ASTBuilder::visitFunctiondef(AvrlangParser::FunctiondefContext *ct
     f->codegen();
     return f;
 }
-antlrcpp::Any ASTBuilder::visitParamlist(AvrlangParser::ParamlistContext *ctx) {
+antlrcpp::Any ASTBuilder::visitParamlist(LemurParser::ParamlistContext *ctx) {
     std::vector<std::string> types;
     std::vector<std::string> params;
     for(auto& type : ctx->types) {
@@ -35,7 +35,7 @@ antlrcpp::Any ASTBuilder::visitParamlist(AvrlangParser::ParamlistContext *ctx) {
     }
     return std::make_pair(types, params);
 }
-antlrcpp::Any ASTBuilder::visitBlock(AvrlangParser::BlockContext *ctx) {
+antlrcpp::Any ASTBuilder::visitBlock(LemurParser::BlockContext *ctx) {
     std::vector<std::shared_ptr<backend::ExprAST>> stmtVector;
     for(auto& stmt : ctx->stmt()) {
         std::shared_ptr<backend::ExprAST> stmtAST =
@@ -46,10 +46,10 @@ antlrcpp::Any ASTBuilder::visitBlock(AvrlangParser::BlockContext *ctx) {
             new backend::SeqExprAST(stmtVector)
     );
 }
-antlrcpp::Any ASTBuilder::visitStmt(AvrlangParser::StmtContext *ctx) {
+antlrcpp::Any ASTBuilder::visitStmt(LemurParser::StmtContext *ctx) {
     return antlr4::tree::AbstractParseTreeVisitor::visitChildren(ctx);
 }
-antlrcpp::Any ASTBuilder::visitAssign(AvrlangParser::AssignContext *ctx) {
+antlrcpp::Any ASTBuilder::visitAssign(LemurParser::AssignContext *ctx) {
     std::string varName = ctx->varName->getText();
     std::string subName = ctx->subName ? ctx->subName->getText() : std::string("");
     std::shared_ptr<backend::ExprAST> expr =
@@ -63,7 +63,7 @@ antlrcpp::Any ASTBuilder::visitAssign(AvrlangParser::AssignContext *ctx) {
             new backend::SetExprAST(expr, varName, subName)
     );
 }
-antlrcpp::Any ASTBuilder::visitRet(AvrlangParser::RetContext *ctx) {
+antlrcpp::Any ASTBuilder::visitRet(LemurParser::RetContext *ctx) {
     if(ctx->expr()) {
         std::shared_ptr<backend::ExprAST> ret =
                 antlr4::tree::AbstractParseTreeVisitor::visit(ctx->expr());
@@ -75,12 +75,12 @@ antlrcpp::Any ASTBuilder::visitRet(AvrlangParser::RetContext *ctx) {
             new backend::RetExprAST()
     );
 }
-antlrcpp::Any ASTBuilder::visitWhileloop(AvrlangParser::WhileloopContext *ctx) {
+antlrcpp::Any ASTBuilder::visitWhileloop(LemurParser::WhileloopContext *ctx) {
     std::shared_ptr<backend::ExprAST> cond = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->bracedexpr()->expr());
     std::shared_ptr<backend::ExprAST> block = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->block());
     return std::shared_ptr<backend::ExprAST>(new backend::WhileExprAST(cond, block));
 }
-antlrcpp::Any ASTBuilder::visitNumberRule(AvrlangParser::NumberRuleContext *ctx) {
+antlrcpp::Any ASTBuilder::visitNumberRule(LemurParser::NumberRuleContext *ctx) {
     if(ctx->number()->FLOAT()) {
         return std::shared_ptr<backend::ExprAST>(
                 new backend::FloatExprAST(std::stof(ctx->number()->FLOAT()->getText()))
@@ -90,7 +90,7 @@ antlrcpp::Any ASTBuilder::visitNumberRule(AvrlangParser::NumberRuleContext *ctx)
             new backend::IntExprAST(std::stoi(ctx->number()->INT()->getText()))
     );
 }
-antlrcpp::Any ASTBuilder::visitVarRule(AvrlangParser::VarRuleContext *ctx) {
+antlrcpp::Any ASTBuilder::visitVarRule(LemurParser::VarRuleContext *ctx) {
     std::string Name = ctx->var()->varName->getText();
     std::string Sub = ctx->var()->subName ? ctx->var()->subName->getText() : std::string("");
     if(Sub.empty()){
@@ -104,12 +104,12 @@ antlrcpp::Any ASTBuilder::visitVarRule(AvrlangParser::VarRuleContext *ctx) {
     }
 }
 
-antlrcpp::Any ASTBuilder::visitIfExpr(AvrlangParser::IfExprContext *ctx) {
+antlrcpp::Any ASTBuilder::visitIfExpr(LemurParser::IfExprContext *ctx) {
     std::shared_ptr<backend::ExprAST> cond = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->cond->expr());
     std::shared_ptr<backend::ExprAST> block = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->block());
     return std::shared_ptr<backend::ExprAST>(new backend::IfExprAST(cond, block));
 }
-antlrcpp::Any ASTBuilder::visitIfElseExpr(AvrlangParser::IfElseExprContext *ctx) {
+antlrcpp::Any ASTBuilder::visitIfElseExpr(LemurParser::IfElseExprContext *ctx) {
     std::shared_ptr<backend::ExprAST> cond = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->cond->expr());
     std::shared_ptr<backend::ExprAST> thenBlock = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->block().at(0));
     std::shared_ptr<backend::ExprAST> elseBlock = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->block().at(1));
@@ -118,7 +118,7 @@ antlrcpp::Any ASTBuilder::visitIfElseExpr(AvrlangParser::IfElseExprContext *ctx)
     );
 }
 
-antlrcpp::Any ASTBuilder::visitCallExprRule(AvrlangParser::CallExprRuleContext *ctx) {
+antlrcpp::Any ASTBuilder::visitCallExprRule(LemurParser::CallExprRuleContext *ctx) {
     std::string name = ctx->callexpr()->fName->getText();
     std::vector<std::shared_ptr<backend::ExprAST>> args;
     for(auto p : ctx->callexpr()->arglist()->expr()){
@@ -130,15 +130,15 @@ antlrcpp::Any ASTBuilder::visitCallExprRule(AvrlangParser::CallExprRuleContext *
     );
 }
 
-antlrcpp::Any ASTBuilder::visitArglist(AvrlangParser::ArglistContext *ctx) {
+antlrcpp::Any ASTBuilder::visitArglist(LemurParser::ArglistContext *ctx) {
     return visitChildren(ctx);
 }
 
-antlrcpp::Any ASTBuilder::visitNegRule(AvrlangParser::NegRuleContext *ctx) {
+antlrcpp::Any ASTBuilder::visitNegRule(LemurParser::NegRuleContext *ctx) {
     std::shared_ptr<backend::ExprAST> expr = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->neg()->expr());
     return std::shared_ptr<backend::ExprAST>(new backend::NotExprAST(expr));
 }
-antlrcpp::Any ASTBuilder::visitOpExprRule(AvrlangParser::OpExprRuleContext *ctx) {
+antlrcpp::Any ASTBuilder::visitOpExprRule(LemurParser::OpExprRuleContext *ctx) {
     std::string op = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->binoperator());
     std::shared_ptr<backend::ExprAST> LHS = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->leftOp);
     std::shared_ptr<backend::ExprAST> RHS = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->rightOp);
@@ -177,39 +177,39 @@ antlrcpp::Any ASTBuilder::visitOpExprRule(AvrlangParser::OpExprRuleContext *ctx)
     return std::shared_ptr<backend::ExprAST>(binop);
 }
 
-antlrcpp::Any ASTBuilder::visitPrintstmt(AvrlangParser::PrintstmtContext *ctx) {
+antlrcpp::Any ASTBuilder::visitPrintstmt(LemurParser::PrintstmtContext *ctx) {
     std::shared_ptr<backend::ExprAST> expr = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->expr());
     return std::shared_ptr<backend::ExprAST>(new backend::PrintExprAST(expr));
 }
 
-antlrcpp::Any ASTBuilder::visitBinoperator(AvrlangParser::BinoperatorContext *ctx) {
+antlrcpp::Any ASTBuilder::visitBinoperator(LemurParser::BinoperatorContext *ctx) {
     return ctx->getText();
 }
 
-antlrcpp::Any ASTBuilder::visitBraceExprRule(AvrlangParser::BraceExprRuleContext *ctx) {
+antlrcpp::Any ASTBuilder::visitBraceExprRule(LemurParser::BraceExprRuleContext *ctx) {
     return antlr4::tree::AbstractParseTreeVisitor::visit(ctx->bracedexpr()->expr());
 }
 
-antlrcpp::Any ASTBuilder::visitVardecl(AvrlangParser::VardeclContext *ctx) {
+antlrcpp::Any ASTBuilder::visitVardecl(LemurParser::VardeclContext *ctx) {
     std::string type = ctx->typeName->getText();
     std::string name = ctx->varName->getText();
     return std::shared_ptr<backend::ExprAST>(new backend::VarDeclExprAST(type, name));
 }
 
-antlrcpp::Any ASTBuilder::visitDeclassign(AvrlangParser::DeclassignContext *ctx) {
+antlrcpp::Any ASTBuilder::visitDeclassign(LemurParser::DeclassignContext *ctx) {
     std::string type = ctx->typeName->getText();
     std::string name = ctx->varName->getText();
     std::shared_ptr<backend::ExprAST> expr = antlr4::tree::AbstractParseTreeVisitor::visit(ctx->expr());
     return std::shared_ptr<backend::ExprAST>(new backend::DeclAssignExprAST(type, name, expr));
 }
 
-antlrcpp::Any ASTBuilder::visitStringRule(AvrlangParser::StringRuleContext *ctx) {
+antlrcpp::Any ASTBuilder::visitStringRule(LemurParser::StringRuleContext *ctx) {
     std::string str = ctx->getText();
     str = formatRawStr(str);
     return std::shared_ptr<backend::ExprAST>(new backend::StringExprAST(str));
 }
 
-antlrcpp::Any ASTBuilder::visitClassdef(AvrlangParser::ClassdefContext *ctx) {
+antlrcpp::Any ASTBuilder::visitClassdef(LemurParser::ClassdefContext *ctx) {
     std::vector<std::string> vartypes;
     std::vector<std::string> varnames;
     std::string Name = ctx->cName->getText();
@@ -239,11 +239,11 @@ antlrcpp::Any ASTBuilder::visitClassdef(AvrlangParser::ClassdefContext *ctx) {
     return std::shared_ptr<backend::ExprAST>(cls);
 }
 
-antlrcpp::Any ASTBuilder::visitClassbody(AvrlangParser::ClassbodyContext *ctx) {
+antlrcpp::Any ASTBuilder::visitClassbody(LemurParser::ClassbodyContext *ctx) {
     return nullptr;
 }
 
-antlrcpp::Any ASTBuilder::visitMethodCall(AvrlangParser::MethodCallContext *ctx) {
+antlrcpp::Any ASTBuilder::visitMethodCall(LemurParser::MethodCallContext *ctx) {
     std::string var = ctx->varName->getText();
     std::string method = ctx->methodName->getText();
     std::vector<std::shared_ptr<backend::ExprAST>> args;

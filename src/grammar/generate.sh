@@ -1,2 +1,2 @@
 #!/bin/bash
-antlr4 -Dlanguage=Cpp -visitor -o ../generated/ Avrlang.g4
+antlr4 -Dlanguage=Cpp -visitor -o ../generated/ Lemur.g4

@@ -1,4 +1,4 @@
-// Generated from /home/avram/Desktop/dev/avrlang/src/grammar/Avrlang.g4 by ANTLR 4.8
+// Generated from /home/avram/Desktop/dev/lemur/src/grammar/Lemur.g4 by ANTLR 4.8
 
     #include <iostream>
     #include <ast.hpp>
@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class AvrlangLexer extends Lexer {
+public class LemurLexer extends Lexer {
 	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -83,13 +83,13 @@ public class AvrlangLexer extends Lexer {
 	}
 
 
-	public AvrlangLexer(CharStream input) {
+	public LemurLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Avrlang.g4"; }
+	public String getGrammarFileName() { return "Lemur.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }

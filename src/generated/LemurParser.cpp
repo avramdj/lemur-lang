@@ -3,93 +3,93 @@
     #include <string>
 
 
-// Generated from Avrlang.g4 by ANTLR 4.7.2
+// Generated from Lemur.g4 by ANTLR 4.7.2
 
 
-#include "AvrlangListener.h"
-#include "AvrlangVisitor.h"
+#include "LemurListener.h"
+#include "LemurVisitor.h"
 
-#include "AvrlangParser.h"
+#include "LemurParser.h"
 
 
 using namespace antlrcpp;
 using namespace antlr4;
 
-AvrlangParser::AvrlangParser(TokenStream *input) : Parser(input) {
+LemurParser::LemurParser(TokenStream *input) : Parser(input) {
   _interpreter = new atn::ParserATNSimulator(this, _atn, _decisionToDFA, _sharedContextCache);
 }
 
-AvrlangParser::~AvrlangParser() {
+LemurParser::~LemurParser() {
   delete _interpreter;
 }
 
-std::string AvrlangParser::getGrammarFileName() const {
-  return "Avrlang.g4";
+std::string LemurParser::getGrammarFileName() const {
+  return "Lemur.g4";
 }
 
-const std::vector<std::string>& AvrlangParser::getRuleNames() const {
+const std::vector<std::string>& LemurParser::getRuleNames() const {
   return _ruleNames;
 }
 
-dfa::Vocabulary& AvrlangParser::getVocabulary() const {
+dfa::Vocabulary& LemurParser::getVocabulary() const {
   return _vocabulary;
 }
 
 
 //----------------- FileContext ------------------------------------------------------------------
 
-AvrlangParser::FileContext::FileContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::FileContext::FileContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::FileContext::EOF() {
-  return getToken(AvrlangParser::EOF, 0);
+tree::TerminalNode* LemurParser::FileContext::EOF() {
+  return getToken(LemurParser::EOF, 0);
 }
 
-std::vector<AvrlangParser::GlobalstmtContext *> AvrlangParser::FileContext::globalstmt() {
-  return getRuleContexts<AvrlangParser::GlobalstmtContext>();
+std::vector<LemurParser::GlobalstmtContext *> LemurParser::FileContext::globalstmt() {
+  return getRuleContexts<LemurParser::GlobalstmtContext>();
 }
 
-AvrlangParser::GlobalstmtContext* AvrlangParser::FileContext::globalstmt(size_t i) {
-  return getRuleContext<AvrlangParser::GlobalstmtContext>(i);
+LemurParser::GlobalstmtContext* LemurParser::FileContext::globalstmt(size_t i) {
+  return getRuleContext<LemurParser::GlobalstmtContext>(i);
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::FileContext::NEWLINE() {
-  return getTokens(AvrlangParser::NEWLINE);
+std::vector<tree::TerminalNode *> LemurParser::FileContext::NEWLINE() {
+  return getTokens(LemurParser::NEWLINE);
 }
 
-tree::TerminalNode* AvrlangParser::FileContext::NEWLINE(size_t i) {
-  return getToken(AvrlangParser::NEWLINE, i);
+tree::TerminalNode* LemurParser::FileContext::NEWLINE(size_t i) {
+  return getToken(LemurParser::NEWLINE, i);
 }
 
 
-size_t AvrlangParser::FileContext::getRuleIndex() const {
-  return AvrlangParser::RuleFile;
+size_t LemurParser::FileContext::getRuleIndex() const {
+  return LemurParser::RuleFile;
 }
 
-void AvrlangParser::FileContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::FileContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterFile(this);
 }
 
-void AvrlangParser::FileContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::FileContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitFile(this);
 }
 
 
-antlrcpp::Any AvrlangParser::FileContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::FileContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitFile(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::FileContext* AvrlangParser::file() {
+LemurParser::FileContext* LemurParser::file() {
   FileContext *_localctx = _tracker.createInstance<FileContext>(_ctx, getState());
-  enterRule(_localctx, 0, AvrlangParser::RuleFile);
+  enterRule(_localctx, 0, LemurParser::RuleFile);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -101,22 +101,22 @@ AvrlangParser::FileContext* AvrlangParser::file() {
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << AvrlangParser::CLASS)
-      | (1ULL << AvrlangParser::DEF)
-      | (1ULL << AvrlangParser::NEWLINE))) != 0)) {
+      ((1ULL << _la) & ((1ULL << LemurParser::CLASS)
+      | (1ULL << LemurParser::DEF)
+      | (1ULL << LemurParser::NEWLINE))) != 0)) {
       setState(62);
       _errHandler->sync(this);
       switch (_input->LA(1)) {
-        case AvrlangParser::CLASS:
-        case AvrlangParser::DEF: {
+        case LemurParser::CLASS:
+        case LemurParser::DEF: {
           setState(60);
           globalstmt();
           break;
         }
 
-        case AvrlangParser::NEWLINE: {
+        case LemurParser::NEWLINE: {
           setState(61);
-          match(AvrlangParser::NEWLINE);
+          match(LemurParser::NEWLINE);
           break;
         }
 
@@ -128,7 +128,7 @@ AvrlangParser::FileContext* AvrlangParser::file() {
       _la = _input->LA(1);
     }
     setState(67);
-    match(AvrlangParser::EOF);
+    match(LemurParser::EOF);
    
   }
   catch (RecognitionException &e) {
@@ -142,46 +142,46 @@ AvrlangParser::FileContext* AvrlangParser::file() {
 
 //----------------- GlobalstmtContext ------------------------------------------------------------------
 
-AvrlangParser::GlobalstmtContext::GlobalstmtContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::GlobalstmtContext::GlobalstmtContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-AvrlangParser::ClassdefContext* AvrlangParser::GlobalstmtContext::classdef() {
-  return getRuleContext<AvrlangParser::ClassdefContext>(0);
+LemurParser::ClassdefContext* LemurParser::GlobalstmtContext::classdef() {
+  return getRuleContext<LemurParser::ClassdefContext>(0);
 }
 
-AvrlangParser::FunctiondefContext* AvrlangParser::GlobalstmtContext::functiondef() {
-  return getRuleContext<AvrlangParser::FunctiondefContext>(0);
+LemurParser::FunctiondefContext* LemurParser::GlobalstmtContext::functiondef() {
+  return getRuleContext<LemurParser::FunctiondefContext>(0);
 }
 
 
-size_t AvrlangParser::GlobalstmtContext::getRuleIndex() const {
-  return AvrlangParser::RuleGlobalstmt;
+size_t LemurParser::GlobalstmtContext::getRuleIndex() const {
+  return LemurParser::RuleGlobalstmt;
 }
 
-void AvrlangParser::GlobalstmtContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::GlobalstmtContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterGlobalstmt(this);
 }
 
-void AvrlangParser::GlobalstmtContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::GlobalstmtContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitGlobalstmt(this);
 }
 
 
-antlrcpp::Any AvrlangParser::GlobalstmtContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::GlobalstmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitGlobalstmt(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::GlobalstmtContext* AvrlangParser::globalstmt() {
+LemurParser::GlobalstmtContext* LemurParser::globalstmt() {
   GlobalstmtContext *_localctx = _tracker.createInstance<GlobalstmtContext>(_ctx, getState());
-  enterRule(_localctx, 2, AvrlangParser::RuleGlobalstmt);
+  enterRule(_localctx, 2, LemurParser::RuleGlobalstmt);
 
   auto onExit = finally([=] {
     exitRule();
@@ -190,14 +190,14 @@ AvrlangParser::GlobalstmtContext* AvrlangParser::globalstmt() {
     setState(71);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
-      case AvrlangParser::CLASS: {
+      case LemurParser::CLASS: {
         enterOuterAlt(_localctx, 1);
         setState(69);
         classdef();
         break;
       }
 
-      case AvrlangParser::DEF: {
+      case LemurParser::DEF: {
         enterOuterAlt(_localctx, 2);
         setState(70);
         functiondef();
@@ -220,66 +220,66 @@ AvrlangParser::GlobalstmtContext* AvrlangParser::globalstmt() {
 
 //----------------- ClassdefContext ------------------------------------------------------------------
 
-AvrlangParser::ClassdefContext::ClassdefContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::ClassdefContext::ClassdefContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::ClassdefContext::CLASS() {
-  return getToken(AvrlangParser::CLASS, 0);
+tree::TerminalNode* LemurParser::ClassdefContext::CLASS() {
+  return getToken(LemurParser::CLASS, 0);
 }
 
-tree::TerminalNode* AvrlangParser::ClassdefContext::LEFTBRACE() {
-  return getToken(AvrlangParser::LEFTBRACE, 0);
+tree::TerminalNode* LemurParser::ClassdefContext::LEFTBRACE() {
+  return getToken(LemurParser::LEFTBRACE, 0);
 }
 
-tree::TerminalNode* AvrlangParser::ClassdefContext::RIGHTBRACE() {
-  return getToken(AvrlangParser::RIGHTBRACE, 0);
+tree::TerminalNode* LemurParser::ClassdefContext::RIGHTBRACE() {
+  return getToken(LemurParser::RIGHTBRACE, 0);
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::ClassdefContext::NAME() {
-  return getTokens(AvrlangParser::NAME);
+std::vector<tree::TerminalNode *> LemurParser::ClassdefContext::NAME() {
+  return getTokens(LemurParser::NAME);
 }
 
-tree::TerminalNode* AvrlangParser::ClassdefContext::NAME(size_t i) {
-  return getToken(AvrlangParser::NAME, i);
+tree::TerminalNode* LemurParser::ClassdefContext::NAME(size_t i) {
+  return getToken(LemurParser::NAME, i);
 }
 
-AvrlangParser::ClassbodyContext* AvrlangParser::ClassdefContext::classbody() {
-  return getRuleContext<AvrlangParser::ClassbodyContext>(0);
+LemurParser::ClassbodyContext* LemurParser::ClassdefContext::classbody() {
+  return getRuleContext<LemurParser::ClassbodyContext>(0);
 }
 
-tree::TerminalNode* AvrlangParser::ClassdefContext::ARROW() {
-  return getToken(AvrlangParser::ARROW, 0);
+tree::TerminalNode* LemurParser::ClassdefContext::ARROW() {
+  return getToken(LemurParser::ARROW, 0);
 }
 
 
-size_t AvrlangParser::ClassdefContext::getRuleIndex() const {
-  return AvrlangParser::RuleClassdef;
+size_t LemurParser::ClassdefContext::getRuleIndex() const {
+  return LemurParser::RuleClassdef;
 }
 
-void AvrlangParser::ClassdefContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ClassdefContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterClassdef(this);
 }
 
-void AvrlangParser::ClassdefContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ClassdefContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitClassdef(this);
 }
 
 
-antlrcpp::Any AvrlangParser::ClassdefContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::ClassdefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitClassdef(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::ClassdefContext* AvrlangParser::classdef() {
+LemurParser::ClassdefContext* LemurParser::classdef() {
   ClassdefContext *_localctx = _tracker.createInstance<ClassdefContext>(_ctx, getState());
-  enterRule(_localctx, 4, AvrlangParser::RuleClassdef);
+  enterRule(_localctx, 4, LemurParser::RuleClassdef);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -288,25 +288,25 @@ AvrlangParser::ClassdefContext* AvrlangParser::classdef() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(73);
-    match(AvrlangParser::CLASS);
+    match(LemurParser::CLASS);
     setState(74);
-    dynamic_cast<ClassdefContext *>(_localctx)->cName = match(AvrlangParser::NAME);
+    dynamic_cast<ClassdefContext *>(_localctx)->cName = match(LemurParser::NAME);
     setState(77);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if (_la == AvrlangParser::ARROW) {
+    if (_la == LemurParser::ARROW) {
       setState(75);
-      match(AvrlangParser::ARROW);
+      match(LemurParser::ARROW);
       setState(76);
-      dynamic_cast<ClassdefContext *>(_localctx)->baseName = match(AvrlangParser::NAME);
+      dynamic_cast<ClassdefContext *>(_localctx)->baseName = match(LemurParser::NAME);
     }
     setState(79);
-    match(AvrlangParser::LEFTBRACE);
+    match(LemurParser::LEFTBRACE);
     setState(80);
     dynamic_cast<ClassdefContext *>(_localctx)->body = classbody();
     setState(81);
-    match(AvrlangParser::RIGHTBRACE);
+    match(LemurParser::RIGHTBRACE);
    
   }
   catch (RecognitionException &e) {
@@ -320,62 +320,62 @@ AvrlangParser::ClassdefContext* AvrlangParser::classdef() {
 
 //----------------- ClassbodyContext ------------------------------------------------------------------
 
-AvrlangParser::ClassbodyContext::ClassbodyContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::ClassbodyContext::ClassbodyContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<AvrlangParser::ClassvardeclContext *> AvrlangParser::ClassbodyContext::classvardecl() {
-  return getRuleContexts<AvrlangParser::ClassvardeclContext>();
+std::vector<LemurParser::ClassvardeclContext *> LemurParser::ClassbodyContext::classvardecl() {
+  return getRuleContexts<LemurParser::ClassvardeclContext>();
 }
 
-AvrlangParser::ClassvardeclContext* AvrlangParser::ClassbodyContext::classvardecl(size_t i) {
-  return getRuleContext<AvrlangParser::ClassvardeclContext>(i);
+LemurParser::ClassvardeclContext* LemurParser::ClassbodyContext::classvardecl(size_t i) {
+  return getRuleContext<LemurParser::ClassvardeclContext>(i);
 }
 
-std::vector<AvrlangParser::ClassfunctiondefContext *> AvrlangParser::ClassbodyContext::classfunctiondef() {
-  return getRuleContexts<AvrlangParser::ClassfunctiondefContext>();
+std::vector<LemurParser::ClassfunctiondefContext *> LemurParser::ClassbodyContext::classfunctiondef() {
+  return getRuleContexts<LemurParser::ClassfunctiondefContext>();
 }
 
-AvrlangParser::ClassfunctiondefContext* AvrlangParser::ClassbodyContext::classfunctiondef(size_t i) {
-  return getRuleContext<AvrlangParser::ClassfunctiondefContext>(i);
+LemurParser::ClassfunctiondefContext* LemurParser::ClassbodyContext::classfunctiondef(size_t i) {
+  return getRuleContext<LemurParser::ClassfunctiondefContext>(i);
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::ClassbodyContext::NEWLINE() {
-  return getTokens(AvrlangParser::NEWLINE);
+std::vector<tree::TerminalNode *> LemurParser::ClassbodyContext::NEWLINE() {
+  return getTokens(LemurParser::NEWLINE);
 }
 
-tree::TerminalNode* AvrlangParser::ClassbodyContext::NEWLINE(size_t i) {
-  return getToken(AvrlangParser::NEWLINE, i);
+tree::TerminalNode* LemurParser::ClassbodyContext::NEWLINE(size_t i) {
+  return getToken(LemurParser::NEWLINE, i);
 }
 
 
-size_t AvrlangParser::ClassbodyContext::getRuleIndex() const {
-  return AvrlangParser::RuleClassbody;
+size_t LemurParser::ClassbodyContext::getRuleIndex() const {
+  return LemurParser::RuleClassbody;
 }
 
-void AvrlangParser::ClassbodyContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ClassbodyContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterClassbody(this);
 }
 
-void AvrlangParser::ClassbodyContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ClassbodyContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitClassbody(this);
 }
 
 
-antlrcpp::Any AvrlangParser::ClassbodyContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::ClassbodyContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitClassbody(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::ClassbodyContext* AvrlangParser::classbody() {
+LemurParser::ClassbodyContext* LemurParser::classbody() {
   ClassbodyContext *_localctx = _tracker.createInstance<ClassbodyContext>(_ctx, getState());
-  enterRule(_localctx, 6, AvrlangParser::RuleClassbody);
+  enterRule(_localctx, 6, LemurParser::RuleClassbody);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -387,27 +387,27 @@ AvrlangParser::ClassbodyContext* AvrlangParser::classbody() {
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << AvrlangParser::DEF)
-      | (1ULL << AvrlangParser::NEWLINE)
-      | (1ULL << AvrlangParser::NAME))) != 0)) {
+      ((1ULL << _la) & ((1ULL << LemurParser::DEF)
+      | (1ULL << LemurParser::NEWLINE)
+      | (1ULL << LemurParser::NAME))) != 0)) {
       setState(86);
       _errHandler->sync(this);
       switch (_input->LA(1)) {
-        case AvrlangParser::NAME: {
+        case LemurParser::NAME: {
           setState(83);
           classvardecl();
           break;
         }
 
-        case AvrlangParser::DEF: {
+        case LemurParser::DEF: {
           setState(84);
           classfunctiondef();
           break;
         }
 
-        case AvrlangParser::NEWLINE: {
+        case LemurParser::NEWLINE: {
           setState(85);
-          match(AvrlangParser::NEWLINE);
+          match(LemurParser::NEWLINE);
           break;
         }
 
@@ -431,46 +431,46 @@ AvrlangParser::ClassbodyContext* AvrlangParser::classbody() {
 
 //----------------- ClassvardeclContext ------------------------------------------------------------------
 
-AvrlangParser::ClassvardeclContext::ClassvardeclContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::ClassvardeclContext::ClassvardeclContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::ClassvardeclContext::NAME() {
-  return getTokens(AvrlangParser::NAME);
+std::vector<tree::TerminalNode *> LemurParser::ClassvardeclContext::NAME() {
+  return getTokens(LemurParser::NAME);
 }
 
-tree::TerminalNode* AvrlangParser::ClassvardeclContext::NAME(size_t i) {
-  return getToken(AvrlangParser::NAME, i);
+tree::TerminalNode* LemurParser::ClassvardeclContext::NAME(size_t i) {
+  return getToken(LemurParser::NAME, i);
 }
 
 
-size_t AvrlangParser::ClassvardeclContext::getRuleIndex() const {
-  return AvrlangParser::RuleClassvardecl;
+size_t LemurParser::ClassvardeclContext::getRuleIndex() const {
+  return LemurParser::RuleClassvardecl;
 }
 
-void AvrlangParser::ClassvardeclContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ClassvardeclContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterClassvardecl(this);
 }
 
-void AvrlangParser::ClassvardeclContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ClassvardeclContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitClassvardecl(this);
 }
 
 
-antlrcpp::Any AvrlangParser::ClassvardeclContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::ClassvardeclContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitClassvardecl(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::ClassvardeclContext* AvrlangParser::classvardecl() {
+LemurParser::ClassvardeclContext* LemurParser::classvardecl() {
   ClassvardeclContext *_localctx = _tracker.createInstance<ClassvardeclContext>(_ctx, getState());
-  enterRule(_localctx, 8, AvrlangParser::RuleClassvardecl);
+  enterRule(_localctx, 8, LemurParser::RuleClassvardecl);
 
   auto onExit = finally([=] {
     exitRule();
@@ -478,9 +478,9 @@ AvrlangParser::ClassvardeclContext* AvrlangParser::classvardecl() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(91);
-    dynamic_cast<ClassvardeclContext *>(_localctx)->typeName = match(AvrlangParser::NAME);
+    dynamic_cast<ClassvardeclContext *>(_localctx)->typeName = match(LemurParser::NAME);
     setState(92);
-    dynamic_cast<ClassvardeclContext *>(_localctx)->varName = match(AvrlangParser::NAME);
+    dynamic_cast<ClassvardeclContext *>(_localctx)->varName = match(LemurParser::NAME);
    
   }
   catch (RecognitionException &e) {
@@ -494,66 +494,66 @@ AvrlangParser::ClassvardeclContext* AvrlangParser::classvardecl() {
 
 //----------------- ClassfunctiondefContext ------------------------------------------------------------------
 
-AvrlangParser::ClassfunctiondefContext::ClassfunctiondefContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::ClassfunctiondefContext::ClassfunctiondefContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::ClassfunctiondefContext::DEF() {
-  return getToken(AvrlangParser::DEF, 0);
+tree::TerminalNode* LemurParser::ClassfunctiondefContext::DEF() {
+  return getToken(LemurParser::DEF, 0);
 }
 
-tree::TerminalNode* AvrlangParser::ClassfunctiondefContext::OPEN() {
-  return getToken(AvrlangParser::OPEN, 0);
+tree::TerminalNode* LemurParser::ClassfunctiondefContext::OPEN() {
+  return getToken(LemurParser::OPEN, 0);
 }
 
-tree::TerminalNode* AvrlangParser::ClassfunctiondefContext::CLOSED() {
-  return getToken(AvrlangParser::CLOSED, 0);
+tree::TerminalNode* LemurParser::ClassfunctiondefContext::CLOSED() {
+  return getToken(LemurParser::CLOSED, 0);
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::ClassfunctiondefContext::NAME() {
-  return getTokens(AvrlangParser::NAME);
+std::vector<tree::TerminalNode *> LemurParser::ClassfunctiondefContext::NAME() {
+  return getTokens(LemurParser::NAME);
 }
 
-tree::TerminalNode* AvrlangParser::ClassfunctiondefContext::NAME(size_t i) {
-  return getToken(AvrlangParser::NAME, i);
+tree::TerminalNode* LemurParser::ClassfunctiondefContext::NAME(size_t i) {
+  return getToken(LemurParser::NAME, i);
 }
 
-AvrlangParser::ParamlistContext* AvrlangParser::ClassfunctiondefContext::paramlist() {
-  return getRuleContext<AvrlangParser::ParamlistContext>(0);
+LemurParser::ParamlistContext* LemurParser::ClassfunctiondefContext::paramlist() {
+  return getRuleContext<LemurParser::ParamlistContext>(0);
 }
 
-AvrlangParser::BlockContext* AvrlangParser::ClassfunctiondefContext::block() {
-  return getRuleContext<AvrlangParser::BlockContext>(0);
+LemurParser::BlockContext* LemurParser::ClassfunctiondefContext::block() {
+  return getRuleContext<LemurParser::BlockContext>(0);
 }
 
 
-size_t AvrlangParser::ClassfunctiondefContext::getRuleIndex() const {
-  return AvrlangParser::RuleClassfunctiondef;
+size_t LemurParser::ClassfunctiondefContext::getRuleIndex() const {
+  return LemurParser::RuleClassfunctiondef;
 }
 
-void AvrlangParser::ClassfunctiondefContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ClassfunctiondefContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterClassfunctiondef(this);
 }
 
-void AvrlangParser::ClassfunctiondefContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ClassfunctiondefContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitClassfunctiondef(this);
 }
 
 
-antlrcpp::Any AvrlangParser::ClassfunctiondefContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::ClassfunctiondefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitClassfunctiondef(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::ClassfunctiondefContext* AvrlangParser::classfunctiondef() {
+LemurParser::ClassfunctiondefContext* LemurParser::classfunctiondef() {
   ClassfunctiondefContext *_localctx = _tracker.createInstance<ClassfunctiondefContext>(_ctx, getState());
-  enterRule(_localctx, 10, AvrlangParser::RuleClassfunctiondef);
+  enterRule(_localctx, 10, LemurParser::RuleClassfunctiondef);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -562,24 +562,24 @@ AvrlangParser::ClassfunctiondefContext* AvrlangParser::classfunctiondef() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(94);
-    match(AvrlangParser::DEF);
+    match(LemurParser::DEF);
     setState(95);
-    dynamic_cast<ClassfunctiondefContext *>(_localctx)->fName = match(AvrlangParser::NAME);
+    dynamic_cast<ClassfunctiondefContext *>(_localctx)->fName = match(LemurParser::NAME);
     setState(96);
-    match(AvrlangParser::OPEN);
+    match(LemurParser::OPEN);
     setState(97);
     dynamic_cast<ClassfunctiondefContext *>(_localctx)->params = paramlist();
     setState(98);
-    match(AvrlangParser::CLOSED);
+    match(LemurParser::CLOSED);
     setState(101);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if (_la == AvrlangParser::T__0) {
+    if (_la == LemurParser::T__0) {
       setState(99);
-      match(AvrlangParser::T__0);
+      match(LemurParser::T__0);
       setState(100);
-      dynamic_cast<ClassfunctiondefContext *>(_localctx)->retType = match(AvrlangParser::NAME);
+      dynamic_cast<ClassfunctiondefContext *>(_localctx)->retType = match(LemurParser::NAME);
     }
     setState(103);
     dynamic_cast<ClassfunctiondefContext *>(_localctx)->body = block();
@@ -596,66 +596,66 @@ AvrlangParser::ClassfunctiondefContext* AvrlangParser::classfunctiondef() {
 
 //----------------- FunctiondefContext ------------------------------------------------------------------
 
-AvrlangParser::FunctiondefContext::FunctiondefContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::FunctiondefContext::FunctiondefContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::FunctiondefContext::DEF() {
-  return getToken(AvrlangParser::DEF, 0);
+tree::TerminalNode* LemurParser::FunctiondefContext::DEF() {
+  return getToken(LemurParser::DEF, 0);
 }
 
-tree::TerminalNode* AvrlangParser::FunctiondefContext::OPEN() {
-  return getToken(AvrlangParser::OPEN, 0);
+tree::TerminalNode* LemurParser::FunctiondefContext::OPEN() {
+  return getToken(LemurParser::OPEN, 0);
 }
 
-tree::TerminalNode* AvrlangParser::FunctiondefContext::CLOSED() {
-  return getToken(AvrlangParser::CLOSED, 0);
+tree::TerminalNode* LemurParser::FunctiondefContext::CLOSED() {
+  return getToken(LemurParser::CLOSED, 0);
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::FunctiondefContext::NAME() {
-  return getTokens(AvrlangParser::NAME);
+std::vector<tree::TerminalNode *> LemurParser::FunctiondefContext::NAME() {
+  return getTokens(LemurParser::NAME);
 }
 
-tree::TerminalNode* AvrlangParser::FunctiondefContext::NAME(size_t i) {
-  return getToken(AvrlangParser::NAME, i);
+tree::TerminalNode* LemurParser::FunctiondefContext::NAME(size_t i) {
+  return getToken(LemurParser::NAME, i);
 }
 
-AvrlangParser::ParamlistContext* AvrlangParser::FunctiondefContext::paramlist() {
-  return getRuleContext<AvrlangParser::ParamlistContext>(0);
+LemurParser::ParamlistContext* LemurParser::FunctiondefContext::paramlist() {
+  return getRuleContext<LemurParser::ParamlistContext>(0);
 }
 
-AvrlangParser::BlockContext* AvrlangParser::FunctiondefContext::block() {
-  return getRuleContext<AvrlangParser::BlockContext>(0);
+LemurParser::BlockContext* LemurParser::FunctiondefContext::block() {
+  return getRuleContext<LemurParser::BlockContext>(0);
 }
 
 
-size_t AvrlangParser::FunctiondefContext::getRuleIndex() const {
-  return AvrlangParser::RuleFunctiondef;
+size_t LemurParser::FunctiondefContext::getRuleIndex() const {
+  return LemurParser::RuleFunctiondef;
 }
 
-void AvrlangParser::FunctiondefContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::FunctiondefContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterFunctiondef(this);
 }
 
-void AvrlangParser::FunctiondefContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::FunctiondefContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitFunctiondef(this);
 }
 
 
-antlrcpp::Any AvrlangParser::FunctiondefContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::FunctiondefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitFunctiondef(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::FunctiondefContext* AvrlangParser::functiondef() {
+LemurParser::FunctiondefContext* LemurParser::functiondef() {
   FunctiondefContext *_localctx = _tracker.createInstance<FunctiondefContext>(_ctx, getState());
-  enterRule(_localctx, 12, AvrlangParser::RuleFunctiondef);
+  enterRule(_localctx, 12, LemurParser::RuleFunctiondef);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -664,24 +664,24 @@ AvrlangParser::FunctiondefContext* AvrlangParser::functiondef() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(105);
-    match(AvrlangParser::DEF);
+    match(LemurParser::DEF);
     setState(106);
-    dynamic_cast<FunctiondefContext *>(_localctx)->fName = match(AvrlangParser::NAME);
+    dynamic_cast<FunctiondefContext *>(_localctx)->fName = match(LemurParser::NAME);
     setState(107);
-    match(AvrlangParser::OPEN);
+    match(LemurParser::OPEN);
     setState(108);
     dynamic_cast<FunctiondefContext *>(_localctx)->params = paramlist();
     setState(109);
-    match(AvrlangParser::CLOSED);
+    match(LemurParser::CLOSED);
     setState(112);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if (_la == AvrlangParser::T__0) {
+    if (_la == LemurParser::T__0) {
       setState(110);
-      match(AvrlangParser::T__0);
+      match(LemurParser::T__0);
       setState(111);
-      dynamic_cast<FunctiondefContext *>(_localctx)->retType = match(AvrlangParser::NAME);
+      dynamic_cast<FunctiondefContext *>(_localctx)->retType = match(LemurParser::NAME);
     }
     setState(114);
     dynamic_cast<FunctiondefContext *>(_localctx)->body = block();
@@ -698,46 +698,46 @@ AvrlangParser::FunctiondefContext* AvrlangParser::functiondef() {
 
 //----------------- ParamlistContext ------------------------------------------------------------------
 
-AvrlangParser::ParamlistContext::ParamlistContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::ParamlistContext::ParamlistContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::ParamlistContext::NAME() {
-  return getTokens(AvrlangParser::NAME);
+std::vector<tree::TerminalNode *> LemurParser::ParamlistContext::NAME() {
+  return getTokens(LemurParser::NAME);
 }
 
-tree::TerminalNode* AvrlangParser::ParamlistContext::NAME(size_t i) {
-  return getToken(AvrlangParser::NAME, i);
+tree::TerminalNode* LemurParser::ParamlistContext::NAME(size_t i) {
+  return getToken(LemurParser::NAME, i);
 }
 
 
-size_t AvrlangParser::ParamlistContext::getRuleIndex() const {
-  return AvrlangParser::RuleParamlist;
+size_t LemurParser::ParamlistContext::getRuleIndex() const {
+  return LemurParser::RuleParamlist;
 }
 
-void AvrlangParser::ParamlistContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ParamlistContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterParamlist(this);
 }
 
-void AvrlangParser::ParamlistContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ParamlistContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitParamlist(this);
 }
 
 
-antlrcpp::Any AvrlangParser::ParamlistContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::ParamlistContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitParamlist(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::ParamlistContext* AvrlangParser::paramlist() {
+LemurParser::ParamlistContext* LemurParser::paramlist() {
   ParamlistContext *_localctx = _tracker.createInstance<ParamlistContext>(_ctx, getState());
-  enterRule(_localctx, 14, AvrlangParser::RuleParamlist);
+  enterRule(_localctx, 14, LemurParser::RuleParamlist);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -749,22 +749,22 @@ AvrlangParser::ParamlistContext* AvrlangParser::paramlist() {
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if (_la == AvrlangParser::NAME) {
+    if (_la == LemurParser::NAME) {
       setState(116);
-      dynamic_cast<ParamlistContext *>(_localctx)->typeName = match(AvrlangParser::NAME);
+      dynamic_cast<ParamlistContext *>(_localctx)->typeName = match(LemurParser::NAME);
       setState(117);
-      dynamic_cast<ParamlistContext *>(_localctx)->varName = match(AvrlangParser::NAME);
+      dynamic_cast<ParamlistContext *>(_localctx)->varName = match(LemurParser::NAME);
       _localctx->types.push_back((dynamic_cast<ParamlistContext *>(_localctx)->typeName != nullptr ? dynamic_cast<ParamlistContext *>(_localctx)->typeName->getText() : ""));_localctx->vars.push_back((dynamic_cast<ParamlistContext *>(_localctx)->varName != nullptr ? dynamic_cast<ParamlistContext *>(_localctx)->varName->getText() : ""));
       setState(125);
       _errHandler->sync(this);
       _la = _input->LA(1);
-      while (_la == AvrlangParser::T__1) {
+      while (_la == LemurParser::T__1) {
         setState(119);
-        match(AvrlangParser::T__1);
+        match(LemurParser::T__1);
         setState(120);
-        dynamic_cast<ParamlistContext *>(_localctx)->typeName = match(AvrlangParser::NAME);
+        dynamic_cast<ParamlistContext *>(_localctx)->typeName = match(LemurParser::NAME);
         setState(121);
-        dynamic_cast<ParamlistContext *>(_localctx)->varName = match(AvrlangParser::NAME);
+        dynamic_cast<ParamlistContext *>(_localctx)->varName = match(LemurParser::NAME);
         {_localctx->types.push_back((dynamic_cast<ParamlistContext *>(_localctx)->typeName != nullptr ? dynamic_cast<ParamlistContext *>(_localctx)->typeName->getText() : ""));_localctx->vars.push_back((dynamic_cast<ParamlistContext *>(_localctx)->varName != nullptr ? dynamic_cast<ParamlistContext *>(_localctx)->varName->getText() : ""));}
         setState(127);
         _errHandler->sync(this);
@@ -784,62 +784,62 @@ AvrlangParser::ParamlistContext* AvrlangParser::paramlist() {
 
 //----------------- BlockContext ------------------------------------------------------------------
 
-AvrlangParser::BlockContext::BlockContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::BlockContext::BlockContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::BlockContext::LEFTBRACE() {
-  return getToken(AvrlangParser::LEFTBRACE, 0);
+tree::TerminalNode* LemurParser::BlockContext::LEFTBRACE() {
+  return getToken(LemurParser::LEFTBRACE, 0);
 }
 
-tree::TerminalNode* AvrlangParser::BlockContext::RIGHTBRACE() {
-  return getToken(AvrlangParser::RIGHTBRACE, 0);
+tree::TerminalNode* LemurParser::BlockContext::RIGHTBRACE() {
+  return getToken(LemurParser::RIGHTBRACE, 0);
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::BlockContext::NEWLINE() {
-  return getTokens(AvrlangParser::NEWLINE);
+std::vector<tree::TerminalNode *> LemurParser::BlockContext::NEWLINE() {
+  return getTokens(LemurParser::NEWLINE);
 }
 
-tree::TerminalNode* AvrlangParser::BlockContext::NEWLINE(size_t i) {
-  return getToken(AvrlangParser::NEWLINE, i);
+tree::TerminalNode* LemurParser::BlockContext::NEWLINE(size_t i) {
+  return getToken(LemurParser::NEWLINE, i);
 }
 
-std::vector<AvrlangParser::StmtContext *> AvrlangParser::BlockContext::stmt() {
-  return getRuleContexts<AvrlangParser::StmtContext>();
+std::vector<LemurParser::StmtContext *> LemurParser::BlockContext::stmt() {
+  return getRuleContexts<LemurParser::StmtContext>();
 }
 
-AvrlangParser::StmtContext* AvrlangParser::BlockContext::stmt(size_t i) {
-  return getRuleContext<AvrlangParser::StmtContext>(i);
+LemurParser::StmtContext* LemurParser::BlockContext::stmt(size_t i) {
+  return getRuleContext<LemurParser::StmtContext>(i);
 }
 
 
-size_t AvrlangParser::BlockContext::getRuleIndex() const {
-  return AvrlangParser::RuleBlock;
+size_t LemurParser::BlockContext::getRuleIndex() const {
+  return LemurParser::RuleBlock;
 }
 
-void AvrlangParser::BlockContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::BlockContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterBlock(this);
 }
 
-void AvrlangParser::BlockContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::BlockContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitBlock(this);
 }
 
 
-antlrcpp::Any AvrlangParser::BlockContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::BlockContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitBlock(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::BlockContext* AvrlangParser::block() {
+LemurParser::BlockContext* LemurParser::block() {
   BlockContext *_localctx = _tracker.createInstance<BlockContext>(_ctx, getState());
-  enterRule(_localctx, 16, AvrlangParser::RuleBlock);
+  enterRule(_localctx, 16, LemurParser::RuleBlock);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -848,7 +848,7 @@ AvrlangParser::BlockContext* AvrlangParser::block() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(130);
-    match(AvrlangParser::LEFTBRACE);
+    match(LemurParser::LEFTBRACE);
     setState(135); 
     _errHandler->sync(this);
     _la = _input->LA(1);
@@ -856,29 +856,29 @@ AvrlangParser::BlockContext* AvrlangParser::block() {
       setState(135);
       _errHandler->sync(this);
       switch (_input->LA(1)) {
-        case AvrlangParser::T__4:
-        case AvrlangParser::UMINUS:
-        case AvrlangParser::FOR:
-        case AvrlangParser::PRINT:
-        case AvrlangParser::OPEN:
-        case AvrlangParser::RET:
-        case AvrlangParser::WHILE:
-        case AvrlangParser::IF:
-        case AvrlangParser::NEG:
-        case AvrlangParser::NAME:
-        case AvrlangParser::INT:
-        case AvrlangParser::FLOAT:
-        case AvrlangParser::STRING: {
+        case LemurParser::T__4:
+        case LemurParser::UMINUS:
+        case LemurParser::FOR:
+        case LemurParser::PRINT:
+        case LemurParser::OPEN:
+        case LemurParser::RET:
+        case LemurParser::WHILE:
+        case LemurParser::IF:
+        case LemurParser::NEG:
+        case LemurParser::NAME:
+        case LemurParser::INT:
+        case LemurParser::FLOAT:
+        case LemurParser::STRING: {
           setState(131);
           stmt();
           setState(132);
-          match(AvrlangParser::NEWLINE);
+          match(LemurParser::NEWLINE);
           break;
         }
 
-        case AvrlangParser::NEWLINE: {
+        case LemurParser::NEWLINE: {
           setState(134);
-          match(AvrlangParser::NEWLINE);
+          match(LemurParser::NEWLINE);
           break;
         }
 
@@ -889,22 +889,22 @@ AvrlangParser::BlockContext* AvrlangParser::block() {
       _errHandler->sync(this);
       _la = _input->LA(1);
     } while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << AvrlangParser::T__4)
-      | (1ULL << AvrlangParser::UMINUS)
-      | (1ULL << AvrlangParser::FOR)
-      | (1ULL << AvrlangParser::PRINT)
-      | (1ULL << AvrlangParser::OPEN)
-      | (1ULL << AvrlangParser::RET)
-      | (1ULL << AvrlangParser::WHILE)
-      | (1ULL << AvrlangParser::IF)
-      | (1ULL << AvrlangParser::NEG)
-      | (1ULL << AvrlangParser::NEWLINE)
-      | (1ULL << AvrlangParser::NAME)
-      | (1ULL << AvrlangParser::INT)
-      | (1ULL << AvrlangParser::FLOAT)
-      | (1ULL << AvrlangParser::STRING))) != 0));
+      ((1ULL << _la) & ((1ULL << LemurParser::T__4)
+      | (1ULL << LemurParser::UMINUS)
+      | (1ULL << LemurParser::FOR)
+      | (1ULL << LemurParser::PRINT)
+      | (1ULL << LemurParser::OPEN)
+      | (1ULL << LemurParser::RET)
+      | (1ULL << LemurParser::WHILE)
+      | (1ULL << LemurParser::IF)
+      | (1ULL << LemurParser::NEG)
+      | (1ULL << LemurParser::NEWLINE)
+      | (1ULL << LemurParser::NAME)
+      | (1ULL << LemurParser::INT)
+      | (1ULL << LemurParser::FLOAT)
+      | (1ULL << LemurParser::STRING))) != 0));
     setState(139);
-    match(AvrlangParser::RIGHTBRACE);
+    match(LemurParser::RIGHTBRACE);
    
   }
   catch (RecognitionException &e) {
@@ -918,78 +918,78 @@ AvrlangParser::BlockContext* AvrlangParser::block() {
 
 //----------------- StmtContext ------------------------------------------------------------------
 
-AvrlangParser::StmtContext::StmtContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::StmtContext::StmtContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-AvrlangParser::VardeclContext* AvrlangParser::StmtContext::vardecl() {
-  return getRuleContext<AvrlangParser::VardeclContext>(0);
+LemurParser::VardeclContext* LemurParser::StmtContext::vardecl() {
+  return getRuleContext<LemurParser::VardeclContext>(0);
 }
 
-AvrlangParser::AssignContext* AvrlangParser::StmtContext::assign() {
-  return getRuleContext<AvrlangParser::AssignContext>(0);
+LemurParser::AssignContext* LemurParser::StmtContext::assign() {
+  return getRuleContext<LemurParser::AssignContext>(0);
 }
 
-AvrlangParser::DeclassignContext* AvrlangParser::StmtContext::declassign() {
-  return getRuleContext<AvrlangParser::DeclassignContext>(0);
+LemurParser::DeclassignContext* LemurParser::StmtContext::declassign() {
+  return getRuleContext<LemurParser::DeclassignContext>(0);
 }
 
-AvrlangParser::RetContext* AvrlangParser::StmtContext::ret() {
-  return getRuleContext<AvrlangParser::RetContext>(0);
+LemurParser::RetContext* LemurParser::StmtContext::ret() {
+  return getRuleContext<LemurParser::RetContext>(0);
 }
 
-AvrlangParser::WhileloopContext* AvrlangParser::StmtContext::whileloop() {
-  return getRuleContext<AvrlangParser::WhileloopContext>(0);
+LemurParser::WhileloopContext* LemurParser::StmtContext::whileloop() {
+  return getRuleContext<LemurParser::WhileloopContext>(0);
 }
 
-AvrlangParser::IfExprContext* AvrlangParser::StmtContext::ifExpr() {
-  return getRuleContext<AvrlangParser::IfExprContext>(0);
+LemurParser::IfExprContext* LemurParser::StmtContext::ifExpr() {
+  return getRuleContext<LemurParser::IfExprContext>(0);
 }
 
-AvrlangParser::IfElseExprContext* AvrlangParser::StmtContext::ifElseExpr() {
-  return getRuleContext<AvrlangParser::IfElseExprContext>(0);
+LemurParser::IfElseExprContext* LemurParser::StmtContext::ifElseExpr() {
+  return getRuleContext<LemurParser::IfElseExprContext>(0);
 }
 
-AvrlangParser::ForloopContext* AvrlangParser::StmtContext::forloop() {
-  return getRuleContext<AvrlangParser::ForloopContext>(0);
+LemurParser::ForloopContext* LemurParser::StmtContext::forloop() {
+  return getRuleContext<LemurParser::ForloopContext>(0);
 }
 
-AvrlangParser::ExprContext* AvrlangParser::StmtContext::expr() {
-  return getRuleContext<AvrlangParser::ExprContext>(0);
+LemurParser::ExprContext* LemurParser::StmtContext::expr() {
+  return getRuleContext<LemurParser::ExprContext>(0);
 }
 
-AvrlangParser::PrintstmtContext* AvrlangParser::StmtContext::printstmt() {
-  return getRuleContext<AvrlangParser::PrintstmtContext>(0);
+LemurParser::PrintstmtContext* LemurParser::StmtContext::printstmt() {
+  return getRuleContext<LemurParser::PrintstmtContext>(0);
 }
 
 
-size_t AvrlangParser::StmtContext::getRuleIndex() const {
-  return AvrlangParser::RuleStmt;
+size_t LemurParser::StmtContext::getRuleIndex() const {
+  return LemurParser::RuleStmt;
 }
 
-void AvrlangParser::StmtContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::StmtContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterStmt(this);
 }
 
-void AvrlangParser::StmtContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::StmtContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitStmt(this);
 }
 
 
-antlrcpp::Any AvrlangParser::StmtContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::StmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitStmt(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::StmtContext* AvrlangParser::stmt() {
+LemurParser::StmtContext* LemurParser::stmt() {
   StmtContext *_localctx = _tracker.createInstance<StmtContext>(_ctx, getState());
-  enterRule(_localctx, 18, AvrlangParser::RuleStmt);
+  enterRule(_localctx, 18, LemurParser::RuleStmt);
 
   auto onExit = finally([=] {
     exitRule();
@@ -1082,54 +1082,54 @@ AvrlangParser::StmtContext* AvrlangParser::stmt() {
 
 //----------------- PrintstmtContext ------------------------------------------------------------------
 
-AvrlangParser::PrintstmtContext::PrintstmtContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::PrintstmtContext::PrintstmtContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::PrintstmtContext::PRINT() {
-  return getToken(AvrlangParser::PRINT, 0);
+tree::TerminalNode* LemurParser::PrintstmtContext::PRINT() {
+  return getToken(LemurParser::PRINT, 0);
 }
 
-tree::TerminalNode* AvrlangParser::PrintstmtContext::OPEN() {
-  return getToken(AvrlangParser::OPEN, 0);
+tree::TerminalNode* LemurParser::PrintstmtContext::OPEN() {
+  return getToken(LemurParser::OPEN, 0);
 }
 
-AvrlangParser::ExprContext* AvrlangParser::PrintstmtContext::expr() {
-  return getRuleContext<AvrlangParser::ExprContext>(0);
+LemurParser::ExprContext* LemurParser::PrintstmtContext::expr() {
+  return getRuleContext<LemurParser::ExprContext>(0);
 }
 
-tree::TerminalNode* AvrlangParser::PrintstmtContext::CLOSED() {
-  return getToken(AvrlangParser::CLOSED, 0);
+tree::TerminalNode* LemurParser::PrintstmtContext::CLOSED() {
+  return getToken(LemurParser::CLOSED, 0);
 }
 
 
-size_t AvrlangParser::PrintstmtContext::getRuleIndex() const {
-  return AvrlangParser::RulePrintstmt;
+size_t LemurParser::PrintstmtContext::getRuleIndex() const {
+  return LemurParser::RulePrintstmt;
 }
 
-void AvrlangParser::PrintstmtContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::PrintstmtContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterPrintstmt(this);
 }
 
-void AvrlangParser::PrintstmtContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::PrintstmtContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitPrintstmt(this);
 }
 
 
-antlrcpp::Any AvrlangParser::PrintstmtContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::PrintstmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitPrintstmt(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::PrintstmtContext* AvrlangParser::printstmt() {
+LemurParser::PrintstmtContext* LemurParser::printstmt() {
   PrintstmtContext *_localctx = _tracker.createInstance<PrintstmtContext>(_ctx, getState());
-  enterRule(_localctx, 20, AvrlangParser::RulePrintstmt);
+  enterRule(_localctx, 20, LemurParser::RulePrintstmt);
 
   auto onExit = finally([=] {
     exitRule();
@@ -1137,13 +1137,13 @@ AvrlangParser::PrintstmtContext* AvrlangParser::printstmt() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(153);
-    match(AvrlangParser::PRINT);
+    match(LemurParser::PRINT);
     setState(154);
-    match(AvrlangParser::OPEN);
+    match(LemurParser::OPEN);
     setState(155);
     expr(0);
     setState(156);
-    match(AvrlangParser::CLOSED);
+    match(LemurParser::CLOSED);
    
   }
   catch (RecognitionException &e) {
@@ -1157,46 +1157,46 @@ AvrlangParser::PrintstmtContext* AvrlangParser::printstmt() {
 
 //----------------- VardeclContext ------------------------------------------------------------------
 
-AvrlangParser::VardeclContext::VardeclContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::VardeclContext::VardeclContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::VardeclContext::NAME() {
-  return getTokens(AvrlangParser::NAME);
+std::vector<tree::TerminalNode *> LemurParser::VardeclContext::NAME() {
+  return getTokens(LemurParser::NAME);
 }
 
-tree::TerminalNode* AvrlangParser::VardeclContext::NAME(size_t i) {
-  return getToken(AvrlangParser::NAME, i);
+tree::TerminalNode* LemurParser::VardeclContext::NAME(size_t i) {
+  return getToken(LemurParser::NAME, i);
 }
 
 
-size_t AvrlangParser::VardeclContext::getRuleIndex() const {
-  return AvrlangParser::RuleVardecl;
+size_t LemurParser::VardeclContext::getRuleIndex() const {
+  return LemurParser::RuleVardecl;
 }
 
-void AvrlangParser::VardeclContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::VardeclContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterVardecl(this);
 }
 
-void AvrlangParser::VardeclContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::VardeclContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitVardecl(this);
 }
 
 
-antlrcpp::Any AvrlangParser::VardeclContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::VardeclContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitVardecl(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::VardeclContext* AvrlangParser::vardecl() {
+LemurParser::VardeclContext* LemurParser::vardecl() {
   VardeclContext *_localctx = _tracker.createInstance<VardeclContext>(_ctx, getState());
-  enterRule(_localctx, 22, AvrlangParser::RuleVardecl);
+  enterRule(_localctx, 22, LemurParser::RuleVardecl);
 
   auto onExit = finally([=] {
     exitRule();
@@ -1204,9 +1204,9 @@ AvrlangParser::VardeclContext* AvrlangParser::vardecl() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(158);
-    dynamic_cast<VardeclContext *>(_localctx)->typeName = match(AvrlangParser::NAME);
+    dynamic_cast<VardeclContext *>(_localctx)->typeName = match(LemurParser::NAME);
     setState(159);
-    dynamic_cast<VardeclContext *>(_localctx)->varName = match(AvrlangParser::NAME);
+    dynamic_cast<VardeclContext *>(_localctx)->varName = match(LemurParser::NAME);
    
   }
   catch (RecognitionException &e) {
@@ -1220,50 +1220,50 @@ AvrlangParser::VardeclContext* AvrlangParser::vardecl() {
 
 //----------------- AssignContext ------------------------------------------------------------------
 
-AvrlangParser::AssignContext::AssignContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::AssignContext::AssignContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-AvrlangParser::ExprContext* AvrlangParser::AssignContext::expr() {
-  return getRuleContext<AvrlangParser::ExprContext>(0);
+LemurParser::ExprContext* LemurParser::AssignContext::expr() {
+  return getRuleContext<LemurParser::ExprContext>(0);
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::AssignContext::NAME() {
-  return getTokens(AvrlangParser::NAME);
+std::vector<tree::TerminalNode *> LemurParser::AssignContext::NAME() {
+  return getTokens(LemurParser::NAME);
 }
 
-tree::TerminalNode* AvrlangParser::AssignContext::NAME(size_t i) {
-  return getToken(AvrlangParser::NAME, i);
+tree::TerminalNode* LemurParser::AssignContext::NAME(size_t i) {
+  return getToken(LemurParser::NAME, i);
 }
 
 
-size_t AvrlangParser::AssignContext::getRuleIndex() const {
-  return AvrlangParser::RuleAssign;
+size_t LemurParser::AssignContext::getRuleIndex() const {
+  return LemurParser::RuleAssign;
 }
 
-void AvrlangParser::AssignContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::AssignContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterAssign(this);
 }
 
-void AvrlangParser::AssignContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::AssignContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitAssign(this);
 }
 
 
-antlrcpp::Any AvrlangParser::AssignContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::AssignContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitAssign(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::AssignContext* AvrlangParser::assign() {
+LemurParser::AssignContext* LemurParser::assign() {
   AssignContext *_localctx = _tracker.createInstance<AssignContext>(_ctx, getState());
-  enterRule(_localctx, 24, AvrlangParser::RuleAssign);
+  enterRule(_localctx, 24, LemurParser::RuleAssign);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -1272,19 +1272,19 @@ AvrlangParser::AssignContext* AvrlangParser::assign() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(161);
-    dynamic_cast<AssignContext *>(_localctx)->varName = match(AvrlangParser::NAME);
+    dynamic_cast<AssignContext *>(_localctx)->varName = match(LemurParser::NAME);
     setState(164);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if (_la == AvrlangParser::T__2) {
+    if (_la == LemurParser::T__2) {
       setState(162);
-      match(AvrlangParser::T__2);
+      match(LemurParser::T__2);
       setState(163);
-      dynamic_cast<AssignContext *>(_localctx)->subName = match(AvrlangParser::NAME);
+      dynamic_cast<AssignContext *>(_localctx)->subName = match(LemurParser::NAME);
     }
     setState(166);
-    match(AvrlangParser::T__3);
+    match(LemurParser::T__3);
     setState(167);
     expr(0);
    
@@ -1300,50 +1300,50 @@ AvrlangParser::AssignContext* AvrlangParser::assign() {
 
 //----------------- DeclassignContext ------------------------------------------------------------------
 
-AvrlangParser::DeclassignContext::DeclassignContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::DeclassignContext::DeclassignContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-AvrlangParser::ExprContext* AvrlangParser::DeclassignContext::expr() {
-  return getRuleContext<AvrlangParser::ExprContext>(0);
+LemurParser::ExprContext* LemurParser::DeclassignContext::expr() {
+  return getRuleContext<LemurParser::ExprContext>(0);
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::DeclassignContext::NAME() {
-  return getTokens(AvrlangParser::NAME);
+std::vector<tree::TerminalNode *> LemurParser::DeclassignContext::NAME() {
+  return getTokens(LemurParser::NAME);
 }
 
-tree::TerminalNode* AvrlangParser::DeclassignContext::NAME(size_t i) {
-  return getToken(AvrlangParser::NAME, i);
+tree::TerminalNode* LemurParser::DeclassignContext::NAME(size_t i) {
+  return getToken(LemurParser::NAME, i);
 }
 
 
-size_t AvrlangParser::DeclassignContext::getRuleIndex() const {
-  return AvrlangParser::RuleDeclassign;
+size_t LemurParser::DeclassignContext::getRuleIndex() const {
+  return LemurParser::RuleDeclassign;
 }
 
-void AvrlangParser::DeclassignContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::DeclassignContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterDeclassign(this);
 }
 
-void AvrlangParser::DeclassignContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::DeclassignContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitDeclassign(this);
 }
 
 
-antlrcpp::Any AvrlangParser::DeclassignContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::DeclassignContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitDeclassign(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::DeclassignContext* AvrlangParser::declassign() {
+LemurParser::DeclassignContext* LemurParser::declassign() {
   DeclassignContext *_localctx = _tracker.createInstance<DeclassignContext>(_ctx, getState());
-  enterRule(_localctx, 26, AvrlangParser::RuleDeclassign);
+  enterRule(_localctx, 26, LemurParser::RuleDeclassign);
 
   auto onExit = finally([=] {
     exitRule();
@@ -1351,11 +1351,11 @@ AvrlangParser::DeclassignContext* AvrlangParser::declassign() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(169);
-    dynamic_cast<DeclassignContext *>(_localctx)->typeName = match(AvrlangParser::NAME);
+    dynamic_cast<DeclassignContext *>(_localctx)->typeName = match(LemurParser::NAME);
     setState(170);
-    dynamic_cast<DeclassignContext *>(_localctx)->varName = match(AvrlangParser::NAME);
+    dynamic_cast<DeclassignContext *>(_localctx)->varName = match(LemurParser::NAME);
     setState(171);
-    match(AvrlangParser::T__3);
+    match(LemurParser::T__3);
     setState(172);
     expr(0);
    
@@ -1371,46 +1371,46 @@ AvrlangParser::DeclassignContext* AvrlangParser::declassign() {
 
 //----------------- RetContext ------------------------------------------------------------------
 
-AvrlangParser::RetContext::RetContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::RetContext::RetContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::RetContext::RET() {
-  return getToken(AvrlangParser::RET, 0);
+tree::TerminalNode* LemurParser::RetContext::RET() {
+  return getToken(LemurParser::RET, 0);
 }
 
-AvrlangParser::ExprContext* AvrlangParser::RetContext::expr() {
-  return getRuleContext<AvrlangParser::ExprContext>(0);
+LemurParser::ExprContext* LemurParser::RetContext::expr() {
+  return getRuleContext<LemurParser::ExprContext>(0);
 }
 
 
-size_t AvrlangParser::RetContext::getRuleIndex() const {
-  return AvrlangParser::RuleRet;
+size_t LemurParser::RetContext::getRuleIndex() const {
+  return LemurParser::RuleRet;
 }
 
-void AvrlangParser::RetContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::RetContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterRet(this);
 }
 
-void AvrlangParser::RetContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::RetContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitRet(this);
 }
 
 
-antlrcpp::Any AvrlangParser::RetContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::RetContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitRet(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::RetContext* AvrlangParser::ret() {
+LemurParser::RetContext* LemurParser::ret() {
   RetContext *_localctx = _tracker.createInstance<RetContext>(_ctx, getState());
-  enterRule(_localctx, 28, AvrlangParser::RuleRet);
+  enterRule(_localctx, 28, LemurParser::RuleRet);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -1419,20 +1419,20 @@ AvrlangParser::RetContext* AvrlangParser::ret() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(174);
-    match(AvrlangParser::RET);
+    match(LemurParser::RET);
     setState(176);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << AvrlangParser::T__4)
-      | (1ULL << AvrlangParser::UMINUS)
-      | (1ULL << AvrlangParser::OPEN)
-      | (1ULL << AvrlangParser::NEG)
-      | (1ULL << AvrlangParser::NAME)
-      | (1ULL << AvrlangParser::INT)
-      | (1ULL << AvrlangParser::FLOAT)
-      | (1ULL << AvrlangParser::STRING))) != 0)) {
+      ((1ULL << _la) & ((1ULL << LemurParser::T__4)
+      | (1ULL << LemurParser::UMINUS)
+      | (1ULL << LemurParser::OPEN)
+      | (1ULL << LemurParser::NEG)
+      | (1ULL << LemurParser::NAME)
+      | (1ULL << LemurParser::INT)
+      | (1ULL << LemurParser::FLOAT)
+      | (1ULL << LemurParser::STRING))) != 0)) {
       setState(175);
       expr(0);
     }
@@ -1449,50 +1449,50 @@ AvrlangParser::RetContext* AvrlangParser::ret() {
 
 //----------------- WhileloopContext ------------------------------------------------------------------
 
-AvrlangParser::WhileloopContext::WhileloopContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::WhileloopContext::WhileloopContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::WhileloopContext::WHILE() {
-  return getToken(AvrlangParser::WHILE, 0);
+tree::TerminalNode* LemurParser::WhileloopContext::WHILE() {
+  return getToken(LemurParser::WHILE, 0);
 }
 
-AvrlangParser::BracedexprContext* AvrlangParser::WhileloopContext::bracedexpr() {
-  return getRuleContext<AvrlangParser::BracedexprContext>(0);
+LemurParser::BracedexprContext* LemurParser::WhileloopContext::bracedexpr() {
+  return getRuleContext<LemurParser::BracedexprContext>(0);
 }
 
-AvrlangParser::BlockContext* AvrlangParser::WhileloopContext::block() {
-  return getRuleContext<AvrlangParser::BlockContext>(0);
+LemurParser::BlockContext* LemurParser::WhileloopContext::block() {
+  return getRuleContext<LemurParser::BlockContext>(0);
 }
 
 
-size_t AvrlangParser::WhileloopContext::getRuleIndex() const {
-  return AvrlangParser::RuleWhileloop;
+size_t LemurParser::WhileloopContext::getRuleIndex() const {
+  return LemurParser::RuleWhileloop;
 }
 
-void AvrlangParser::WhileloopContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::WhileloopContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterWhileloop(this);
 }
 
-void AvrlangParser::WhileloopContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::WhileloopContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitWhileloop(this);
 }
 
 
-antlrcpp::Any AvrlangParser::WhileloopContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::WhileloopContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitWhileloop(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::WhileloopContext* AvrlangParser::whileloop() {
+LemurParser::WhileloopContext* LemurParser::whileloop() {
   WhileloopContext *_localctx = _tracker.createInstance<WhileloopContext>(_ctx, getState());
-  enterRule(_localctx, 30, AvrlangParser::RuleWhileloop);
+  enterRule(_localctx, 30, LemurParser::RuleWhileloop);
 
   auto onExit = finally([=] {
     exitRule();
@@ -1500,7 +1500,7 @@ AvrlangParser::WhileloopContext* AvrlangParser::whileloop() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(178);
-    match(AvrlangParser::WHILE);
+    match(LemurParser::WHILE);
     setState(179);
     bracedexpr();
     setState(180);
@@ -1518,62 +1518,62 @@ AvrlangParser::WhileloopContext* AvrlangParser::whileloop() {
 
 //----------------- ForloopContext ------------------------------------------------------------------
 
-AvrlangParser::ForloopContext::ForloopContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::ForloopContext::ForloopContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::ForloopContext::FOR() {
-  return getToken(AvrlangParser::FOR, 0);
+tree::TerminalNode* LemurParser::ForloopContext::FOR() {
+  return getToken(LemurParser::FOR, 0);
 }
 
-tree::TerminalNode* AvrlangParser::ForloopContext::OPEN() {
-  return getToken(AvrlangParser::OPEN, 0);
+tree::TerminalNode* LemurParser::ForloopContext::OPEN() {
+  return getToken(LemurParser::OPEN, 0);
 }
 
-tree::TerminalNode* AvrlangParser::ForloopContext::IN() {
-  return getToken(AvrlangParser::IN, 0);
+tree::TerminalNode* LemurParser::ForloopContext::IN() {
+  return getToken(LemurParser::IN, 0);
 }
 
-AvrlangParser::BlockContext* AvrlangParser::ForloopContext::block() {
-  return getRuleContext<AvrlangParser::BlockContext>(0);
+LemurParser::BlockContext* LemurParser::ForloopContext::block() {
+  return getRuleContext<LemurParser::BlockContext>(0);
 }
 
-tree::TerminalNode* AvrlangParser::ForloopContext::NAME() {
-  return getToken(AvrlangParser::NAME, 0);
+tree::TerminalNode* LemurParser::ForloopContext::NAME() {
+  return getToken(LemurParser::NAME, 0);
 }
 
-AvrlangParser::ExprContext* AvrlangParser::ForloopContext::expr() {
-  return getRuleContext<AvrlangParser::ExprContext>(0);
+LemurParser::ExprContext* LemurParser::ForloopContext::expr() {
+  return getRuleContext<LemurParser::ExprContext>(0);
 }
 
 
-size_t AvrlangParser::ForloopContext::getRuleIndex() const {
-  return AvrlangParser::RuleForloop;
+size_t LemurParser::ForloopContext::getRuleIndex() const {
+  return LemurParser::RuleForloop;
 }
 
-void AvrlangParser::ForloopContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ForloopContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterForloop(this);
 }
 
-void AvrlangParser::ForloopContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ForloopContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitForloop(this);
 }
 
 
-antlrcpp::Any AvrlangParser::ForloopContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::ForloopContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitForloop(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::ForloopContext* AvrlangParser::forloop() {
+LemurParser::ForloopContext* LemurParser::forloop() {
   ForloopContext *_localctx = _tracker.createInstance<ForloopContext>(_ctx, getState());
-  enterRule(_localctx, 32, AvrlangParser::RuleForloop);
+  enterRule(_localctx, 32, LemurParser::RuleForloop);
 
   auto onExit = finally([=] {
     exitRule();
@@ -1581,13 +1581,13 @@ AvrlangParser::ForloopContext* AvrlangParser::forloop() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(182);
-    match(AvrlangParser::FOR);
+    match(LemurParser::FOR);
     setState(183);
-    match(AvrlangParser::OPEN);
+    match(LemurParser::OPEN);
     setState(184);
-    dynamic_cast<ForloopContext *>(_localctx)->varName = match(AvrlangParser::NAME);
+    dynamic_cast<ForloopContext *>(_localctx)->varName = match(LemurParser::NAME);
     setState(185);
-    match(AvrlangParser::IN);
+    match(LemurParser::IN);
     setState(186);
     dynamic_cast<ForloopContext *>(_localctx)->listName = expr(0);
     setState(187);
@@ -1605,50 +1605,50 @@ AvrlangParser::ForloopContext* AvrlangParser::forloop() {
 
 //----------------- IfExprContext ------------------------------------------------------------------
 
-AvrlangParser::IfExprContext::IfExprContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::IfExprContext::IfExprContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::IfExprContext::IF() {
-  return getToken(AvrlangParser::IF, 0);
+tree::TerminalNode* LemurParser::IfExprContext::IF() {
+  return getToken(LemurParser::IF, 0);
 }
 
-AvrlangParser::BracedexprContext* AvrlangParser::IfExprContext::bracedexpr() {
-  return getRuleContext<AvrlangParser::BracedexprContext>(0);
+LemurParser::BracedexprContext* LemurParser::IfExprContext::bracedexpr() {
+  return getRuleContext<LemurParser::BracedexprContext>(0);
 }
 
-AvrlangParser::BlockContext* AvrlangParser::IfExprContext::block() {
-  return getRuleContext<AvrlangParser::BlockContext>(0);
+LemurParser::BlockContext* LemurParser::IfExprContext::block() {
+  return getRuleContext<LemurParser::BlockContext>(0);
 }
 
 
-size_t AvrlangParser::IfExprContext::getRuleIndex() const {
-  return AvrlangParser::RuleIfExpr;
+size_t LemurParser::IfExprContext::getRuleIndex() const {
+  return LemurParser::RuleIfExpr;
 }
 
-void AvrlangParser::IfExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::IfExprContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterIfExpr(this);
 }
 
-void AvrlangParser::IfExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::IfExprContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitIfExpr(this);
 }
 
 
-antlrcpp::Any AvrlangParser::IfExprContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::IfExprContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitIfExpr(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::IfExprContext* AvrlangParser::ifExpr() {
+LemurParser::IfExprContext* LemurParser::ifExpr() {
   IfExprContext *_localctx = _tracker.createInstance<IfExprContext>(_ctx, getState());
-  enterRule(_localctx, 34, AvrlangParser::RuleIfExpr);
+  enterRule(_localctx, 34, LemurParser::RuleIfExpr);
 
   auto onExit = finally([=] {
     exitRule();
@@ -1656,7 +1656,7 @@ AvrlangParser::IfExprContext* AvrlangParser::ifExpr() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(189);
-    match(AvrlangParser::IF);
+    match(LemurParser::IF);
     setState(190);
     dynamic_cast<IfExprContext *>(_localctx)->cond = bracedexpr();
     setState(191);
@@ -1674,66 +1674,66 @@ AvrlangParser::IfExprContext* AvrlangParser::ifExpr() {
 
 //----------------- IfElseExprContext ------------------------------------------------------------------
 
-AvrlangParser::IfElseExprContext::IfElseExprContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::IfElseExprContext::IfElseExprContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::IfElseExprContext::IF() {
-  return getToken(AvrlangParser::IF, 0);
+tree::TerminalNode* LemurParser::IfElseExprContext::IF() {
+  return getToken(LemurParser::IF, 0);
 }
 
-std::vector<AvrlangParser::BlockContext *> AvrlangParser::IfElseExprContext::block() {
-  return getRuleContexts<AvrlangParser::BlockContext>();
+std::vector<LemurParser::BlockContext *> LemurParser::IfElseExprContext::block() {
+  return getRuleContexts<LemurParser::BlockContext>();
 }
 
-AvrlangParser::BlockContext* AvrlangParser::IfElseExprContext::block(size_t i) {
-  return getRuleContext<AvrlangParser::BlockContext>(i);
+LemurParser::BlockContext* LemurParser::IfElseExprContext::block(size_t i) {
+  return getRuleContext<LemurParser::BlockContext>(i);
 }
 
-tree::TerminalNode* AvrlangParser::IfElseExprContext::ELSE() {
-  return getToken(AvrlangParser::ELSE, 0);
+tree::TerminalNode* LemurParser::IfElseExprContext::ELSE() {
+  return getToken(LemurParser::ELSE, 0);
 }
 
-AvrlangParser::BracedexprContext* AvrlangParser::IfElseExprContext::bracedexpr() {
-  return getRuleContext<AvrlangParser::BracedexprContext>(0);
+LemurParser::BracedexprContext* LemurParser::IfElseExprContext::bracedexpr() {
+  return getRuleContext<LemurParser::BracedexprContext>(0);
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::IfElseExprContext::NEWLINE() {
-  return getTokens(AvrlangParser::NEWLINE);
+std::vector<tree::TerminalNode *> LemurParser::IfElseExprContext::NEWLINE() {
+  return getTokens(LemurParser::NEWLINE);
 }
 
-tree::TerminalNode* AvrlangParser::IfElseExprContext::NEWLINE(size_t i) {
-  return getToken(AvrlangParser::NEWLINE, i);
+tree::TerminalNode* LemurParser::IfElseExprContext::NEWLINE(size_t i) {
+  return getToken(LemurParser::NEWLINE, i);
 }
 
 
-size_t AvrlangParser::IfElseExprContext::getRuleIndex() const {
-  return AvrlangParser::RuleIfElseExpr;
+size_t LemurParser::IfElseExprContext::getRuleIndex() const {
+  return LemurParser::RuleIfElseExpr;
 }
 
-void AvrlangParser::IfElseExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::IfElseExprContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterIfElseExpr(this);
 }
 
-void AvrlangParser::IfElseExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::IfElseExprContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitIfElseExpr(this);
 }
 
 
-antlrcpp::Any AvrlangParser::IfElseExprContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::IfElseExprContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitIfElseExpr(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::IfElseExprContext* AvrlangParser::ifElseExpr() {
+LemurParser::IfElseExprContext* LemurParser::ifElseExpr() {
   IfElseExprContext *_localctx = _tracker.createInstance<IfElseExprContext>(_ctx, getState());
-  enterRule(_localctx, 36, AvrlangParser::RuleIfElseExpr);
+  enterRule(_localctx, 36, LemurParser::RuleIfElseExpr);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -1742,7 +1742,7 @@ AvrlangParser::IfElseExprContext* AvrlangParser::ifElseExpr() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(193);
-    match(AvrlangParser::IF);
+    match(LemurParser::IF);
     setState(194);
     dynamic_cast<IfElseExprContext *>(_localctx)->cond = bracedexpr();
     setState(195);
@@ -1750,15 +1750,15 @@ AvrlangParser::IfElseExprContext* AvrlangParser::ifElseExpr() {
     setState(199);
     _errHandler->sync(this);
     _la = _input->LA(1);
-    while (_la == AvrlangParser::NEWLINE) {
+    while (_la == LemurParser::NEWLINE) {
       setState(196);
-      match(AvrlangParser::NEWLINE);
+      match(LemurParser::NEWLINE);
       setState(201);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
     setState(202);
-    match(AvrlangParser::ELSE);
+    match(LemurParser::ELSE);
     setState(203);
     block();
    
@@ -1774,323 +1774,323 @@ AvrlangParser::IfElseExprContext* AvrlangParser::ifElseExpr() {
 
 //----------------- ExprContext ------------------------------------------------------------------
 
-AvrlangParser::ExprContext::ExprContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::ExprContext::ExprContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
 
-size_t AvrlangParser::ExprContext::getRuleIndex() const {
-  return AvrlangParser::RuleExpr;
+size_t LemurParser::ExprContext::getRuleIndex() const {
+  return LemurParser::RuleExpr;
 }
 
-void AvrlangParser::ExprContext::copyFrom(ExprContext *ctx) {
+void LemurParser::ExprContext::copyFrom(ExprContext *ctx) {
   ParserRuleContext::copyFrom(ctx);
 }
 
 //----------------- StringRuleContext ------------------------------------------------------------------
 
-AvrlangParser::StringContext* AvrlangParser::StringRuleContext::string() {
-  return getRuleContext<AvrlangParser::StringContext>(0);
+LemurParser::StringContext* LemurParser::StringRuleContext::string() {
+  return getRuleContext<LemurParser::StringContext>(0);
 }
 
-AvrlangParser::StringRuleContext::StringRuleContext(ExprContext *ctx) { copyFrom(ctx); }
+LemurParser::StringRuleContext::StringRuleContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void AvrlangParser::StringRuleContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::StringRuleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterStringRule(this);
 }
-void AvrlangParser::StringRuleContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::StringRuleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitStringRule(this);
 }
 
-antlrcpp::Any AvrlangParser::StringRuleContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::StringRuleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitStringRule(this);
   else
     return visitor->visitChildren(this);
 }
 //----------------- OpExprRuleContext ------------------------------------------------------------------
 
-AvrlangParser::BinoperatorContext* AvrlangParser::OpExprRuleContext::binoperator() {
-  return getRuleContext<AvrlangParser::BinoperatorContext>(0);
+LemurParser::BinoperatorContext* LemurParser::OpExprRuleContext::binoperator() {
+  return getRuleContext<LemurParser::BinoperatorContext>(0);
 }
 
-std::vector<AvrlangParser::ExprContext *> AvrlangParser::OpExprRuleContext::expr() {
-  return getRuleContexts<AvrlangParser::ExprContext>();
+std::vector<LemurParser::ExprContext *> LemurParser::OpExprRuleContext::expr() {
+  return getRuleContexts<LemurParser::ExprContext>();
 }
 
-AvrlangParser::ExprContext* AvrlangParser::OpExprRuleContext::expr(size_t i) {
-  return getRuleContext<AvrlangParser::ExprContext>(i);
+LemurParser::ExprContext* LemurParser::OpExprRuleContext::expr(size_t i) {
+  return getRuleContext<LemurParser::ExprContext>(i);
 }
 
-AvrlangParser::OpExprRuleContext::OpExprRuleContext(ExprContext *ctx) { copyFrom(ctx); }
+LemurParser::OpExprRuleContext::OpExprRuleContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void AvrlangParser::OpExprRuleContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::OpExprRuleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterOpExprRule(this);
 }
-void AvrlangParser::OpExprRuleContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::OpExprRuleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitOpExprRule(this);
 }
 
-antlrcpp::Any AvrlangParser::OpExprRuleContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::OpExprRuleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitOpExprRule(this);
   else
     return visitor->visitChildren(this);
 }
 //----------------- IndexRuleContext ------------------------------------------------------------------
 
-std::vector<AvrlangParser::ExprContext *> AvrlangParser::IndexRuleContext::expr() {
-  return getRuleContexts<AvrlangParser::ExprContext>();
+std::vector<LemurParser::ExprContext *> LemurParser::IndexRuleContext::expr() {
+  return getRuleContexts<LemurParser::ExprContext>();
 }
 
-AvrlangParser::ExprContext* AvrlangParser::IndexRuleContext::expr(size_t i) {
-  return getRuleContext<AvrlangParser::ExprContext>(i);
+LemurParser::ExprContext* LemurParser::IndexRuleContext::expr(size_t i) {
+  return getRuleContext<LemurParser::ExprContext>(i);
 }
 
-AvrlangParser::IndexRuleContext::IndexRuleContext(ExprContext *ctx) { copyFrom(ctx); }
+LemurParser::IndexRuleContext::IndexRuleContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void AvrlangParser::IndexRuleContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::IndexRuleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterIndexRule(this);
 }
-void AvrlangParser::IndexRuleContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::IndexRuleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitIndexRule(this);
 }
 
-antlrcpp::Any AvrlangParser::IndexRuleContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::IndexRuleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitIndexRule(this);
   else
     return visitor->visitChildren(this);
 }
 //----------------- MethodRuleContext ------------------------------------------------------------------
 
-AvrlangParser::MethodCallContext* AvrlangParser::MethodRuleContext::methodCall() {
-  return getRuleContext<AvrlangParser::MethodCallContext>(0);
+LemurParser::MethodCallContext* LemurParser::MethodRuleContext::methodCall() {
+  return getRuleContext<LemurParser::MethodCallContext>(0);
 }
 
-AvrlangParser::MethodRuleContext::MethodRuleContext(ExprContext *ctx) { copyFrom(ctx); }
+LemurParser::MethodRuleContext::MethodRuleContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void AvrlangParser::MethodRuleContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::MethodRuleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterMethodRule(this);
 }
-void AvrlangParser::MethodRuleContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::MethodRuleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitMethodRule(this);
 }
 
-antlrcpp::Any AvrlangParser::MethodRuleContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::MethodRuleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitMethodRule(this);
   else
     return visitor->visitChildren(this);
 }
 //----------------- ListRuleContext ------------------------------------------------------------------
 
-AvrlangParser::ListContext* AvrlangParser::ListRuleContext::list() {
-  return getRuleContext<AvrlangParser::ListContext>(0);
+LemurParser::ListContext* LemurParser::ListRuleContext::list() {
+  return getRuleContext<LemurParser::ListContext>(0);
 }
 
-AvrlangParser::ListRuleContext::ListRuleContext(ExprContext *ctx) { copyFrom(ctx); }
+LemurParser::ListRuleContext::ListRuleContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void AvrlangParser::ListRuleContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ListRuleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterListRule(this);
 }
-void AvrlangParser::ListRuleContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ListRuleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitListRule(this);
 }
 
-antlrcpp::Any AvrlangParser::ListRuleContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::ListRuleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitListRule(this);
   else
     return visitor->visitChildren(this);
 }
 //----------------- NumberRuleContext ------------------------------------------------------------------
 
-AvrlangParser::NumberContext* AvrlangParser::NumberRuleContext::number() {
-  return getRuleContext<AvrlangParser::NumberContext>(0);
+LemurParser::NumberContext* LemurParser::NumberRuleContext::number() {
+  return getRuleContext<LemurParser::NumberContext>(0);
 }
 
-AvrlangParser::NumberRuleContext::NumberRuleContext(ExprContext *ctx) { copyFrom(ctx); }
+LemurParser::NumberRuleContext::NumberRuleContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void AvrlangParser::NumberRuleContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::NumberRuleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterNumberRule(this);
 }
-void AvrlangParser::NumberRuleContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::NumberRuleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitNumberRule(this);
 }
 
-antlrcpp::Any AvrlangParser::NumberRuleContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::NumberRuleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitNumberRule(this);
   else
     return visitor->visitChildren(this);
 }
 //----------------- UminusRuleContext ------------------------------------------------------------------
 
-tree::TerminalNode* AvrlangParser::UminusRuleContext::UMINUS() {
-  return getToken(AvrlangParser::UMINUS, 0);
+tree::TerminalNode* LemurParser::UminusRuleContext::UMINUS() {
+  return getToken(LemurParser::UMINUS, 0);
 }
 
-AvrlangParser::ExprContext* AvrlangParser::UminusRuleContext::expr() {
-  return getRuleContext<AvrlangParser::ExprContext>(0);
+LemurParser::ExprContext* LemurParser::UminusRuleContext::expr() {
+  return getRuleContext<LemurParser::ExprContext>(0);
 }
 
-AvrlangParser::UminusRuleContext::UminusRuleContext(ExprContext *ctx) { copyFrom(ctx); }
+LemurParser::UminusRuleContext::UminusRuleContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void AvrlangParser::UminusRuleContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::UminusRuleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterUminusRule(this);
 }
-void AvrlangParser::UminusRuleContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::UminusRuleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitUminusRule(this);
 }
 
-antlrcpp::Any AvrlangParser::UminusRuleContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::UminusRuleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitUminusRule(this);
   else
     return visitor->visitChildren(this);
 }
 //----------------- CallExprRuleContext ------------------------------------------------------------------
 
-AvrlangParser::CallexprContext* AvrlangParser::CallExprRuleContext::callexpr() {
-  return getRuleContext<AvrlangParser::CallexprContext>(0);
+LemurParser::CallexprContext* LemurParser::CallExprRuleContext::callexpr() {
+  return getRuleContext<LemurParser::CallexprContext>(0);
 }
 
-AvrlangParser::CallExprRuleContext::CallExprRuleContext(ExprContext *ctx) { copyFrom(ctx); }
+LemurParser::CallExprRuleContext::CallExprRuleContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void AvrlangParser::CallExprRuleContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::CallExprRuleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterCallExprRule(this);
 }
-void AvrlangParser::CallExprRuleContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::CallExprRuleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitCallExprRule(this);
 }
 
-antlrcpp::Any AvrlangParser::CallExprRuleContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::CallExprRuleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitCallExprRule(this);
   else
     return visitor->visitChildren(this);
 }
 //----------------- VarRuleContext ------------------------------------------------------------------
 
-AvrlangParser::VarContext* AvrlangParser::VarRuleContext::var() {
-  return getRuleContext<AvrlangParser::VarContext>(0);
+LemurParser::VarContext* LemurParser::VarRuleContext::var() {
+  return getRuleContext<LemurParser::VarContext>(0);
 }
 
-AvrlangParser::VarRuleContext::VarRuleContext(ExprContext *ctx) { copyFrom(ctx); }
+LemurParser::VarRuleContext::VarRuleContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void AvrlangParser::VarRuleContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::VarRuleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterVarRule(this);
 }
-void AvrlangParser::VarRuleContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::VarRuleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitVarRule(this);
 }
 
-antlrcpp::Any AvrlangParser::VarRuleContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::VarRuleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitVarRule(this);
   else
     return visitor->visitChildren(this);
 }
 //----------------- NegRuleContext ------------------------------------------------------------------
 
-AvrlangParser::NegContext* AvrlangParser::NegRuleContext::neg() {
-  return getRuleContext<AvrlangParser::NegContext>(0);
+LemurParser::NegContext* LemurParser::NegRuleContext::neg() {
+  return getRuleContext<LemurParser::NegContext>(0);
 }
 
-AvrlangParser::NegRuleContext::NegRuleContext(ExprContext *ctx) { copyFrom(ctx); }
+LemurParser::NegRuleContext::NegRuleContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void AvrlangParser::NegRuleContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::NegRuleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterNegRule(this);
 }
-void AvrlangParser::NegRuleContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::NegRuleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitNegRule(this);
 }
 
-antlrcpp::Any AvrlangParser::NegRuleContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::NegRuleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitNegRule(this);
   else
     return visitor->visitChildren(this);
 }
 //----------------- BraceExprRuleContext ------------------------------------------------------------------
 
-AvrlangParser::BracedexprContext* AvrlangParser::BraceExprRuleContext::bracedexpr() {
-  return getRuleContext<AvrlangParser::BracedexprContext>(0);
+LemurParser::BracedexprContext* LemurParser::BraceExprRuleContext::bracedexpr() {
+  return getRuleContext<LemurParser::BracedexprContext>(0);
 }
 
-AvrlangParser::BraceExprRuleContext::BraceExprRuleContext(ExprContext *ctx) { copyFrom(ctx); }
+LemurParser::BraceExprRuleContext::BraceExprRuleContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void AvrlangParser::BraceExprRuleContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::BraceExprRuleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterBraceExprRule(this);
 }
-void AvrlangParser::BraceExprRuleContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::BraceExprRuleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitBraceExprRule(this);
 }
 
-antlrcpp::Any AvrlangParser::BraceExprRuleContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::BraceExprRuleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitBraceExprRule(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::ExprContext* AvrlangParser::expr() {
+LemurParser::ExprContext* LemurParser::expr() {
    return expr(0);
 }
 
-AvrlangParser::ExprContext* AvrlangParser::expr(int precedence) {
+LemurParser::ExprContext* LemurParser::expr(int precedence) {
   ParserRuleContext *parentContext = _ctx;
   size_t parentState = getState();
-  AvrlangParser::ExprContext *_localctx = _tracker.createInstance<ExprContext>(_ctx, parentState);
-  AvrlangParser::ExprContext *previousContext = _localctx;
+  LemurParser::ExprContext *_localctx = _tracker.createInstance<ExprContext>(_ctx, parentState);
+  LemurParser::ExprContext *previousContext = _localctx;
   (void)previousContext; // Silence compiler, in case the context is not used by generated code.
   size_t startState = 38;
-  enterRecursionRule(_localctx, 38, AvrlangParser::RuleExpr, precedence);
+  enterRecursionRule(_localctx, 38, LemurParser::RuleExpr, precedence);
 
     
 
@@ -2118,7 +2118,7 @@ AvrlangParser::ExprContext* AvrlangParser::expr(int precedence) {
       _ctx = _localctx;
       previousContext = _localctx;
       setState(207);
-      match(AvrlangParser::UMINUS);
+      match(LemurParser::UMINUS);
       setState(208);
       expr(10);
       break;
@@ -2223,11 +2223,11 @@ AvrlangParser::ExprContext* AvrlangParser::expr(int precedence) {
 
           if (!(precpred(_ctx, 6))) throw FailedPredicateException(this, "precpred(_ctx, 6)");
           setState(223);
-          match(AvrlangParser::T__4);
+          match(LemurParser::T__4);
           setState(224);
           expr(0);
           setState(225);
-          match(AvrlangParser::T__5);
+          match(LemurParser::T__5);
           break;
         }
 
@@ -2248,46 +2248,46 @@ AvrlangParser::ExprContext* AvrlangParser::expr(int precedence) {
 
 //----------------- ListContext ------------------------------------------------------------------
 
-AvrlangParser::ListContext::ListContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::ListContext::ListContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<AvrlangParser::ExprContext *> AvrlangParser::ListContext::expr() {
-  return getRuleContexts<AvrlangParser::ExprContext>();
+std::vector<LemurParser::ExprContext *> LemurParser::ListContext::expr() {
+  return getRuleContexts<LemurParser::ExprContext>();
 }
 
-AvrlangParser::ExprContext* AvrlangParser::ListContext::expr(size_t i) {
-  return getRuleContext<AvrlangParser::ExprContext>(i);
+LemurParser::ExprContext* LemurParser::ListContext::expr(size_t i) {
+  return getRuleContext<LemurParser::ExprContext>(i);
 }
 
 
-size_t AvrlangParser::ListContext::getRuleIndex() const {
-  return AvrlangParser::RuleList;
+size_t LemurParser::ListContext::getRuleIndex() const {
+  return LemurParser::RuleList;
 }
 
-void AvrlangParser::ListContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ListContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterList(this);
 }
 
-void AvrlangParser::ListContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ListContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitList(this);
 }
 
 
-antlrcpp::Any AvrlangParser::ListContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::ListContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitList(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::ListContext* AvrlangParser::list() {
+LemurParser::ListContext* LemurParser::list() {
   ListContext *_localctx = _tracker.createInstance<ListContext>(_ctx, getState());
-  enterRule(_localctx, 40, AvrlangParser::RuleList);
+  enterRule(_localctx, 40, LemurParser::RuleList);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -2296,35 +2296,35 @@ AvrlangParser::ListContext* AvrlangParser::list() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(232);
-    match(AvrlangParser::T__4);
+    match(LemurParser::T__4);
     setState(238);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << AvrlangParser::T__4)
-      | (1ULL << AvrlangParser::UMINUS)
-      | (1ULL << AvrlangParser::OPEN)
-      | (1ULL << AvrlangParser::NEG)
-      | (1ULL << AvrlangParser::NAME)
-      | (1ULL << AvrlangParser::INT)
-      | (1ULL << AvrlangParser::FLOAT)
-      | (1ULL << AvrlangParser::STRING))) != 0)) {
+      ((1ULL << _la) & ((1ULL << LemurParser::T__4)
+      | (1ULL << LemurParser::UMINUS)
+      | (1ULL << LemurParser::OPEN)
+      | (1ULL << LemurParser::NEG)
+      | (1ULL << LemurParser::NAME)
+      | (1ULL << LemurParser::INT)
+      | (1ULL << LemurParser::FLOAT)
+      | (1ULL << LemurParser::STRING))) != 0)) {
       setState(233);
       expr(0);
       setState(236);
       _errHandler->sync(this);
 
       _la = _input->LA(1);
-      if (_la == AvrlangParser::T__1) {
+      if (_la == LemurParser::T__1) {
         setState(234);
-        match(AvrlangParser::T__1);
+        match(LemurParser::T__1);
         setState(235);
         expr(0);
       }
     }
     setState(240);
-    match(AvrlangParser::T__5);
+    match(LemurParser::T__5);
    
   }
   catch (RecognitionException &e) {
@@ -2338,58 +2338,58 @@ AvrlangParser::ListContext* AvrlangParser::list() {
 
 //----------------- MethodCallContext ------------------------------------------------------------------
 
-AvrlangParser::MethodCallContext::MethodCallContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::MethodCallContext::MethodCallContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::MethodCallContext::OPEN() {
-  return getToken(AvrlangParser::OPEN, 0);
+tree::TerminalNode* LemurParser::MethodCallContext::OPEN() {
+  return getToken(LemurParser::OPEN, 0);
 }
 
-tree::TerminalNode* AvrlangParser::MethodCallContext::CLOSED() {
-  return getToken(AvrlangParser::CLOSED, 0);
+tree::TerminalNode* LemurParser::MethodCallContext::CLOSED() {
+  return getToken(LemurParser::CLOSED, 0);
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::MethodCallContext::NAME() {
-  return getTokens(AvrlangParser::NAME);
+std::vector<tree::TerminalNode *> LemurParser::MethodCallContext::NAME() {
+  return getTokens(LemurParser::NAME);
 }
 
-tree::TerminalNode* AvrlangParser::MethodCallContext::NAME(size_t i) {
-  return getToken(AvrlangParser::NAME, i);
+tree::TerminalNode* LemurParser::MethodCallContext::NAME(size_t i) {
+  return getToken(LemurParser::NAME, i);
 }
 
-AvrlangParser::ArglistContext* AvrlangParser::MethodCallContext::arglist() {
-  return getRuleContext<AvrlangParser::ArglistContext>(0);
+LemurParser::ArglistContext* LemurParser::MethodCallContext::arglist() {
+  return getRuleContext<LemurParser::ArglistContext>(0);
 }
 
 
-size_t AvrlangParser::MethodCallContext::getRuleIndex() const {
-  return AvrlangParser::RuleMethodCall;
+size_t LemurParser::MethodCallContext::getRuleIndex() const {
+  return LemurParser::RuleMethodCall;
 }
 
-void AvrlangParser::MethodCallContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::MethodCallContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterMethodCall(this);
 }
 
-void AvrlangParser::MethodCallContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::MethodCallContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitMethodCall(this);
 }
 
 
-antlrcpp::Any AvrlangParser::MethodCallContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::MethodCallContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitMethodCall(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::MethodCallContext* AvrlangParser::methodCall() {
+LemurParser::MethodCallContext* LemurParser::methodCall() {
   MethodCallContext *_localctx = _tracker.createInstance<MethodCallContext>(_ctx, getState());
-  enterRule(_localctx, 42, AvrlangParser::RuleMethodCall);
+  enterRule(_localctx, 42, LemurParser::RuleMethodCall);
 
   auto onExit = finally([=] {
     exitRule();
@@ -2397,17 +2397,17 @@ AvrlangParser::MethodCallContext* AvrlangParser::methodCall() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(242);
-    dynamic_cast<MethodCallContext *>(_localctx)->varName = match(AvrlangParser::NAME);
+    dynamic_cast<MethodCallContext *>(_localctx)->varName = match(LemurParser::NAME);
     setState(243);
-    match(AvrlangParser::T__2);
+    match(LemurParser::T__2);
     setState(244);
-    dynamic_cast<MethodCallContext *>(_localctx)->methodName = match(AvrlangParser::NAME);
+    dynamic_cast<MethodCallContext *>(_localctx)->methodName = match(LemurParser::NAME);
     setState(245);
-    match(AvrlangParser::OPEN);
+    match(LemurParser::OPEN);
     setState(246);
     dynamic_cast<MethodCallContext *>(_localctx)->args = arglist();
     setState(247);
-    match(AvrlangParser::CLOSED);
+    match(LemurParser::CLOSED);
    
   }
   catch (RecognitionException &e) {
@@ -2421,42 +2421,42 @@ AvrlangParser::MethodCallContext* AvrlangParser::methodCall() {
 
 //----------------- StringContext ------------------------------------------------------------------
 
-AvrlangParser::StringContext::StringContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::StringContext::StringContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::StringContext::STRING() {
-  return getToken(AvrlangParser::STRING, 0);
+tree::TerminalNode* LemurParser::StringContext::STRING() {
+  return getToken(LemurParser::STRING, 0);
 }
 
 
-size_t AvrlangParser::StringContext::getRuleIndex() const {
-  return AvrlangParser::RuleString;
+size_t LemurParser::StringContext::getRuleIndex() const {
+  return LemurParser::RuleString;
 }
 
-void AvrlangParser::StringContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::StringContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterString(this);
 }
 
-void AvrlangParser::StringContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::StringContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitString(this);
 }
 
 
-antlrcpp::Any AvrlangParser::StringContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::StringContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitString(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::StringContext* AvrlangParser::string() {
+LemurParser::StringContext* LemurParser::string() {
   StringContext *_localctx = _tracker.createInstance<StringContext>(_ctx, getState());
-  enterRule(_localctx, 44, AvrlangParser::RuleString);
+  enterRule(_localctx, 44, LemurParser::RuleString);
 
   auto onExit = finally([=] {
     exitRule();
@@ -2464,7 +2464,7 @@ AvrlangParser::StringContext* AvrlangParser::string() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(249);
-    match(AvrlangParser::STRING);
+    match(LemurParser::STRING);
    
   }
   catch (RecognitionException &e) {
@@ -2478,46 +2478,46 @@ AvrlangParser::StringContext* AvrlangParser::string() {
 
 //----------------- NumberContext ------------------------------------------------------------------
 
-AvrlangParser::NumberContext::NumberContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::NumberContext::NumberContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::NumberContext::INT() {
-  return getToken(AvrlangParser::INT, 0);
+tree::TerminalNode* LemurParser::NumberContext::INT() {
+  return getToken(LemurParser::INT, 0);
 }
 
-tree::TerminalNode* AvrlangParser::NumberContext::FLOAT() {
-  return getToken(AvrlangParser::FLOAT, 0);
+tree::TerminalNode* LemurParser::NumberContext::FLOAT() {
+  return getToken(LemurParser::FLOAT, 0);
 }
 
 
-size_t AvrlangParser::NumberContext::getRuleIndex() const {
-  return AvrlangParser::RuleNumber;
+size_t LemurParser::NumberContext::getRuleIndex() const {
+  return LemurParser::RuleNumber;
 }
 
-void AvrlangParser::NumberContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::NumberContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterNumber(this);
 }
 
-void AvrlangParser::NumberContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::NumberContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitNumber(this);
 }
 
 
-antlrcpp::Any AvrlangParser::NumberContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::NumberContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitNumber(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::NumberContext* AvrlangParser::number() {
+LemurParser::NumberContext* LemurParser::number() {
   NumberContext *_localctx = _tracker.createInstance<NumberContext>(_ctx, getState());
-  enterRule(_localctx, 46, AvrlangParser::RuleNumber);
+  enterRule(_localctx, 46, LemurParser::RuleNumber);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -2527,9 +2527,9 @@ AvrlangParser::NumberContext* AvrlangParser::number() {
     enterOuterAlt(_localctx, 1);
     setState(251);
     _la = _input->LA(1);
-    if (!(_la == AvrlangParser::INT
+    if (!(_la == LemurParser::INT
 
-    || _la == AvrlangParser::FLOAT)) {
+    || _la == LemurParser::FLOAT)) {
     _errHandler->recoverInline(this);
     }
     else {
@@ -2549,46 +2549,46 @@ AvrlangParser::NumberContext* AvrlangParser::number() {
 
 //----------------- VarContext ------------------------------------------------------------------
 
-AvrlangParser::VarContext::VarContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::VarContext::VarContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<tree::TerminalNode *> AvrlangParser::VarContext::NAME() {
-  return getTokens(AvrlangParser::NAME);
+std::vector<tree::TerminalNode *> LemurParser::VarContext::NAME() {
+  return getTokens(LemurParser::NAME);
 }
 
-tree::TerminalNode* AvrlangParser::VarContext::NAME(size_t i) {
-  return getToken(AvrlangParser::NAME, i);
+tree::TerminalNode* LemurParser::VarContext::NAME(size_t i) {
+  return getToken(LemurParser::NAME, i);
 }
 
 
-size_t AvrlangParser::VarContext::getRuleIndex() const {
-  return AvrlangParser::RuleVar;
+size_t LemurParser::VarContext::getRuleIndex() const {
+  return LemurParser::RuleVar;
 }
 
-void AvrlangParser::VarContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::VarContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterVar(this);
 }
 
-void AvrlangParser::VarContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::VarContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitVar(this);
 }
 
 
-antlrcpp::Any AvrlangParser::VarContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::VarContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitVar(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::VarContext* AvrlangParser::var() {
+LemurParser::VarContext* LemurParser::var() {
   VarContext *_localctx = _tracker.createInstance<VarContext>(_ctx, getState());
-  enterRule(_localctx, 48, AvrlangParser::RuleVar);
+  enterRule(_localctx, 48, LemurParser::RuleVar);
 
   auto onExit = finally([=] {
     exitRule();
@@ -2596,16 +2596,16 @@ AvrlangParser::VarContext* AvrlangParser::var() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(253);
-    dynamic_cast<VarContext *>(_localctx)->varName = match(AvrlangParser::NAME);
+    dynamic_cast<VarContext *>(_localctx)->varName = match(LemurParser::NAME);
     setState(256);
     _errHandler->sync(this);
 
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 21, _ctx)) {
     case 1: {
       setState(254);
-      match(AvrlangParser::T__2);
+      match(LemurParser::T__2);
       setState(255);
-      dynamic_cast<VarContext *>(_localctx)->subName = match(AvrlangParser::NAME);
+      dynamic_cast<VarContext *>(_localctx)->subName = match(LemurParser::NAME);
       break;
     }
 
@@ -2623,54 +2623,54 @@ AvrlangParser::VarContext* AvrlangParser::var() {
 
 //----------------- CallexprContext ------------------------------------------------------------------
 
-AvrlangParser::CallexprContext::CallexprContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::CallexprContext::CallexprContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::CallexprContext::OPEN() {
-  return getToken(AvrlangParser::OPEN, 0);
+tree::TerminalNode* LemurParser::CallexprContext::OPEN() {
+  return getToken(LemurParser::OPEN, 0);
 }
 
-tree::TerminalNode* AvrlangParser::CallexprContext::CLOSED() {
-  return getToken(AvrlangParser::CLOSED, 0);
+tree::TerminalNode* LemurParser::CallexprContext::CLOSED() {
+  return getToken(LemurParser::CLOSED, 0);
 }
 
-tree::TerminalNode* AvrlangParser::CallexprContext::NAME() {
-  return getToken(AvrlangParser::NAME, 0);
+tree::TerminalNode* LemurParser::CallexprContext::NAME() {
+  return getToken(LemurParser::NAME, 0);
 }
 
-AvrlangParser::ArglistContext* AvrlangParser::CallexprContext::arglist() {
-  return getRuleContext<AvrlangParser::ArglistContext>(0);
+LemurParser::ArglistContext* LemurParser::CallexprContext::arglist() {
+  return getRuleContext<LemurParser::ArglistContext>(0);
 }
 
 
-size_t AvrlangParser::CallexprContext::getRuleIndex() const {
-  return AvrlangParser::RuleCallexpr;
+size_t LemurParser::CallexprContext::getRuleIndex() const {
+  return LemurParser::RuleCallexpr;
 }
 
-void AvrlangParser::CallexprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::CallexprContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterCallexpr(this);
 }
 
-void AvrlangParser::CallexprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::CallexprContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitCallexpr(this);
 }
 
 
-antlrcpp::Any AvrlangParser::CallexprContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::CallexprContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitCallexpr(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::CallexprContext* AvrlangParser::callexpr() {
+LemurParser::CallexprContext* LemurParser::callexpr() {
   CallexprContext *_localctx = _tracker.createInstance<CallexprContext>(_ctx, getState());
-  enterRule(_localctx, 50, AvrlangParser::RuleCallexpr);
+  enterRule(_localctx, 50, LemurParser::RuleCallexpr);
 
   auto onExit = finally([=] {
     exitRule();
@@ -2678,13 +2678,13 @@ AvrlangParser::CallexprContext* AvrlangParser::callexpr() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(258);
-    dynamic_cast<CallexprContext *>(_localctx)->fName = match(AvrlangParser::NAME);
+    dynamic_cast<CallexprContext *>(_localctx)->fName = match(LemurParser::NAME);
     setState(259);
-    match(AvrlangParser::OPEN);
+    match(LemurParser::OPEN);
     setState(260);
     dynamic_cast<CallexprContext *>(_localctx)->args = arglist();
     setState(261);
-    match(AvrlangParser::CLOSED);
+    match(LemurParser::CLOSED);
    
   }
   catch (RecognitionException &e) {
@@ -2698,46 +2698,46 @@ AvrlangParser::CallexprContext* AvrlangParser::callexpr() {
 
 //----------------- ArglistContext ------------------------------------------------------------------
 
-AvrlangParser::ArglistContext::ArglistContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::ArglistContext::ArglistContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<AvrlangParser::ExprContext *> AvrlangParser::ArglistContext::expr() {
-  return getRuleContexts<AvrlangParser::ExprContext>();
+std::vector<LemurParser::ExprContext *> LemurParser::ArglistContext::expr() {
+  return getRuleContexts<LemurParser::ExprContext>();
 }
 
-AvrlangParser::ExprContext* AvrlangParser::ArglistContext::expr(size_t i) {
-  return getRuleContext<AvrlangParser::ExprContext>(i);
+LemurParser::ExprContext* LemurParser::ArglistContext::expr(size_t i) {
+  return getRuleContext<LemurParser::ExprContext>(i);
 }
 
 
-size_t AvrlangParser::ArglistContext::getRuleIndex() const {
-  return AvrlangParser::RuleArglist;
+size_t LemurParser::ArglistContext::getRuleIndex() const {
+  return LemurParser::RuleArglist;
 }
 
-void AvrlangParser::ArglistContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ArglistContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterArglist(this);
 }
 
-void AvrlangParser::ArglistContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::ArglistContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitArglist(this);
 }
 
 
-antlrcpp::Any AvrlangParser::ArglistContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::ArglistContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitArglist(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::ArglistContext* AvrlangParser::arglist() {
+LemurParser::ArglistContext* LemurParser::arglist() {
   ArglistContext *_localctx = _tracker.createInstance<ArglistContext>(_ctx, getState());
-  enterRule(_localctx, 52, AvrlangParser::RuleArglist);
+  enterRule(_localctx, 52, LemurParser::RuleArglist);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -2750,22 +2750,22 @@ AvrlangParser::ArglistContext* AvrlangParser::arglist() {
 
     _la = _input->LA(1);
     if ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << AvrlangParser::T__4)
-      | (1ULL << AvrlangParser::UMINUS)
-      | (1ULL << AvrlangParser::OPEN)
-      | (1ULL << AvrlangParser::NEG)
-      | (1ULL << AvrlangParser::NAME)
-      | (1ULL << AvrlangParser::INT)
-      | (1ULL << AvrlangParser::FLOAT)
-      | (1ULL << AvrlangParser::STRING))) != 0)) {
+      ((1ULL << _la) & ((1ULL << LemurParser::T__4)
+      | (1ULL << LemurParser::UMINUS)
+      | (1ULL << LemurParser::OPEN)
+      | (1ULL << LemurParser::NEG)
+      | (1ULL << LemurParser::NAME)
+      | (1ULL << LemurParser::INT)
+      | (1ULL << LemurParser::FLOAT)
+      | (1ULL << LemurParser::STRING))) != 0)) {
       setState(263);
       expr(0);
       setState(268);
       _errHandler->sync(this);
       _la = _input->LA(1);
-      while (_la == AvrlangParser::T__1) {
+      while (_la == LemurParser::T__1) {
         setState(264);
-        match(AvrlangParser::T__1);
+        match(LemurParser::T__1);
         setState(265);
         expr(0);
         setState(270);
@@ -2786,46 +2786,46 @@ AvrlangParser::ArglistContext* AvrlangParser::arglist() {
 
 //----------------- NegContext ------------------------------------------------------------------
 
-AvrlangParser::NegContext::NegContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::NegContext::NegContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::NegContext::NEG() {
-  return getToken(AvrlangParser::NEG, 0);
+tree::TerminalNode* LemurParser::NegContext::NEG() {
+  return getToken(LemurParser::NEG, 0);
 }
 
-AvrlangParser::ExprContext* AvrlangParser::NegContext::expr() {
-  return getRuleContext<AvrlangParser::ExprContext>(0);
+LemurParser::ExprContext* LemurParser::NegContext::expr() {
+  return getRuleContext<LemurParser::ExprContext>(0);
 }
 
 
-size_t AvrlangParser::NegContext::getRuleIndex() const {
-  return AvrlangParser::RuleNeg;
+size_t LemurParser::NegContext::getRuleIndex() const {
+  return LemurParser::RuleNeg;
 }
 
-void AvrlangParser::NegContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::NegContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterNeg(this);
 }
 
-void AvrlangParser::NegContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::NegContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitNeg(this);
 }
 
 
-antlrcpp::Any AvrlangParser::NegContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::NegContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitNeg(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::NegContext* AvrlangParser::neg() {
+LemurParser::NegContext* LemurParser::neg() {
   NegContext *_localctx = _tracker.createInstance<NegContext>(_ctx, getState());
-  enterRule(_localctx, 54, AvrlangParser::RuleNeg);
+  enterRule(_localctx, 54, LemurParser::RuleNeg);
 
   auto onExit = finally([=] {
     exitRule();
@@ -2833,7 +2833,7 @@ AvrlangParser::NegContext* AvrlangParser::neg() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(273);
-    match(AvrlangParser::NEG);
+    match(LemurParser::NEG);
     setState(274);
     expr(0);
    
@@ -2849,86 +2849,86 @@ AvrlangParser::NegContext* AvrlangParser::neg() {
 
 //----------------- BinoperatorContext ------------------------------------------------------------------
 
-AvrlangParser::BinoperatorContext::BinoperatorContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::BinoperatorContext::BinoperatorContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::BinoperatorContext::UMINUS() {
-  return getToken(AvrlangParser::UMINUS, 0);
+tree::TerminalNode* LemurParser::BinoperatorContext::UMINUS() {
+  return getToken(LemurParser::UMINUS, 0);
 }
 
-tree::TerminalNode* AvrlangParser::BinoperatorContext::SHL() {
-  return getToken(AvrlangParser::SHL, 0);
+tree::TerminalNode* LemurParser::BinoperatorContext::SHL() {
+  return getToken(LemurParser::SHL, 0);
 }
 
-tree::TerminalNode* AvrlangParser::BinoperatorContext::SHR() {
-  return getToken(AvrlangParser::SHR, 0);
+tree::TerminalNode* LemurParser::BinoperatorContext::SHR() {
+  return getToken(LemurParser::SHR, 0);
 }
 
-tree::TerminalNode* AvrlangParser::BinoperatorContext::AND() {
-  return getToken(AvrlangParser::AND, 0);
+tree::TerminalNode* LemurParser::BinoperatorContext::AND() {
+  return getToken(LemurParser::AND, 0);
 }
 
-tree::TerminalNode* AvrlangParser::BinoperatorContext::OR() {
-  return getToken(AvrlangParser::OR, 0);
+tree::TerminalNode* LemurParser::BinoperatorContext::OR() {
+  return getToken(LemurParser::OR, 0);
 }
 
-tree::TerminalNode* AvrlangParser::BinoperatorContext::XOR() {
-  return getToken(AvrlangParser::XOR, 0);
+tree::TerminalNode* LemurParser::BinoperatorContext::XOR() {
+  return getToken(LemurParser::XOR, 0);
 }
 
-tree::TerminalNode* AvrlangParser::BinoperatorContext::GT() {
-  return getToken(AvrlangParser::GT, 0);
+tree::TerminalNode* LemurParser::BinoperatorContext::GT() {
+  return getToken(LemurParser::GT, 0);
 }
 
-tree::TerminalNode* AvrlangParser::BinoperatorContext::LT() {
-  return getToken(AvrlangParser::LT, 0);
+tree::TerminalNode* LemurParser::BinoperatorContext::LT() {
+  return getToken(LemurParser::LT, 0);
 }
 
-tree::TerminalNode* AvrlangParser::BinoperatorContext::GE() {
-  return getToken(AvrlangParser::GE, 0);
+tree::TerminalNode* LemurParser::BinoperatorContext::GE() {
+  return getToken(LemurParser::GE, 0);
 }
 
-tree::TerminalNode* AvrlangParser::BinoperatorContext::LE() {
-  return getToken(AvrlangParser::LE, 0);
+tree::TerminalNode* LemurParser::BinoperatorContext::LE() {
+  return getToken(LemurParser::LE, 0);
 }
 
-tree::TerminalNode* AvrlangParser::BinoperatorContext::EQ() {
-  return getToken(AvrlangParser::EQ, 0);
+tree::TerminalNode* LemurParser::BinoperatorContext::EQ() {
+  return getToken(LemurParser::EQ, 0);
 }
 
-tree::TerminalNode* AvrlangParser::BinoperatorContext::NE() {
-  return getToken(AvrlangParser::NE, 0);
+tree::TerminalNode* LemurParser::BinoperatorContext::NE() {
+  return getToken(LemurParser::NE, 0);
 }
 
 
-size_t AvrlangParser::BinoperatorContext::getRuleIndex() const {
-  return AvrlangParser::RuleBinoperator;
+size_t LemurParser::BinoperatorContext::getRuleIndex() const {
+  return LemurParser::RuleBinoperator;
 }
 
-void AvrlangParser::BinoperatorContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::BinoperatorContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterBinoperator(this);
 }
 
-void AvrlangParser::BinoperatorContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::BinoperatorContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitBinoperator(this);
 }
 
 
-antlrcpp::Any AvrlangParser::BinoperatorContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::BinoperatorContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitBinoperator(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::BinoperatorContext* AvrlangParser::binoperator() {
+LemurParser::BinoperatorContext* LemurParser::binoperator() {
   BinoperatorContext *_localctx = _tracker.createInstance<BinoperatorContext>(_ctx, getState());
-  enterRule(_localctx, 56, AvrlangParser::RuleBinoperator);
+  enterRule(_localctx, 56, LemurParser::RuleBinoperator);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -2939,21 +2939,21 @@ AvrlangParser::BinoperatorContext* AvrlangParser::binoperator() {
     setState(276);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << AvrlangParser::T__6)
-      | (1ULL << AvrlangParser::T__7)
-      | (1ULL << AvrlangParser::T__8)
-      | (1ULL << AvrlangParser::UMINUS)
-      | (1ULL << AvrlangParser::AND)
-      | (1ULL << AvrlangParser::OR)
-      | (1ULL << AvrlangParser::XOR)
-      | (1ULL << AvrlangParser::SHL)
-      | (1ULL << AvrlangParser::SHR)
-      | (1ULL << AvrlangParser::GT)
-      | (1ULL << AvrlangParser::GE)
-      | (1ULL << AvrlangParser::LT)
-      | (1ULL << AvrlangParser::LE)
-      | (1ULL << AvrlangParser::EQ)
-      | (1ULL << AvrlangParser::NE))) != 0))) {
+      ((1ULL << _la) & ((1ULL << LemurParser::T__6)
+      | (1ULL << LemurParser::T__7)
+      | (1ULL << LemurParser::T__8)
+      | (1ULL << LemurParser::UMINUS)
+      | (1ULL << LemurParser::AND)
+      | (1ULL << LemurParser::OR)
+      | (1ULL << LemurParser::XOR)
+      | (1ULL << LemurParser::SHL)
+      | (1ULL << LemurParser::SHR)
+      | (1ULL << LemurParser::GT)
+      | (1ULL << LemurParser::GE)
+      | (1ULL << LemurParser::LT)
+      | (1ULL << LemurParser::LE)
+      | (1ULL << LemurParser::EQ)
+      | (1ULL << LemurParser::NE))) != 0))) {
     _errHandler->recoverInline(this);
     }
     else {
@@ -2973,50 +2973,50 @@ AvrlangParser::BinoperatorContext* AvrlangParser::binoperator() {
 
 //----------------- BracedexprContext ------------------------------------------------------------------
 
-AvrlangParser::BracedexprContext::BracedexprContext(ParserRuleContext *parent, size_t invokingState)
+LemurParser::BracedexprContext::BracedexprContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* AvrlangParser::BracedexprContext::OPEN() {
-  return getToken(AvrlangParser::OPEN, 0);
+tree::TerminalNode* LemurParser::BracedexprContext::OPEN() {
+  return getToken(LemurParser::OPEN, 0);
 }
 
-AvrlangParser::ExprContext* AvrlangParser::BracedexprContext::expr() {
-  return getRuleContext<AvrlangParser::ExprContext>(0);
+LemurParser::ExprContext* LemurParser::BracedexprContext::expr() {
+  return getRuleContext<LemurParser::ExprContext>(0);
 }
 
-tree::TerminalNode* AvrlangParser::BracedexprContext::CLOSED() {
-  return getToken(AvrlangParser::CLOSED, 0);
+tree::TerminalNode* LemurParser::BracedexprContext::CLOSED() {
+  return getToken(LemurParser::CLOSED, 0);
 }
 
 
-size_t AvrlangParser::BracedexprContext::getRuleIndex() const {
-  return AvrlangParser::RuleBracedexpr;
+size_t LemurParser::BracedexprContext::getRuleIndex() const {
+  return LemurParser::RuleBracedexpr;
 }
 
-void AvrlangParser::BracedexprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::BracedexprContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->enterBracedexpr(this);
 }
 
-void AvrlangParser::BracedexprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<AvrlangListener *>(listener);
+void LemurParser::BracedexprContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<LemurListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitBracedexpr(this);
 }
 
 
-antlrcpp::Any AvrlangParser::BracedexprContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<AvrlangVisitor*>(visitor))
+antlrcpp::Any LemurParser::BracedexprContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LemurVisitor*>(visitor))
     return parserVisitor->visitBracedexpr(this);
   else
     return visitor->visitChildren(this);
 }
 
-AvrlangParser::BracedexprContext* AvrlangParser::bracedexpr() {
+LemurParser::BracedexprContext* LemurParser::bracedexpr() {
   BracedexprContext *_localctx = _tracker.createInstance<BracedexprContext>(_ctx, getState());
-  enterRule(_localctx, 58, AvrlangParser::RuleBracedexpr);
+  enterRule(_localctx, 58, LemurParser::RuleBracedexpr);
 
   auto onExit = finally([=] {
     exitRule();
@@ -3024,11 +3024,11 @@ AvrlangParser::BracedexprContext* AvrlangParser::bracedexpr() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(278);
-    match(AvrlangParser::OPEN);
+    match(LemurParser::OPEN);
     setState(279);
     expr(0);
     setState(280);
-    match(AvrlangParser::CLOSED);
+    match(LemurParser::CLOSED);
    
   }
   catch (RecognitionException &e) {
@@ -3040,7 +3040,7 @@ AvrlangParser::BracedexprContext* AvrlangParser::bracedexpr() {
   return _localctx;
 }
 
-bool AvrlangParser::sempred(RuleContext *context, size_t ruleIndex, size_t predicateIndex) {
+bool LemurParser::sempred(RuleContext *context, size_t ruleIndex, size_t predicateIndex) {
   switch (ruleIndex) {
     case 19: return exprSempred(dynamic_cast<ExprContext *>(context), predicateIndex);
 
@@ -3050,7 +3050,7 @@ bool AvrlangParser::sempred(RuleContext *context, size_t ruleIndex, size_t predi
   return true;
 }
 
-bool AvrlangParser::exprSempred(ExprContext *_localctx, size_t predicateIndex) {
+bool LemurParser::exprSempred(ExprContext *_localctx, size_t predicateIndex) {
   switch (predicateIndex) {
     case 0: return precpred(_ctx, 4);
     case 1: return precpred(_ctx, 6);
@@ -3062,14 +3062,14 @@ bool AvrlangParser::exprSempred(ExprContext *_localctx, size_t predicateIndex) {
 }
 
 // Static vars and initialization.
-std::vector<dfa::DFA> AvrlangParser::_decisionToDFA;
-atn::PredictionContextCache AvrlangParser::_sharedContextCache;
+std::vector<dfa::DFA> LemurParser::_decisionToDFA;
+atn::PredictionContextCache LemurParser::_sharedContextCache;
 
 // We own the ATN which in turn owns the ATN states.
-atn::ATN AvrlangParser::_atn;
-std::vector<uint16_t> AvrlangParser::_serializedATN;
+atn::ATN LemurParser::_atn;
+std::vector<uint16_t> LemurParser::_serializedATN;
 
-std::vector<std::string> AvrlangParser::_ruleNames = {
+std::vector<std::string> LemurParser::_ruleNames = {
   "file", "globalstmt", "classdef", "classbody", "classvardecl", "classfunctiondef", 
   "functiondef", "paramlist", "block", "stmt", "printstmt", "vardecl", "assign", 
   "declassign", "ret", "whileloop", "forloop", "ifExpr", "ifElseExpr", "expr", 
@@ -3077,7 +3077,7 @@ std::vector<std::string> AvrlangParser::_ruleNames = {
   "neg", "binoperator", "bracedexpr"
 };
 
-std::vector<std::string> AvrlangParser::_literalNames = {
+std::vector<std::string> LemurParser::_literalNames = {
   "", "':'", "','", "'.'", "'='", "'['", "']'", "'+'", "'*'", "'/'", "'-'", 
   "'for'", "'in'", "'class'", "'<-'", "'def'", "'print'", "'('", "')'", 
   "'{'", "'}'", "'return'", "'while'", "'if'", "'else'", "'and'", "'or'", 
@@ -3085,7 +3085,7 @@ std::vector<std::string> AvrlangParser::_literalNames = {
   "'!='", "'\n'"
 };
 
-std::vector<std::string> AvrlangParser::_symbolicNames = {
+std::vector<std::string> LemurParser::_symbolicNames = {
   "", "", "", "", "", "", "", "", "", "", "UMINUS", "FOR", "IN", "CLASS", 
   "ARROW", "DEF", "PRINT", "OPEN", "CLOSED", "LEFTBRACE", "RIGHTBRACE", 
   "RET", "WHILE", "IF", "ELSE", "AND", "OR", "XOR", "SHL", "SHR", "NEG", 
@@ -3093,11 +3093,11 @@ std::vector<std::string> AvrlangParser::_symbolicNames = {
   "STRING", "WHITESPACE", "COMMENT"
 };
 
-dfa::Vocabulary AvrlangParser::_vocabulary(_literalNames, _symbolicNames);
+dfa::Vocabulary LemurParser::_vocabulary(_literalNames, _symbolicNames);
 
-std::vector<std::string> AvrlangParser::_tokenNames;
+std::vector<std::string> LemurParser::_tokenNames;
 
-AvrlangParser::Initializer::Initializer() {
+LemurParser::Initializer::Initializer() {
 	for (size_t i = 0; i < _symbolicNames.size(); ++i) {
 		std::string name = _vocabulary.getLiteralName(i);
 		if (name.empty()) {
@@ -3312,4 +3312,4 @@ AvrlangParser::Initializer::Initializer() {
   }
 }
 
-AvrlangParser::Initializer AvrlangParser::_init;
+LemurParser::Initializer LemurParser::_init;

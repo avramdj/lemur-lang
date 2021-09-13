@@ -1,4 +1,4 @@
-grammar Avrlang;
+grammar Lemur;
 
 @header {
     #include <vector>

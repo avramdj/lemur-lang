@@ -2,8 +2,8 @@
 // Created by avram on 11.9.21..
 //
 
-#ifndef AVRLANG_ASTUTIL_H
-#define AVRLANG_ASTUTIL_H
+#ifndef LEMUR_ASTUTIL_H
+#define LEMUR_ASTUTIL_H
 
 #include <string>
 #include "llvm/IR/Value.h"
@@ -17,4 +17,4 @@ Value *getPtrToMember(const std::string& Name, const std::string& Sub);
 Value *getPtrToValue(const std::string& Name, const std::string& Sub);
 Value *GetMemberPointer(const std::string& Name, const std::string& Var);
 
-#endif //AVRLANG_ASTUTIL_H
+#endif //LEMUR_ASTUTIL_H

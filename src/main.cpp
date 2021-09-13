@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include <antlr4-runtime.h>
-#include <AvrlangLexer.h>
-#include <AvrlangParser.h>
+#include <LemurLexer.h>
+#include <LemurParser.h>
 #include <ASTBuilder.hpp>
 #include <ParserErrorListener.h>
 #include <context.h>
@@ -23,14 +23,14 @@ int main(int argc, char *argv[]) {
                     std::istreambuf_iterator<char>());
 
     antlr4::ANTLRInputStream input(str);
-    AvrlangLexer lexer(&input);
+    LemurLexer lexer(&input);
     antlr4::CommonTokenStream tokens(&lexer);
 
     ParserErrorListener errorListner;
 
     tokens.fill();
 
-    AvrlangParser parser(&tokens);
+    LemurParser parser(&tokens);
     parser.removeErrorListeners();
     parser.addErrorListener(&errorListner);
     try {

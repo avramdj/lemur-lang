@@ -2,8 +2,8 @@
 // Created by avram on 30.8.21..
 //
 
-#ifndef AVRLANG_MODULE_H
-#define AVRLANG_MODULE_H
+#ifndef LEMUR_MODULE_H
+#define LEMUR_MODULE_H
 
 #include <map>
 #include "llvm/IR/IRBuilder.h"
@@ -77,4 +77,4 @@ namespace backend {
     };
 }
 
-#endif //AVRLANG_MODULE_H
+#endif //LEMUR_MODULE_H

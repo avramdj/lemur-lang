@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
 set(CMAKE_CXX_STANDARD 14)
-set(PROJECT_NAME avrlang)
+set(PROJECT_NAME lemur)
 project(${PROJECT_NAME})
 
 #execute_process(
 #        COMMAND
-#        antlr4 -Dlanguage=Cpp -o ${PROJECT_SOURCE_DIR}/src/generated/ ${PROJECT_SOURCE_DIR}/src/grammar/Avrlang.g4)
+#        antlr4 -Dlanguage=Cpp -o ${PROJECT_SOURCE_DIR}/src/generated/ ${PROJECT_SOURCE_DIR}/src/grammar/Lemur.g4)
 #execute_process(
 #        COMMAND
 #        llvm-config-12 --cxxflags

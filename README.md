@@ -66,7 +66,7 @@ Class objects passed by reference
 * `make`
 
 ### Run
-* `./avrlang source_file | llc -o out_name`
+* `./lemur source_file | llc -o out_name`
 
 ### TODO
 * <strike> *AST class hierarchy* </strike>

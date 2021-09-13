@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/avrlang.iml" filepath="$PROJECT_DIR$/.idea/avrlang.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/lemur.iml" filepath="$PROJECT_DIR$/.idea/lemur.iml" />
     </modules>
   </component>
 </project>

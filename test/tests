@@ -6,6 +6,6 @@ TESTS=$(ls "$DIR" | grep -P '^test_\d+$')
 
 for i in $TESTS
 
-do ($DIR/run $DIR/../avrlang $i &> /dev/null && echo $i OK) || echo $i FAILED
+do ($DIR/run $DIR/../lemur $i &> /dev/null && echo $i OK) || echo $i FAILED
 
 done

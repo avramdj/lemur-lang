@@ -1,4 +1,4 @@
-// Generated from /home/avram/Desktop/dev/avrlang/src/grammar/Avrlang.g4 by ANTLR 4.8
+// Generated from /home/avram/Desktop/dev/lemur/src/grammar/Lemur.g4 by ANTLR 4.8
 
     #include <iostream>
     #include <ast.hpp>
@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class AvrlangParser extends Parser {
+public class LemurParser extends Parser {
 	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -77,7 +77,7 @@ public class AvrlangParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Avrlang.g4"; }
+	public String getGrammarFileName() { return "Lemur.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -88,22 +88,22 @@ public class AvrlangParser extends Parser {
 	@Override
 	public ATN getATN() { return _ATN; }
 
-	public AvrlangParser(TokenStream input) {
+	public LemurParser(TokenStream input) {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	public static class FileContext extends ParserRuleContext {
-		public TerminalNode EOF() { return getToken(AvrlangParser.EOF, 0); }
+		public TerminalNode EOF() { return getToken(LemurParser.EOF, 0); }
 		public List<GlobalstmtContext> globalstmt() {
 			return getRuleContexts(GlobalstmtContext.class);
 		}
 		public GlobalstmtContext globalstmt(int i) {
 			return getRuleContext(GlobalstmtContext.class,i);
 		}
-		public List<TerminalNode> NEWLINE() { return getTokens(AvrlangParser.NEWLINE); }
+		public List<TerminalNode> NEWLINE() { return getTokens(LemurParser.NEWLINE); }
 		public TerminalNode NEWLINE(int i) {
-			return getToken(AvrlangParser.NEWLINE, i);
+			return getToken(LemurParser.NEWLINE, i);
 		}
 		public FileContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -193,7 +193,7 @@ public class AvrlangParser extends Parser {
 	}
 
 	public static class FunctiondefContext extends ParserRuleContext {
-		public TerminalNode NAME() { return getToken(AvrlangParser.NAME, 0); }
+		public TerminalNode NAME() { return getToken(LemurParser.NAME, 0); }
 		public FunctiondefContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}

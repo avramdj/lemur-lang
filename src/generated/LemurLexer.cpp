@@ -3,52 +3,52 @@
     #include <string>
 
 
-// Generated from Avrlang.g4 by ANTLR 4.7.2
+// Generated from Lemur.g4 by ANTLR 4.7.2
 
 
-#include "AvrlangLexer.h"
+#include "LemurLexer.h"
 
 
 using namespace antlr4;
 
 
-AvrlangLexer::AvrlangLexer(CharStream *input) : Lexer(input) {
+LemurLexer::LemurLexer(CharStream *input) : Lexer(input) {
   _interpreter = new atn::LexerATNSimulator(this, _atn, _decisionToDFA, _sharedContextCache);
 }
 
-AvrlangLexer::~AvrlangLexer() {
+LemurLexer::~LemurLexer() {
   delete _interpreter;
 }
 
-std::string AvrlangLexer::getGrammarFileName() const {
-  return "Avrlang.g4";
+std::string LemurLexer::getGrammarFileName() const {
+  return "Lemur.g4";
 }
 
-const std::vector<std::string>& AvrlangLexer::getRuleNames() const {
+const std::vector<std::string>& LemurLexer::getRuleNames() const {
   return _ruleNames;
 }
 
-const std::vector<std::string>& AvrlangLexer::getChannelNames() const {
+const std::vector<std::string>& LemurLexer::getChannelNames() const {
   return _channelNames;
 }
 
-const std::vector<std::string>& AvrlangLexer::getModeNames() const {
+const std::vector<std::string>& LemurLexer::getModeNames() const {
   return _modeNames;
 }
 
-const std::vector<std::string>& AvrlangLexer::getTokenNames() const {
+const std::vector<std::string>& LemurLexer::getTokenNames() const {
   return _tokenNames;
 }
 
-dfa::Vocabulary& AvrlangLexer::getVocabulary() const {
+dfa::Vocabulary& LemurLexer::getVocabulary() const {
   return _vocabulary;
 }
 
-const std::vector<uint16_t> AvrlangLexer::getSerializedATN() const {
+const std::vector<uint16_t> LemurLexer::getSerializedATN() const {
   return _serializedATN;
 }
 
-const atn::ATN& AvrlangLexer::getATN() const {
+const atn::ATN& LemurLexer::getATN() const {
   return _atn;
 }
 
@@ -56,14 +56,14 @@ const atn::ATN& AvrlangLexer::getATN() const {
 
 
 // Static vars and initialization.
-std::vector<dfa::DFA> AvrlangLexer::_decisionToDFA;
-atn::PredictionContextCache AvrlangLexer::_sharedContextCache;
+std::vector<dfa::DFA> LemurLexer::_decisionToDFA;
+atn::PredictionContextCache LemurLexer::_sharedContextCache;
 
 // We own the ATN which in turn owns the ATN states.
-atn::ATN AvrlangLexer::_atn;
-std::vector<uint16_t> AvrlangLexer::_serializedATN;
+atn::ATN LemurLexer::_atn;
+std::vector<uint16_t> LemurLexer::_serializedATN;
 
-std::vector<std::string> AvrlangLexer::_ruleNames = {
+std::vector<std::string> LemurLexer::_ruleNames = {
   u8"T__0", u8"T__1", u8"T__2", u8"T__3", u8"T__4", u8"T__5", u8"T__6", 
   u8"T__7", u8"T__8", u8"UMINUS", u8"FOR", u8"IN", u8"CLASS", u8"ARROW", 
   u8"DEF", u8"PRINT", u8"OPEN", u8"CLOSED", u8"LEFTBRACE", u8"RIGHTBRACE", 
@@ -72,15 +72,15 @@ std::vector<std::string> AvrlangLexer::_ruleNames = {
   u8"NAME", u8"INT", u8"FLOAT", u8"STRING", u8"ESC", u8"WHITESPACE", u8"COMMENT"
 };
 
-std::vector<std::string> AvrlangLexer::_channelNames = {
+std::vector<std::string> LemurLexer::_channelNames = {
   "DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 };
 
-std::vector<std::string> AvrlangLexer::_modeNames = {
+std::vector<std::string> LemurLexer::_modeNames = {
   u8"DEFAULT_MODE"
 };
 
-std::vector<std::string> AvrlangLexer::_literalNames = {
+std::vector<std::string> LemurLexer::_literalNames = {
   "", u8"':'", u8"','", u8"'.'", u8"'='", u8"'['", u8"']'", u8"'+'", u8"'*'", 
   u8"'/'", u8"'-'", u8"'for'", u8"'in'", u8"'class'", u8"'<-'", u8"'def'", 
   u8"'print'", u8"'('", u8"')'", u8"'{'", u8"'}'", u8"'return'", u8"'while'", 
@@ -88,7 +88,7 @@ std::vector<std::string> AvrlangLexer::_literalNames = {
   u8"'not'", u8"'>'", u8"'>='", u8"'<'", u8"'<='", u8"'=='", u8"'!='", u8"'\n'"
 };
 
-std::vector<std::string> AvrlangLexer::_symbolicNames = {
+std::vector<std::string> LemurLexer::_symbolicNames = {
   "", "", "", "", "", "", "", "", "", "", u8"UMINUS", u8"FOR", u8"IN", u8"CLASS", 
   u8"ARROW", u8"DEF", u8"PRINT", u8"OPEN", u8"CLOSED", u8"LEFTBRACE", u8"RIGHTBRACE", 
   u8"RET", u8"WHILE", u8"IF", u8"ELSE", u8"AND", u8"OR", u8"XOR", u8"SHL", 
@@ -96,11 +96,11 @@ std::vector<std::string> AvrlangLexer::_symbolicNames = {
   u8"NAME", u8"INT", u8"FLOAT", u8"STRING", u8"WHITESPACE", u8"COMMENT"
 };
 
-dfa::Vocabulary AvrlangLexer::_vocabulary(_literalNames, _symbolicNames);
+dfa::Vocabulary LemurLexer::_vocabulary(_literalNames, _symbolicNames);
 
-std::vector<std::string> AvrlangLexer::_tokenNames;
+std::vector<std::string> LemurLexer::_tokenNames;
 
-AvrlangLexer::Initializer::Initializer() {
+LemurLexer::Initializer::Initializer() {
   // This code could be in a static initializer lambda, but VS doesn't allow access to private class members from there.
 	for (size_t i = 0; i < _symbolicNames.size(); ++i) {
 		std::string name = _vocabulary.getLiteralName(i);
@@ -301,4 +301,4 @@ AvrlangLexer::Initializer::Initializer() {
   }
 }
 
-AvrlangLexer::Initializer AvrlangLexer::_init;
+LemurLexer::Initializer LemurLexer::_init;
