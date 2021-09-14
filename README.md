@@ -78,4 +78,3 @@ Class objects passed by reference
 * <strike> *type infrastructure* </strike>
 * advanced OOP concepts
 * JIT support
-* vscode extension (???)
