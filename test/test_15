@@ -26,7 +26,7 @@ def changeA(A tmp) {
 
 def main() {
 	A a
-	return
+#	return
 	a.c = 5.0
 	print(a.c)
 	a.setC(60.0)
