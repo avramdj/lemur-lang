@@ -77,4 +77,5 @@ Class objects passed by reference
 * <strike> *string support* </strike>
 * <strike> *type infrastructure* </strike>
 * advanced OOP concepts
+* garbage collector
 * JIT support
