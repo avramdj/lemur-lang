@@ -1,5 +1,7 @@
 rename.sh
+test/out*.log
 lemur
+lemur.cbp
 TODO.txt
 antlr4_runtime
 avrlang.cbp

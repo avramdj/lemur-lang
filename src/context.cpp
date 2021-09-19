@@ -21,7 +21,7 @@
 #include <llvm/Support/TargetRegistry.h>
 #include "llvm/Support/FileSystem.h"
 
-#define _DISABLE_OPTS_ 1
+//#define _DISABLE_OPTS_ 1
 #define VOID_BITS 11
 
 using namespace llvm;
