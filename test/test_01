@@ -1,5 +1,4 @@
-# jezik podrzava jednolinijske komentare
-# i obavezno ima main funkciju
+#comment
 
 def main() : int {
     print(16 + 1.3)
