@@ -57,6 +57,8 @@ Weakly typed.
 
 Class objects are passed by reference.
 
+Built-in types: `int`, `float`, `bool`, `string`
+
 
 ### Dependencies
 * LLVM-12
