@@ -9,8 +9,8 @@ class Base {
     float x
     string message
     
-    def Base(float _x) {
-        x = _x
+    def Base(float x) {
+        this.x = x
     }
     def setMessage(string s) {
         message = s
