@@ -18,40 +18,44 @@ class ExprAST {
   virtual ~ExprAST();
 
   virtual Value *codegen() const = 0;
+  virtual bool wellFormed() = 0;
 };
 
 class IntExprAST : public ExprAST {
  public:
-  explicit IntExprAST(int v) : Val(v) {}
+  explicit IntExprAST(int v) : val_(v) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
-  int Val;
+  int val_;
 };
 
 class FloatExprAST : public ExprAST {
  public:
-  explicit FloatExprAST(float v) : Val(v) {}
+  explicit FloatExprAST(float v) : val_(v) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
-  float Val;
+  float val_;
 };
 
 class VariableExprAST : public ExprAST {
  public:
-  explicit VariableExprAST(std::string n) : Name(std::move(n)) {}
+  explicit VariableExprAST(std::string n) : name_(std::move(n)) {}
 
   VariableExprAST(std::string n, std::string s)
-      : Name(std::move(n)), Sub(std::move(s)) {}
+      : name_(std::move(n)), sub_(std::move(s)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
-  std::string Name;
-  std::string Sub;
+  std::string name_;
+  std::string sub_;
 };
 
 class InnerExprAST : public ExprAST {
@@ -71,7 +75,7 @@ class InnerExprAST : public ExprAST {
   ~InnerExprAST() override;
 
  protected:
-  std::vector<std::shared_ptr<ExprAST>> _nodes;
+  std::vector<std::shared_ptr<ExprAST>> nodes_;
 
  private:
   InnerExprAST(const InnerExprAST &i);
@@ -85,6 +89,7 @@ class AndExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a), std::move(b)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class OrExprAST : public InnerExprAST {
@@ -93,6 +98,7 @@ class OrExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a), std::move(b)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class XorExprAST : public InnerExprAST {
@@ -101,6 +107,7 @@ class XorExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a), std::move(b)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class ShlExprAST : public InnerExprAST {
@@ -109,6 +116,7 @@ class ShlExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a), std::move(b)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class ShrExprAST : public InnerExprAST {
@@ -117,6 +125,7 @@ class ShrExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a), std::move(b)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class NotExprAST : public InnerExprAST {
@@ -125,6 +134,7 @@ class NotExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class PrintExprAST : public InnerExprAST {
@@ -133,45 +143,49 @@ class PrintExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class VarDeclExprAST : public ExprAST {
  public:
   VarDeclExprAST(std::string type, std::string name)
-      : Type(std::move(type)), Name(std::move(name)) {}
+      : type_(std::move(type)), name_(std::move(name)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
-  std::string Name;
-  std::string Type;
+  std::string name_;
+  std::string type_;
 };
 
 class DeclAssignExprAST : public InnerExprAST {
  public:
   DeclAssignExprAST(std::string t, std::string n, std::shared_ptr<ExprAST> a)
-      : Type(std::move(t)), Name(std::move(n)), InnerExprAST(a) {}
+      : type_(std::move(t)), name_(std::move(n)), InnerExprAST(a) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
-  std::string Type;
-  std::string Name;
+  std::string type_;
+  std::string name_;
 };
 
 class SetExprAST : public InnerExprAST {
  public:
   SetExprAST(std::shared_ptr<ExprAST> a, std::string n)
-      : InnerExprAST(std::move(a)), Name(std::move(n)) {}
+      : InnerExprAST(std::move(a)), name_(std::move(n)) {}
 
   SetExprAST(std::shared_ptr<ExprAST> a, std::string n, std::string s)
-      : InnerExprAST(std::move(a)), Name(std::move(n)), Sub(std::move(s)) {}
+      : InnerExprAST(std::move(a)), name_(std::move(n)), sub_(std::move(s)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
-  std::string Name;
-  std::string Sub;
+  std::string name_;
+  std::string sub_;
 };
 
 class SeqExprAST : public InnerExprAST {
@@ -180,71 +194,84 @@ class SeqExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
   void add(std::shared_ptr<ExprAST> node);
 };
 
-class FunctionDefAST : ExprAST {
+class FileAST : public SeqExprAST {
+ public:
+  explicit FileAST(std::vector<std::shared_ptr<ExprAST>> a)
+      : SeqExprAST(std::move(a)) {}
+
+  Value *codegen() const override;
+  bool wellFormed() override;
+};
+
+class FunctionDefAST : public ExprAST {
  public:
   FunctionDefAST(std::string n, std::vector<std::string> t,
-                 std::vector<std::string> p, std::string retT,
+                 std::vector<std::string> p, std::string ret_t,
                  std::shared_ptr<ExprAST> b, bool isMem = false)
-      : name(std::move(n)),
-        paramTypes(std::move(t)),
-        parameters(std::move(p)),
-        retType(std::move(retT)),
-        body(std::move(b)),
-        isMember(isMem) {}
+      : name_(std::move(n)),
+        param_types_(std::move(t)),
+        param_names_(std::move(p)),
+        ret_type_(std::move(ret_t)),
+        body_(std::move(b)),
+        is_member_(isMem) {}
 
   std::string getName() const;
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
-  std::string name;
-  std::string retType;
-  std::shared_ptr<ExprAST> body;
-  bool isMember;
+  std::string name_;
+  std::string ret_type_;
+  std::shared_ptr<ExprAST> body_;
+  bool is_member_;
 
  protected:
-  std::vector<std::string> parameters;
-  std::vector<std::string> paramTypes;
+  std::vector<std::string> param_names_;
+  std::vector<std::string> param_types_;
 };
 
 class CallExprAST : public ExprAST {
  public:
   CallExprAST(std::string s, std::vector<std::shared_ptr<ExprAST>> v)
-      : Callee(std::move(s)), Args(std::move(v)) {}
+      : callee_(std::move(s)), args_(std::move(v)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
   CallExprAST(const CallExprAST &);
 
   CallExprAST &operator=(const CallExprAST &);
 
-  std::string Callee;
-  std::vector<std::shared_ptr<ExprAST>> Args;
+  std::string callee_;
+  std::vector<std::shared_ptr<ExprAST>> args_;
 };
 
 class MethodCallExprAST : public ExprAST {
  public:
-  MethodCallExprAST(std::string vName, std::string mthName,
+  MethodCallExprAST(std::string name, std::string method,
                     std::vector<std::shared_ptr<ExprAST>> v)
-      : Name(std::move(vName)),
-        Method(std::move(mthName)),
-        Args(std::move(v)) {}
+      : name_(std::move(name)),
+        method_(std::move(method)),
+        args_(std::move(v)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
   MethodCallExprAST(const MethodCallExprAST &);
 
   MethodCallExprAST &operator=(const MethodCallExprAST &);
 
-  std::string Name;
-  std::string Method;
-  std::vector<std::shared_ptr<ExprAST>> Args;
+  std::string name_;
+  std::string method_;
+  std::vector<std::shared_ptr<ExprAST>> args_;
 };
 
 class AddExprAST : public InnerExprAST {
@@ -253,6 +280,7 @@ class AddExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class SubExprAST : public InnerExprAST {
@@ -261,6 +289,7 @@ class SubExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class MulExprAST : public InnerExprAST {
@@ -269,6 +298,7 @@ class MulExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class DivExprAST : public InnerExprAST {
@@ -277,6 +307,7 @@ class DivExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class LtExprAST : public InnerExprAST {
@@ -285,6 +316,7 @@ class LtExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class GtExprAST : public InnerExprAST {
@@ -293,6 +325,7 @@ class GtExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class LteExprAST : public InnerExprAST {
@@ -301,6 +334,7 @@ class LteExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class GteExprAST : public InnerExprAST {
@@ -309,6 +343,7 @@ class GteExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class NeqExprAST : public InnerExprAST {
@@ -317,6 +352,7 @@ class NeqExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class EqExprAST : public InnerExprAST {
@@ -325,44 +361,50 @@ class EqExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 };
 
 class WhileExprAST : public ExprAST {
  public:
   WhileExprAST(std::shared_ptr<ExprAST> c, std::shared_ptr<ExprAST> b)
-      : cond(std::move(c)), block(std::move(b)) {}
+      : cond_(std::move(c)), block_(std::move(b)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
-  std::shared_ptr<ExprAST> cond;
-  std::shared_ptr<ExprAST> block;
+  std::shared_ptr<ExprAST> cond_;
+  std::shared_ptr<ExprAST> block_;
 };
 
 class IfExprAST : public ExprAST {
  public:
   IfExprAST(std::shared_ptr<ExprAST> c, std::shared_ptr<ExprAST> b)
-      : cond(std::move(c)), block(std::move(b)) {}
+      : cond_(std::move(c)), block_(std::move(b)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
-  std::shared_ptr<ExprAST> cond;
-  std::shared_ptr<ExprAST> block;
+  std::shared_ptr<ExprAST> cond_;
+  std::shared_ptr<ExprAST> block_;
 };
 
 class IfElseExprAST : public ExprAST {
  public:
   IfElseExprAST(std::shared_ptr<ExprAST> c, std::shared_ptr<ExprAST> t,
                 std::shared_ptr<ExprAST> e)
-      : cond(std::move(c)), thenBlock(std::move(t)), elseBlock(std::move(e)) {}
+      : cond_(std::move(c)),
+        then_block_(std::move(t)),
+        else_block_(std::move(e)) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
-  std::shared_ptr<ExprAST> cond;
-  std::shared_ptr<ExprAST> thenBlock;
-  std::shared_ptr<ExprAST> elseBlock;
+  std::shared_ptr<ExprAST> cond_;
+  std::shared_ptr<ExprAST> then_block_;
+  std::shared_ptr<ExprAST> else_block_;
 };
 
 class RetExprAST : public ExprAST {
@@ -372,6 +414,7 @@ class RetExprAST : public ExprAST {
   RetExprAST() : v(nullptr) {}
 
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
   std::shared_ptr<ExprAST> v;
@@ -379,35 +422,37 @@ class RetExprAST : public ExprAST {
 
 class StringExprAST : public ExprAST {
  public:
-  explicit StringExprAST(std::string s) : Str(std::move(s)) {}
+  explicit StringExprAST(std::string s) : str_(std::move(s)) {}
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
-  std::string Str;
+  std::string str_;
 };
 
 class ClassDefExprAST : public ExprAST {
  public:
-  ClassDefExprAST(std::string name, std::string baseName,
+  ClassDefExprAST(std::string name, std::string base_name,
                   std::vector<std::string> &ts, std::vector<std::string> &vs,
                   std::vector<FunctionDefAST *> fs)
-      : Name(std::move(name)),
-        BaseName(std::move(baseName)),
-        types(ts),
-        vars(vs),
-        functions(std::move(fs)){};
+      : name_(std::move(name)),
+        base_name_(std::move(base_name)),
+        types_(ts),
+        vars_(vs),
+        functions_(std::move(fs)){};
   Value *codegen() const override;
+  bool wellFormed() override;
 
  private:
-  std::string Name;
-  std::string BaseName;
-  std::vector<std::string> types;
-  std::vector<std::string> vars;
-  std::vector<FunctionDefAST *> functions;
+  std::string name_;
+  std::string base_name_;
+  std::vector<std::string> types_;
+  std::vector<std::string> vars_;
+  std::vector<FunctionDefAST *> functions_;
 };
 
-AllocaInst *CreateEntryBlockAlloca(Type *t, Function *TheFunction,
-                                   const std::string &VarName);
+AllocaInst *CreateEntryBlockAlloca(Type *t, Function *the_function,
+                                   const std::string &var_name);
 bool isRet(Value *tmp);
 
 }  // namespace backend

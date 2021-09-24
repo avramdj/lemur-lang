@@ -16,9 +16,9 @@ classbody: (classvardecl | classfunctiondef | NEWLINE)*;
 
 classvardecl : typeName=NAME varName=NAME;
 
-classfunctiondef : DEF fName=NAME OPEN params=paramlist CLOSED (':' retType=NAME)? body=block;
+classfunctiondef : DEF fName=NAME OPEN params=paramlist CLOSED (':' ret_type_=NAME)? body=block;
 
-functiondef : DEF fName=NAME OPEN params=paramlist CLOSED (':' retType=NAME)? body=block;
+functiondef : DEF fName=NAME OPEN params=paramlist CLOSED (':' ret_type_=NAME)? body=block;
 
 paramlist returns [std::vector<std::string> types, std::vector<std::string> vars]
  : (
@@ -44,9 +44,9 @@ whileloop : WHILE bracedexpr block;
 
 forloop : FOR '(' varName=NAME IN listName=expr block;
 
-ifExpr : IF cond=bracedexpr then=block;
+ifExpr : IF cond_=bracedexpr then=block;
 
-ifElseExpr : IF cond=bracedexpr block (NEWLINE)* ELSE block;
+ifElseExpr : IF cond_=bracedexpr block (NEWLINE)* ELSE block;
 
 expr : number #NumberRule |
     UMINUS expr #UminusRule |

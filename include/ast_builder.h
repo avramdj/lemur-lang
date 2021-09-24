@@ -2,7 +2,7 @@
 // Created by avram on 30.8.21..
 //
 
-#include <LemurBaseVisitor.h>
+#include "LemurBaseVisitor.h"
 
 class ASTBuilder : public LemurBaseVisitor {
   antlrcpp::Any visitFile(LemurParser::FileContext *ctx) override;

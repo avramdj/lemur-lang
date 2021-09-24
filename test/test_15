@@ -1,3 +1,4 @@
+
 class A {
 	int x
 	float y
@@ -13,17 +14,14 @@ class A {
 		this.c = c
 	}
 }
-
 def mkA() : A {
 	A b
 	b.setC(10000.0)
 	return b
 }
-
 def changeA(A tmp) {
 	tmp.c = 42.0
 }
-
 def main() {
 	A a
 #	return

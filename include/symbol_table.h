@@ -5,31 +5,61 @@
 #ifndef LEMUR_INCLUDE_SYMBOL_TABLE_H_
 #define LEMUR_INCLUDE_SYMBOL_TABLE_H_
 
-#include <memory>
 #include <map>
+#include <memory>
 #include <utility>
-#include "llvm/IR/Value.h"
+
+#include "context.h"
+#include "types.h"
 
 namespace backend {
+template <class T>
 class SymbolTable {
  public:
-  void pushScope();
-  void popScope();
-  void set(const std::string& name, llvm::Value* alloca);
-  llvm::Value* get(const std::string& name);
-  llvm::Value* operator[](const std::string& name);
-  bool isInCurrentScope(const std::string& name);
-
-  void swapLastTwo();
+  void pushScope() {
+    auto tmpScope = currentScope;
+    currentScope = Scope::get();
+    currentScope->parent = tmpScope;
+  }
+  void popScope() {
+    currentScope = currentScope ? currentScope->parent : nullptr;
+  }
+  T operator[](const std::string& name) {
+    auto searchScope = currentScope;
+    while (searchScope) {
+      auto it = searchScope->symbols.find(name);
+      if (it != searchScope->symbols.end()) {
+        return it->second;
+      }
+      searchScope = searchScope->parent;
+    }
+    return T();
+  }
+  void set(const std::string& name, T val) {
+    currentScope->symbols[name] = val;
+  }
+  T get(const std::string& name) { return operator[](name); }
+  bool isInCurrentScope(const std::string& name) {
+    return currentScope->symbols.find(name) != currentScope->symbols.end();
+  }
+  void clear() { currentScope = nullptr; }
+  void swapLastTwo() {
+    auto curr = currentScope;
+    auto prev = currentScope->parent;
+    curr->parent = prev->parent;
+    prev->parent = curr;
+    currentScope = prev;
+  }
 
  private:
   struct Scope {
     std::shared_ptr<Scope> parent;
-    std::map<std::string, llvm::Value*> symbols;
+    std::map<std::string, T> symbols;
     static std::shared_ptr<Scope> get() { return std::make_shared<Scope>(); };
     explicit Scope() = default;
     explicit Scope(Scope* parent_) : parent(std::make_shared<Scope>(parent_)) {}
-    explicit Scope(std::shared_ptr<Scope> parent_) : parent(std::move(parent_)) {}
+    explicit Scope(std::shared_ptr<Scope> parent_)
+        : parent(std::move(parent_)) {}
   };
 
   std::shared_ptr<Scope> currentScope = nullptr;

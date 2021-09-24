@@ -35,7 +35,7 @@ Value *backend::getPtrToValue(const std::string &Name, const std::string &Sub) {
   return getPtrToMember(Name, Sub);
 }
 Value *backend::getPtrToPrim(const std::string &Name) {
-  Value *Alloca = NamedValues[Name];
+  Value *Alloca = named_values[Name];
   if (!Alloca) {
     std::cerr << "Variable " << Name << " undefined" << std::endl;
     return nullptr;
@@ -44,7 +44,7 @@ Value *backend::getPtrToPrim(const std::string &Name) {
 }
 Value *backend::getPtrToMember(const std::string &Name,
                                const std::string &Sub) {
-  Value* tmp = NamedValues[Name];
+  Value* tmp = named_values[Name];
   if (tmp == nullptr) {
     std::cerr << "Variable " + Name + " is undefined" << std::endl;
     return nullptr;
@@ -70,7 +70,7 @@ Value *backend::getPtrToMember(const std::string &Name,
 }
 Value *backend::GetMemberPointer(const std::string &Name,
                                  const std::string &Var) {
-  Value *tmp = NamedValues[Name];
+  Value *tmp = named_values[Name];
   if (tmp == nullptr) {
     std::cerr << "Variable " + Name + " is undefined" << std::endl;
     return nullptr;

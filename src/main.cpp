@@ -1,12 +1,14 @@
-#include <LemurLexer.h>
-#include <LemurParser.h>
 #include <antlr4-runtime.h>
-#include <ast_builder.h>
-#include <context.h>
-#include <parser_error_listener.h>
 
 #include <iostream>
 #include <string>
+
+#include "LemurLexer.h"
+#include "LemurParser.h"
+#include "ast_builder.h"
+#include "ast_core.h"
+#include "context.h"
+#include "parser_error_listener.h"
 
 int main(int argc, char* argv[]) {
   bool printIR = true;
@@ -35,8 +37,13 @@ int main(int argc, char* argv[]) {
   try {
     antlr4::tree::ParseTree* tree = parser.file();
     ASTBuilder builder;
-    builder.visit(tree);
-    backend::printModule(outPath, printIR);
+    std::shared_ptr<backend::FileAST> root = builder.visit(tree);
+    bool isSuccess = backend::compile(root);
+    if (isSuccess) {
+      backend::printModule(outPath, printIR);
+    } else {
+      exit(-1);
+    }
     return 0;
   } catch (std::invalid_argument& e) {
     std::cout << e.what() << std::endl;
