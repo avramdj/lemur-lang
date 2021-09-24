@@ -42,6 +42,6 @@ file(GLOB SOURCES "src/*.cpp" "src/generated/*.cpp" "libs/antlr/runtime/src/supp
 include_directories( include/ src/generated libs/antlr/runtime/src )
 
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${antlr4cpp_src_files_antlrcpptest} src/ASTBuilder.cpp include/ASTBuilder.h src/ParserErrorListener.cpp include/ParserErrorListener.h src/context.cpp include/context.h include/ASTUtil.h src/ASTUtil.cpp include/SymbolTable.h src/SymbolTable.cpp)
+add_executable(${PROJECT_NAME} ${SOURCES} ${antlr4cpp_src_files_antlrcpptest} src/ast_builder.cpp include/ast_builder.h src/parser_error_listener.cpp include/parser_error_listener.h src/context.cpp include/context.h include/ast_util.h src/ast_util.cpp include/symbol_table.h src/symbol_table.cpp)
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 #add_dependencies(${PROJECT_NAME}  antlr4cpp antlr4cpp_generation_antlrcpptest)

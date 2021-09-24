@@ -5,25 +5,27 @@
 #ifndef LEMUR_MODULE_H
 #define LEMUR_MODULE_H
 
-#include <SymbolTable.h>
+#include <symbol_table.h>
 
 #include <map>
 #include <utility>
 
 #include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Instructions.h"
+#include "llvm/IR/LegacyPassManager.h"
 
 using namespace llvm;
 using namespace legacy;
 
 namespace backend {
 namespace types {
-extern std::map<std::string, Type *> typeTable;
-extern std::map<Type *, std::string> typeNames;
-extern std::map<std::string, std::map<std::string, unsigned>> classVarTable;
-extern std::map<std::string, std::map<std::string, Type *>> classVarTypeTable;
-extern std::map<std::string, std::vector<std::string>> classFnTable;
+inline namespace class_meta {
+extern std::map<std::string, std::map<std::string, unsigned>> class_var_table;
+extern std::map<std::string, std::map<std::string, Type *>> class_var_types;
+extern std::map<std::string, std::vector<std::string>> class_functions;
+}  // namespace class_meta
+extern std::map<std::string, Type *> type_table;
+extern std::map<Type *, std::string> type_names;
 Value *getTypeConstant(Type *, float);
 Value *getTypeConstant(std::string, float);
 Type *getType(std::string name);
@@ -35,18 +37,20 @@ Value *getStructSize(Type *t);
 bool isVoid(const std::string &typeName);
 bool isVoid(Type *type);
 }  // namespace types
-typedef AllocaInst* AllocaPtr;
+typedef AllocaInst *AllocaPtr;
 extern Module *TheModule;
 extern LLVMContext TheContext;
 extern IRBuilder<> Builder;
 extern llvm::legacy::FunctionPassManager *TheFPM;
-extern Function *PrintFun;
-extern Function *MallocFun;
-extern Function *FreeFun;
+namespace libc {
+extern Function *print;
+extern Function *malloc;
+extern Function *free;
+}  // namespace libc
 
-extern Value *strIntFormat;
-extern Value *strFloatFormat;
-extern Value *strFormat;
+extern Value *str_int_format;
+extern Value *str_float_format;
+extern Value *str_format;
 
 extern SymbolTable NamedValues;
 

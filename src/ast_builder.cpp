@@ -2,9 +2,9 @@
 // Created by avram on 30.8.21..
 //
 
-#include <AST.h>
-#include <ASTBuilder.h>
-#include <ASTUtil.h>
+#include <ast.h>
+#include <ast_builder.h>
+#include <ast_util.h>
 #include <context.h>
 
 antlrcpp::Any ASTBuilder::visitFile(LemurParser::FileContext *ctx) {

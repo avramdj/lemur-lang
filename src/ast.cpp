@@ -1,5 +1,5 @@
-#include <AST.h>
-#include <ASTUtil.h>
+#include <ast.h>
+#include <ast_util.h>
 #include <context.h>
 
 #include <iostream>
@@ -160,27 +160,27 @@ Value *NotExprAST::codegen() const {
 Value *PrintExprAST::codegen() const {
   Value *l = _nodes[0]->codegen();
   if (l == nullptr) return nullptr;
-  vector<Value *> ArgsV;
+  vector<Value *> args_v;
   Type *t = l->getType();
   Value *ftm;
-  if (!strFormat) {
+  if (!str_format) {
     InitializeStrings();
   }
   if (t == types::getType("int")) {
-    ftm = strIntFormat;
+    ftm = str_int_format;
   } else if (t == types::getType("float")) {
-    ftm = strFloatFormat;
+    ftm = str_float_format;
   } else if (t == types::getType("string")) {
-    ftm = strFormat;
+    ftm = str_format;
   } else if (t == types::getType("bool")) {
-    ftm = strIntFormat;
+    ftm = str_int_format;
   } else {
     std::cerr << "Unknown type cast to string" << std::endl;
     return nullptr;
   }
-  ArgsV.push_back(ftm);
-  ArgsV.push_back(l);
-  Builder.CreateCall(PrintFun, ArgsV, "printfCall");
+  args_v.push_back(ftm);
+  args_v.push_back(l);
+  Builder.CreateCall(libc::print, args_v, "printCall");
   return l;
 }
 
@@ -205,7 +205,7 @@ Value *VarDeclExprAST::codegen() const {
   AllocaInst *Alloca = CreateEntryBlockAlloca(t, F, Name);
   if (types::isClassType(t)) {
     Value *structSizeVal = types::getStructSize(t);
-    Value *StructAllocaRaw = Builder.CreateCall(MallocFun, structSizeVal);
+    Value *StructAllocaRaw = Builder.CreateCall(libc::malloc, structSizeVal);
     Value *StructAlloca = Builder.CreateBitCast(StructAllocaRaw, t);
     Builder.CreateStore(StructAlloca, Alloca);
   }
@@ -286,8 +286,8 @@ Value *FunctionDefAST::codegen() const {
   if (isMember) {
     NamedValues.pushScope();
     Value *thisPtr = f->getArg(0);
-    std::string clsName = types::typeNames[thisPtr->getType()];
-    for (const auto &it : types::classVarTable[clsName]) {
+    std::string clsName = types::type_names[thisPtr->getType()];
+    for (const auto &it : types::class_var_table[clsName]) {
       const auto &memberName = it.first;
       Value *memberAddr = getPtrToMember("this", memberName);
       NamedValues.set(memberName, memberAddr);
@@ -356,8 +356,8 @@ Value *MethodCallExprAST::codegen() const {
   }
   Type *t = tmp->getType()->getPointerElementType();
 
-  auto cit = types::typeNames.find(t);
-  if (cit == types::typeNames.end()) {
+  auto cit = types::type_names.find(t);
+  if (cit == types::type_names.end()) {
     std::cerr << "Variable " << Name << " is not of class type" << std::endl;
     return nullptr;
   }
@@ -719,7 +719,7 @@ Value *StringExprAST::codegen() const {
 }
 
 Value *ClassDefExprAST::codegen() const {
-  if (types::typeTable.find(Name) != types::typeTable.end()) {
+  if (types::type_table.find(Name) != types::type_table.end()) {
     std::cerr << "Class " << Name << " already exists" << std::endl;
   }
   vector<Type *> subtypes;
@@ -728,19 +728,19 @@ Value *ClassDefExprAST::codegen() const {
     if (!t) {
       return nullptr;
     }
-    if (types::classVarTable[Name].find(vars[i]) !=
-        types::classVarTable[Name].end()) {
+    if (types::class_var_table[Name].find(vars[i]) !=
+        types::class_var_table[Name].end()) {
       std::cerr << "Class variable " << types[i] << " already defined"
                 << std::endl;
       return nullptr;
     }
     subtypes.push_back(t);
-    types::classVarTable[Name][vars[i]] = i;
-    types::classVarTypeTable[Name][vars[i]] = t;
+    types::class_var_table[Name][vars[i]] = i;
+    types::class_var_types[Name][vars[i]] = t;
   }
   StructType *classType = StructType::create(TheContext, subtypes, Name);
-  types::typeTable[Name] = classType->getPointerTo();
-  types::typeNames[types::typeTable[Name]] = Name;
+  types::type_table[Name] = classType->getPointerTo();
+  types::type_names[types::type_table[Name]] = Name;
   for (auto &f : functions) {
     f->codegen();
   }

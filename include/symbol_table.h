@@ -2,8 +2,8 @@
 // Created by avram on 24.9.21..
 //
 
-#ifndef LEMUR_INCLUDE_SYMBOLTABLE_H_
-#define LEMUR_INCLUDE_SYMBOLTABLE_H_
+#ifndef LEMUR_INCLUDE_SYMBOL_TABLE_H_
+#define LEMUR_INCLUDE_SYMBOL_TABLE_H_
 
 #include <memory>
 #include <map>
@@ -36,4 +36,4 @@ class SymbolTable {
 };
 };  // namespace backend
 
-#endif  // LEMUR_INCLUDE_SYMBOLTABLE_H_
+#endif  // LEMUR_INCLUDE_SYMBOL_TABLE_H_

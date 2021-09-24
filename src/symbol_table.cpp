@@ -1,7 +1,8 @@
 //
 // Created by avram on 24.9.21..
 //
-#include <SymbolTable.h>
+#include <symbol_table.h>
+
 #include "llvm/IR/Value.h"
 
 using namespace llvm;
@@ -28,13 +29,13 @@ Value* backend::SymbolTable::operator[](const std::string& name) {
 bool backend::SymbolTable::isInCurrentScope(const std::string& name) {
   return currentScope->symbols.find(name) != currentScope->symbols.end();
 }
-void backend::SymbolTable::set(const std::string& name, llvm::Value* alloca){
+void backend::SymbolTable::set(const std::string& name, llvm::Value* alloca) {
   currentScope->symbols[name] = alloca;
 }
-Value* backend::SymbolTable::get(const std::string& name){
+Value* backend::SymbolTable::get(const std::string& name) {
   return operator[](name);
 }
-void backend::SymbolTable::swapLastTwo(){
+void backend::SymbolTable::swapLastTwo() {
   auto curr = currentScope;
   auto prev = currentScope->parent;
   curr->parent = prev->parent;

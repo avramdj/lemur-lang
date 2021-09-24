@@ -1,13 +1,13 @@
 //
 // Created by avram on 30.8.21..
 //
-#include <AST.h>
+#include <ast.h>
 #include <context.h>
-#include <SymbolTable.h>
 #include <llvm/IR/LegacyPassManager.h>
 #include <llvm/Support/Host.h>
 #include <llvm/Support/TargetRegistry.h>
 #include <llvm/Support/TargetSelect.h>
+#include <symbol_table.h>
 
 #include <exception>
 #include <iostream>
@@ -27,22 +27,26 @@ using namespace llvm;
 
 namespace backend {
 namespace types {
-std::map<std::string, Type *> typeTable;
-std::map<Type *, std::string> typeNames;
-std::map<std::string, std::map<std::string, unsigned>> classVarTable;
-std::map<std::string, std::map<std::string, Type *>> classVarTypeTable;
-std::map<std::string, std::vector<std::string>> classFnTable;
+inline namespace class_meta {
+std::map<std::string, std::map<std::string, unsigned>> class_var_table;
+std::map<std::string, std::map<std::string, Type *>> class_var_types;
+std::map<std::string, std::vector<std::string>> class_functions;
+}  // namespace class_meta
+std::map<std::string, Type *> type_table;
+std::map<Type *, std::string> type_names;
 }  // namespace types
 Module *TheModule;
 LLVMContext TheContext;
 IRBuilder<> Builder(TheContext);
 llvm::legacy::FunctionPassManager *TheFPM;
-Function *PrintFun;
-Function *MallocFun;
-Function *FreeFun;
-Value *strIntFormat = nullptr;
-Value *strFloatFormat = nullptr;
-Value *strFormat = nullptr;
+namespace libc {
+Function *print;
+Function *malloc;
+Function *free;
+}  // namespace libc
+Value *str_int_format = nullptr;
+Value *str_float_format = nullptr;
+Value *str_format = nullptr;
 SymbolTable NamedValues;
 
 void InitializeContext() {
@@ -51,22 +55,22 @@ void InitializeContext() {
 }
 
 void InitializeStrings() {
-  strIntFormat = Builder.CreateGlobalStringPtr("%d\n");
-  strFloatFormat = Builder.CreateGlobalStringPtr("%g\n");
-  strFormat = Builder.CreateGlobalStringPtr("%s\n");
+  str_int_format = Builder.CreateGlobalStringPtr("%d\n");
+  str_float_format = Builder.CreateGlobalStringPtr("%g\n");
+  str_format = Builder.CreateGlobalStringPtr("%s\n");
 }
 
 void InitializeTypeTable() {
-  types::typeTable["int"] = Type::getInt32Ty(TheContext);
-  types::typeNames[types::typeTable["int"]] = "int";
-  types::typeTable["bool"] = Type::getInt1Ty(TheContext);
-  types::typeNames[types::typeTable["bool"]] = "bool";
-  types::typeTable["float"] = Type::getDoubleTy(TheContext);
-  types::typeNames[types::typeTable["float"]] = "float";
-  types::typeTable["string"] = Type::getInt8PtrTy(TheContext);
-  types::typeNames[types::typeTable["string"]] = "string";
-  types::typeTable["void"] = Type::getIntNTy(TheContext, VOID_BITS);
-  types::typeNames[types::typeTable["void"]] = "void";
+  types::type_table["int"] = Type::getInt32Ty(TheContext);
+  types::type_names[types::type_table["int"]] = "int";
+  types::type_table["bool"] = Type::getInt1Ty(TheContext);
+  types::type_names[types::type_table["bool"]] = "bool";
+  types::type_table["float"] = Type::getDoubleTy(TheContext);
+  types::type_names[types::type_table["float"]] = "float";
+  types::type_table["string"] = Type::getInt8PtrTy(TheContext);
+  types::type_names[types::type_table["string"]] = "string";
+  types::type_table["void"] = Type::getIntNTy(TheContext, VOID_BITS);
+  types::type_names[types::type_table["void"]] = "void";
 }
 
 void InitializeModuleAndPassManager() {
@@ -76,21 +80,21 @@ void InitializeModuleAndPassManager() {
   FunctionType *printFunType =
       FunctionType::get(IntegerType::getInt32Ty(TheContext),
                         PointerType::get(Type::getInt8Ty(TheContext), 0), true);
-  PrintFun = Function::Create(printFunType, Function::ExternalLinkage, "printf",
+  libc::print = Function::Create(printFunType, Function::ExternalLinkage, "printf",
                               TheModule);
 
   /* malloc function */
   FunctionType *mallocFunType =
       FunctionType::get(IntegerType::getInt8PtrTy(TheContext),
                         IntegerType::getInt32Ty(TheContext), false);
-  MallocFun = Function::Create(mallocFunType, Function::ExternalLinkage,
+  libc::malloc = Function::Create(mallocFunType, Function::ExternalLinkage,
                                "malloc", TheModule);
 
   /* malloc function */
   FunctionType *freeFunType =
       FunctionType::get(Type::getVoidTy(TheContext),
                         IntegerType::getInt8PtrTy(TheContext), false);
-  FreeFun = Function::Create(freeFunType, Function::ExternalLinkage, "free",
+  libc::free = Function::Create(freeFunType, Function::ExternalLinkage, "free",
                              TheModule);
 
   TheFPM = new llvm::legacy::FunctionPassManager(TheModule);
@@ -122,26 +126,25 @@ void printModule(const std::string &outPath, bool printIR) {
   InitializeAllAsmPrinters();
 
   std::string Error;
-  auto Target = TargetRegistry::lookupTarget(TargetTriple, Error);
+  auto target = TargetRegistry::lookupTarget(TargetTriple, Error);
 
-  if (!Target) {
+  if (!target) {
     throw TargetErrorException(Error);
   }
 
-  auto CPU = "generic";
-  auto Features = "";
+  auto cpu = "generic";
+  auto features = "";
 
   TargetOptions opt;
-  auto RM = Optional<Reloc::Model>();
-  auto TargetMachine =
-      Target->createTargetMachine(TargetTriple, CPU, Features, opt, RM);
+  auto realoc_model = Optional<Reloc::Model>();
+  auto target_machine = target->createTargetMachine(TargetTriple, cpu, features, opt, realoc_model);
 
-  TheModule->setDataLayout(TargetMachine->createDataLayout());
+  TheModule->setDataLayout(target_machine->createDataLayout());
   TheModule->setTargetTriple(TargetTriple);
 
-  const auto &Filename = outPath;
+  const auto &filename = outPath;
   std::error_code EC;
-  raw_fd_ostream dest(Filename, EC, sys::fs::OF_None);
+  raw_fd_ostream dest(filename, EC, sys::fs::OF_None);
 
   if (EC) {
     std::cerr << "Could not open file: " << EC.message() << std::endl;
@@ -149,10 +152,10 @@ void printModule(const std::string &outPath, bool printIR) {
   }
 
   legacy::PassManager pass;
-  auto FileType = CGFT_ObjectFile;
+  auto file_type = CGFT_ObjectFile;
 
-  if (TargetMachine->addPassesToEmitFile(pass, dest, nullptr, FileType)) {
-    throw TargetErrorException("TargetMachine can't emit a file of this type");
+  if (target_machine->addPassesToEmitFile(pass, dest, nullptr, file_type)) {
+    throw TargetErrorException("target_machine can't emit a file of this type");
   }
 
   pass.run(*TheModule);
@@ -168,24 +171,24 @@ std::string encodeFunctionName(const std::string &fnName,
 }
 
 Value *types::getTypeConstant(Type *t, float val) {
-  if (t == typeTable["int"]) {
+  if (t == type_table["int"]) {
     return ConstantInt::get(Type::getInt32Ty(TheContext), APInt(32, val));
   }
-  if (t == typeTable["float"]) {
+  if (t == type_table["float"]) {
     return ConstantFP::get(Type::getDoubleTy(TheContext), val);
   }
-  if (t == typeTable["void"]) {
+  if (t == type_table["void"]) {
     return ConstantInt::get(Type::getInt32Ty(TheContext),
                             APInt(VOID_BITS, val));
   }
   return nullptr;
 }
 Value *types::getTypeConstant(std::string type, float val) {
-  return getTypeConstant(typeTable[type], val);
+  return getTypeConstant(type_table[type], val);
 }
 Type *types::getType(std::string name) {
-  auto typeIt = types::typeTable.find(name);
-  if (typeIt == types::typeTable.end()) {
+  auto typeIt = types::type_table.find(name);
+  if (typeIt == types::type_table.end()) {
     std::cerr << "Invalid type  " << name << std::endl;
     return nullptr;
   }
@@ -217,8 +220,8 @@ Value *types::floatCast(Value *v) {
 }
 
 bool types::isClassType(Type *t) {
-  std::string ts = types::typeNames[t];
-  return types::classVarTable.find(ts) != types::classVarTable.end();
+  std::string ts = types::type_names[t];
+  return types::class_var_table.find(ts) != types::class_var_table.end();
 }
 
 Value *types::getStructSize(Type *t) {
@@ -236,9 +239,9 @@ Value *types::getStructSize(Type *t) {
 //        if(vT == strType) {
 //            return v;
 //        } else if(vT == types::getType("int")) {
-//            Args.push_back(strIntFormat);
+//            Args.push_back(str_int_format);
 //        } else if(vT == types::getType("float")){
-//            Args.push_back(strFloatFormat);
+//            Args.push_back(str_float_format);
 //        } else {
 //            return nullptr;
 //        }
@@ -246,5 +249,5 @@ Value *types::getStructSize(Type *t) {
 //        return Builder.CreateCall(Sprintf, Args, "sprintfCall");
 //    }
 bool types::isVoid(const std::string &typeName) { return typeName == "void"; }
-bool types::isVoid(Type *type) { return isVoid(typeNames[type]); }
+bool types::isVoid(Type *type) { return isVoid(type_names[type]); }
 }  // namespace backend

@@ -2,7 +2,7 @@
 // Created by avram on 11.9.21..
 //
 
-#include <ASTUtil.h>
+#include <ast_util.h>
 #include <context.h>
 
 #include <iostream>
@@ -51,14 +51,14 @@ Value *backend::getPtrToMember(const std::string &Name,
   }
   Type *t = tmp->getType()->getPointerElementType();
 
-  auto cit = types::typeNames.find(t);
-  if (cit == types::typeNames.end()) {
+  auto cit = types::type_names.find(t);
+  if (cit == types::type_names.end()) {
     std::cerr << "Variable " << Name << " is not of class type" << std::endl;
     return nullptr;
   }
   std::string clsName = cit->second;
-  auto it = types::classVarTable[clsName].find(Sub);
-  if (it == types::classVarTable[clsName].end()) {
+  auto it = types::class_var_table[clsName].find(Sub);
+  if (it == types::class_var_table[clsName].end()) {
     std::cerr << "Class " << clsName << " doesn't have member " << Sub
               << std::endl;
     return nullptr;
@@ -77,14 +77,14 @@ Value *backend::GetMemberPointer(const std::string &Name,
   }
   Type *t = tmp->getType()->getPointerElementType();
 
-  auto cit = types::typeNames.find(t);
-  if (cit == types::typeNames.end()) {
+  auto cit = types::type_names.find(t);
+  if (cit == types::type_names.end()) {
     std::cerr << "Variable " << Name << " is not of class type" << std::endl;
     return nullptr;
   }
   std::string clsName = cit->second;
-  auto it = types::classVarTable[clsName].find(Var);
-  if (it == types::classVarTable[clsName].end()) {
+  auto it = types::class_var_table[clsName].find(Var);
+  if (it == types::class_var_table[clsName].end()) {
     std::cerr << "Class " << clsName << " doesn't have member " << Var
               << std::endl;
     return nullptr;
@@ -92,7 +92,7 @@ Value *backend::GetMemberPointer(const std::string &Name,
   unsigned memberIdx = it->second;
   Value *tmp2 = Builder.CreateLoad(t, tmp, "derefptrptr");  // pointer to struct
   Value *gep = Builder.CreateStructGEP(
-      types::classVarTypeTable[Name][Var]->getPointerTo(), tmp2, memberIdx);
+      types::class_var_types[Name][Var]->getPointerTo(), tmp2, memberIdx);
   assert(gep);
   return gep;
 }
