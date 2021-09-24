@@ -50,7 +50,7 @@ def main() {
 }
 ```
 
-### types
+### Types
 Weakly typed (implicit conversions possible)
 
 Statically typed (variable type must be known at compile time)
