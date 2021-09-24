@@ -9,20 +9,20 @@ class Base {
     float x
     string message
     
-    def Base(float x) {
-        this.x = x
+    def Base(float _x) {
+        x = _x
     }
     def setMessage(string s) {
-        this.message = s
+        message = s
     }
     def incX() {
-        this.x = this.x + 1
+        x = x + 1
     }
     def getX() : int {
-        return this.x
+        return x
     }
     def doSomething() : int {
-        return this.x*this.x
+        return x*x
     }
 }
 
