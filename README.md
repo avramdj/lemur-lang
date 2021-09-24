@@ -1,8 +1,6 @@
 # Lemur
 A compiled object-oriented programing language implemented with ANTLR4 and LLVM-12.
 
-It's pretty boring.
-
 ### Syntax 
 ```
 class Base {
