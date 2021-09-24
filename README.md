@@ -51,11 +51,12 @@ def main() {
 ```
 
 ### Types
-Weakly typed (implicit conversions possible)
+Statically typed.
 
-Statically typed (variable type must be known at compile time)
+Weakly typed.
 
-Class objects passed by reference
+Class objects are passed by reference.
+
 
 ### Dependencies
 * LLVM-12
