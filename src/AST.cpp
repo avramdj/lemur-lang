@@ -192,8 +192,7 @@ Value *DeclAssignExprAST::codegen() const {
 }
 
 Value *VarDeclExprAST::codegen() const {
-  AllocaInst *Alloca = NamedValues[Name].first;
-  if (Alloca) {
+  if (NamedValues.isInCurrentScope(Name)) {
     cerr << "Variable " << Name << " already defined" << endl;
     return nullptr;
   }
@@ -203,14 +202,14 @@ Value *VarDeclExprAST::codegen() const {
     std::cerr << "Unknown type " << Type << std::endl;
     return nullptr;
   }
-  Alloca = CreateEntryBlockAlloca(t, F, Name);
+  AllocaInst *Alloca = CreateEntryBlockAlloca(t, F, Name);
   if (types::isClassType(t)) {
     Value *structSizeVal = types::getStructSize(t);
     Value *StructAllocaRaw = Builder.CreateCall(MallocFun, structSizeVal);
     Value *StructAlloca = Builder.CreateBitCast(StructAllocaRaw, t);
     Builder.CreateStore(StructAlloca, Alloca);
   }
-  NamedValues[Name] = {Alloca, t};
+  NamedValues.set(Name, Alloca);
   return Alloca;
 }
 
@@ -227,6 +226,7 @@ Value *SetExprAST::codegen() const {
 }
 
 Value *SeqExprAST::codegen() const {
+  NamedValues.pushScope();
   Value *tmp = nullptr;
   for (const auto &_node : _nodes) {
     tmp = _node->codegen();
@@ -235,6 +235,7 @@ Value *SeqExprAST::codegen() const {
     }
     if (!tmp) return nullptr;
   }
+  NamedValues.popScope();
   return tmp;
 }
 
@@ -275,15 +276,30 @@ Value *FunctionDefAST::codegen() const {
   BasicBlock *BB = BasicBlock::Create(TheContext, "entry", f);
   Builder.SetInsertPoint(BB);
 
-  NamedValues.clear();
+  NamedValues.pushScope();
   for (auto &a : f->args()) {
     AllocaInst *Alloca =
-        CreateEntryBlockAlloca(a.getType(), f, string(a.getName()));
-    NamedValues[string(a.getName())] = {Alloca, a.getType()};
+        CreateEntryBlockAlloca(a.getType(), f, std::string(a.getName()));
+    NamedValues.set(std::string(a.getName()), Alloca);
     Builder.CreateStore(&a, Alloca);
   }
-
+  if (isMember) {
+    NamedValues.pushScope();
+    Value *thisPtr = f->getArg(0);
+    std::string clsName = types::typeNames[thisPtr->getType()];
+    for (const auto &it : types::classVarTable[clsName]) {
+      const auto &memberName = it.first;
+      Value *memberAddr = getPtrToMember("this", memberName);
+      NamedValues.set(memberName, memberAddr);
+    }
+    NamedValues.swapLastTwo();
+  }
   Value *Body = body->codegen();
+  NamedValues.popScope();
+  if (isMember) {
+    NamedValues.popScope();
+  }
+
   if (Body != nullptr) {
     if (!isRet(Body)) {
       auto retV = types::getTypeConstant(retType, 0);
@@ -307,7 +323,7 @@ Value *FunctionDefAST::codegen() const {
   return nullptr;
 }
 
-string FunctionDefAST::getName() const { return name; }
+std::string FunctionDefAST::getName() const { return name; }
 
 Value *CallExprAST::codegen() const {
   Function *f = TheModule->getFunction(Callee);
@@ -333,12 +349,12 @@ Value *CallExprAST::codegen() const {
 }
 
 Value *MethodCallExprAST::codegen() const {
-  AllocaInst *tmp = NamedValues[Name].first;
-  if (tmp == nullptr) {
+  Value *tmp = NamedValues[Name];
+  if (!tmp) {
     cerr << "Variable " + Name + " is undefined" << endl;
     return nullptr;
   }
-  Type *t = tmp->getAllocatedType();
+  Type *t = tmp->getType()->getPointerElementType();
 
   auto cit = types::typeNames.find(t);
   if (cit == types::typeNames.end()) {
@@ -671,7 +687,7 @@ Value *RetExprAST::codegen() const {
 }
 
 AllocaInst *CreateEntryBlockAlloca(Type *t, Function *TheFunction,
-                                   const string &VarName) {
+                                   const std::string &VarName) {
   IRBuilder<> TmpB(&TheFunction->getEntryBlock(),
                    TheFunction->getEntryBlock().begin());
   return TmpB.CreateAlloca(t, nullptr, VarName);

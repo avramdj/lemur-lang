@@ -3,6 +3,7 @@
 //
 #include <AST.h>
 #include <context.h>
+#include <SymbolTable.h>
 #include <llvm/IR/LegacyPassManager.h>
 #include <llvm/Support/Host.h>
 #include <llvm/Support/TargetRegistry.h>
@@ -42,7 +43,7 @@ Function *FreeFun;
 Value *strIntFormat = nullptr;
 Value *strFloatFormat = nullptr;
 Value *strFormat = nullptr;
-std::map<std::string, std::pair<AllocaInst *, Type *>> NamedValues;
+SymbolTable NamedValues;
 
 void InitializeContext() {
   InitializeModuleAndPassManager();

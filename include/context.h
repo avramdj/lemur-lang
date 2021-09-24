@@ -5,11 +5,14 @@
 #ifndef LEMUR_MODULE_H
 #define LEMUR_MODULE_H
 
+#include <SymbolTable.h>
+
 #include <map>
 #include <utility>
 
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LegacyPassManager.h"
+#include "llvm/IR/Instructions.h"
 
 using namespace llvm;
 using namespace legacy;
@@ -32,6 +35,7 @@ Value *getStructSize(Type *t);
 bool isVoid(const std::string &typeName);
 bool isVoid(Type *type);
 }  // namespace types
+typedef AllocaInst* AllocaPtr;
 extern Module *TheModule;
 extern LLVMContext TheContext;
 extern IRBuilder<> Builder;
@@ -44,7 +48,7 @@ extern Value *strIntFormat;
 extern Value *strFloatFormat;
 extern Value *strFormat;
 
-extern std::map<std::string, std::pair<AllocaInst *, Type *>> NamedValues;
+extern SymbolTable NamedValues;
 
 void InitializeContext();
 void InitializeStrings();

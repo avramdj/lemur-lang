@@ -218,7 +218,7 @@ antlrcpp::Any ASTBuilder::visitDeclassign(LemurParser::DeclassignContext *ctx) {
 
 antlrcpp::Any ASTBuilder::visitStringRule(LemurParser::StringRuleContext *ctx) {
   std::string str = ctx->getText();
-  str = formatRawStr(str);
+  str = backend::formatRawStr(str);
   return std::shared_ptr<backend::ExprAST>(new backend::StringExprAST(str));
 }
 

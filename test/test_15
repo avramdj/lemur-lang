@@ -5,8 +5,8 @@ class A {
 	float a
 	float b
 	float c
-	def setX(int x) {
-		this.x = x
+	def setX(int _x) {
+		x = _x
 		return
 	}
 	def setC(float c) {

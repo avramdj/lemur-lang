@@ -13,14 +13,14 @@
 using namespace llvm;
 using namespace backend;
 
-bool replaceFormat(std::string &str, const std::string &from,
-                   const std::string &to) {
+bool backend::replaceFormat(std::string &str, const std::string &from,
+                            const std::string &to) {
   size_t start_pos = str.find(from);
   if (start_pos == std::string::npos) return false;
   str.replace(start_pos, from.length(), to);
   return true;
 }
-std::string formatRawStr(std::string s) {
+std::string backend::formatRawStr(std::string s) {
   while (replaceFormat(s, "\\\\", "\\")) {
   }
   while (replaceFormat(s, "\\n", "\n")) {
@@ -28,27 +28,28 @@ std::string formatRawStr(std::string s) {
   s = s.substr(1, s.size() - 2);
   return s;
 }
-Value *getPtrToValue(const std::string &Name, const std::string &Sub) {
+Value *backend::getPtrToValue(const std::string &Name, const std::string &Sub) {
   if (Sub.empty()) {
     return getPtrToPrim(Name);
   }
   return getPtrToMember(Name, Sub);
 }
-Value *getPtrToPrim(const std::string &Name) {
-  AllocaInst *Alloca = NamedValues[Name].first;
+Value *backend::getPtrToPrim(const std::string &Name) {
+  Value *Alloca = NamedValues[Name];
   if (!Alloca) {
     std::cerr << "Variable " << Name << " undefined" << std::endl;
     return nullptr;
   }
   return Alloca;
 }
-Value *getPtrToMember(const std::string &Name, const std::string &Sub) {
-  AllocaInst *tmp = NamedValues[Name].first;
+Value *backend::getPtrToMember(const std::string &Name,
+                               const std::string &Sub) {
+  Value* tmp = NamedValues[Name];
   if (tmp == nullptr) {
     std::cerr << "Variable " + Name + " is undefined" << std::endl;
     return nullptr;
   }
-  Type *t = tmp->getAllocatedType();  // t = struct *
+  Type *t = tmp->getType()->getPointerElementType();
 
   auto cit = types::typeNames.find(t);
   if (cit == types::typeNames.end()) {
@@ -67,13 +68,14 @@ Value *getPtrToMember(const std::string &Name, const std::string &Sub) {
   Value *gep = Builder.CreateStructGEP(tmp2, memberIdx);
   return gep;
 }
-Value *GetMemberPointer(const std::string &Name, const std::string &Var) {
-  AllocaInst *tmp = NamedValues[Name].first;
+Value *backend::GetMemberPointer(const std::string &Name,
+                                 const std::string &Var) {
+  Value *tmp = NamedValues[Name];
   if (tmp == nullptr) {
     std::cerr << "Variable " + Name + " is undefined" << std::endl;
     return nullptr;
   }
-  Type *t = tmp->getAllocatedType();  // t = struct *
+  Type *t = tmp->getType()->getPointerElementType();
 
   auto cit = types::typeNames.find(t);
   if (cit == types::typeNames.end()) {
