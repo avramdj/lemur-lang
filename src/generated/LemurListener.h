@@ -1,23 +1,20 @@
 
-    #include <vector>
-    #include <string>
-
+#include <string>
+#include <vector>
 
 // Generated from Lemur.g4 by ANTLR 4.7.2
 
 #pragma once
 
-
-#include "antlr4-runtime.h"
 #include "LemurParser.h"
-
+#include "antlr4-runtime.h"
 
 /**
- * This interface defines an abstract listener for a parse tree produced by LemurParser.
+ * This interface defines an abstract listener for a parse tree produced by
+ * LemurParser.
  */
-class  LemurListener : public antlr4::tree::ParseTreeListener {
-public:
-
+class LemurListener : public antlr4::tree::ParseTreeListener {
+ public:
   virtual void enterFile(LemurParser::FileContext *ctx) = 0;
   virtual void exitFile(LemurParser::FileContext *ctx) = 0;
 
@@ -33,8 +30,10 @@ public:
   virtual void enterClassvardecl(LemurParser::ClassvardeclContext *ctx) = 0;
   virtual void exitClassvardecl(LemurParser::ClassvardeclContext *ctx) = 0;
 
-  virtual void enterClassfunctiondef(LemurParser::ClassfunctiondefContext *ctx) = 0;
-  virtual void exitClassfunctiondef(LemurParser::ClassfunctiondefContext *ctx) = 0;
+  virtual void enterClassfunctiondef(
+      LemurParser::ClassfunctiondefContext *ctx) = 0;
+  virtual void exitClassfunctiondef(
+      LemurParser::ClassfunctiondefContext *ctx) = 0;
 
   virtual void enterFunctiondef(LemurParser::FunctiondefContext *ctx) = 0;
   virtual void exitFunctiondef(LemurParser::FunctiondefContext *ctx) = 0;
@@ -137,7 +136,4 @@ public:
 
   virtual void enterBracedexpr(LemurParser::BracedexprContext *ctx) = 0;
   virtual void exitBracedexpr(LemurParser::BracedexprContext *ctx) = 0;
-
-
 };
-
