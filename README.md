@@ -77,6 +77,7 @@ Built-in types: `int`, `float`, `bool`, `string`
 * <strike> *unit testing* </strike>
 * <strike> *string support* </strike>
 * <strike> *type infrastructure* </strike>
+* <strike> *better scoping* </strike>
 * advanced OOP concepts
 * garbage collector
 * JIT support
