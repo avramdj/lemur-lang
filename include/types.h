@@ -26,6 +26,7 @@ enum LemurTypes {
 inline namespace class_meta {
 extern std::map<std::string, std::map<std::string, unsigned>> class_var_table;
 extern std::map<std::string, std::map<std::string, llvm::Type *>> class_var_types;
+extern std::map<std::string, std::map<std::string, LemurTypes>> class_var_analysis;
 extern std::map<std::string, std::vector<std::string>> class_functions;
 }  // namespace class_meta
 extern std::map<std::string, llvm::Type *> type_table;

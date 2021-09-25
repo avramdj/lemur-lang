@@ -249,7 +249,7 @@ Value *PrintExprAST::codegen() const {
   return l;
 }
 types::LemurTypes PrintExprAST::wellFormed() {
-  if(nodes_[0]->wellFormed() == types::kError) {
+  if (nodes_[0]->wellFormed() == types::kError) {
     return types::kError;
   }
   return types::LemurTypes::kNone;
@@ -304,7 +304,11 @@ Value *SetExprAST::codegen() const {
   return Builder.CreateStore(l, el);
 }
 types::LemurTypes SetExprAST::wellFormed() {
-
+  auto expr_type = nodes_[0]->wellFormed();
+  if (expr_type == types::kError) {
+    return types::kError;
+  }
+  return expr_type;
 }
 
 Value *SeqExprAST::codegen() const {
@@ -321,7 +325,16 @@ Value *SeqExprAST::codegen() const {
   return tmp;
 }
 void SeqExprAST::add(shared_ptr<ExprAST> node) { nodes_.push_back(node); }
-types::LemurTypes SeqExprAST::wellFormed() { return types::LemurTypes::kError; }
+
+types::LemurTypes SeqExprAST::wellFormed() {
+  auto ret_val = types::kNone;
+  for (const auto &node : nodes_) {
+    if (node->wellFormed() == types::kError) {
+      ret_val = types::kError;
+    }
+  }
+  return ret_val;
+}
 
 Value *FileAST::codegen() const {
   named_values.pushScope();
@@ -418,7 +431,24 @@ Value *FunctionDefAST::codegen() const {
 
 std::string FunctionDefAST::getName() const { return name_; }
 types::LemurTypes FunctionDefAST::wellFormed() {
-  return types::LemurTypes::kError;
+  named_analysis_values.pushScope();
+  if (is_member_) {
+    std::string cls_name = param_types_[0];
+    for (const auto &var_it : types::class_var_analysis[cls_name]) {
+      std::string var_name = var_it.first;
+      auto type = var_it.second;
+      named_analysis_values.set(var_name, type);
+      named_analysis_values.pushScope();
+    }
+  }
+  if (body_->wellFormed() == types::kError) {
+    return types::kError;
+  }
+  if (is_member_) {
+    named_analysis_values.popScope();
+  }
+  named_analysis_values.popScope();
+  return types::kNone;
 }
 
 Value *CallExprAST::codegen() const {
@@ -870,7 +900,13 @@ Value *ClassDefExprAST::codegen() const {
   return nullptr;
 }
 types::LemurTypes ClassDefExprAST::wellFormed() {
-  return types::LemurTypes::kError;
+  named_analysis_values.pushScope();
+  for (int i = 0; i < vars_.size(); i++) {
+    auto type = types::getLemurType(types_[i]);
+    types::class_var_analysis[name_][vars_[i]] = type;
+    named_analysis_values.set(vars_[i], type);
+  }
+  named_analysis_values.popScope();
 }
 CastExprAST::CastExprAST(const shared_ptr<ExprAST> &a) : InnerExprAST(a) {}
 

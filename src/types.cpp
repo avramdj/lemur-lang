@@ -21,6 +21,7 @@ namespace types {
 inline namespace class_meta {
 std::map<std::string, std::map<std::string, unsigned>> class_var_table;
 std::map<std::string, std::map<std::string, Type *>> class_var_types;
+std::map<std::string, std::map<std::string, LemurTypes>> class_var_analysis;
 std::map<std::string, std::vector<std::string>> class_functions;
 }  // namespace class_meta
 std::map<std::string, Type *> type_table;

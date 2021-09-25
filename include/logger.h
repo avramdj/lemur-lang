@@ -10,7 +10,7 @@
 
 namespace backend {
 // class Logger {
-//   enum LoggingLevel { ERROR, cWarn };
+//   enum LoggingLevel { cError, cWarn };
 //
 //  public:
 //   Logger() = delete;
