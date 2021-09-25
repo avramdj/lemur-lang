@@ -1,6 +1,8 @@
 # Lemur
 A compiled object-oriented programing language implemented with ANTLR4 and LLVM-12.
 
+![CMake](https://github.com/avramdj/lemur-lang/actions/workflows/c-cpp.yml/badge.svg)
+
 ### Syntax 
 ```
 class Base {
