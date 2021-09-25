@@ -41,6 +41,7 @@ llvm::Value *stringCast(llvm::Value *v);
 llvm::Value *getStructSize(llvm::Type *t);
 bool isVoid(const std::string &type_name);
 bool isVoid(llvm::Type *type);
+LemurTypes getLemurType(std::string name);
 }  // namespace types
 }  // namespace backend
 #endif  // LEMUR_INCLUDE_TYPES_H_

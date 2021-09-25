@@ -8,6 +8,7 @@
 
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Value.h"
+#include "types.h"
 
 using namespace llvm;
 
@@ -18,7 +19,7 @@ class ExprAST {
   virtual ~ExprAST();
 
   virtual Value *codegen() const = 0;
-  virtual bool wellFormed() = 0;
+  virtual types::LemurTypes wellFormed() = 0;
 };
 
 class IntExprAST : public ExprAST {
@@ -26,7 +27,7 @@ class IntExprAST : public ExprAST {
   explicit IntExprAST(int v) : val_(v) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   int val_;
@@ -37,7 +38,7 @@ class FloatExprAST : public ExprAST {
   explicit FloatExprAST(float v) : val_(v) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   float val_;
@@ -51,7 +52,7 @@ class VariableExprAST : public ExprAST {
       : name_(std::move(n)), sub_(std::move(s)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   std::string name_;
@@ -89,7 +90,7 @@ class AndExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a), std::move(b)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class OrExprAST : public InnerExprAST {
@@ -98,7 +99,7 @@ class OrExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a), std::move(b)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class XorExprAST : public InnerExprAST {
@@ -107,7 +108,7 @@ class XorExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a), std::move(b)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class ShlExprAST : public InnerExprAST {
@@ -116,7 +117,7 @@ class ShlExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a), std::move(b)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class ShrExprAST : public InnerExprAST {
@@ -125,7 +126,7 @@ class ShrExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a), std::move(b)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class NotExprAST : public InnerExprAST {
@@ -134,7 +135,7 @@ class NotExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class PrintExprAST : public InnerExprAST {
@@ -143,7 +144,7 @@ class PrintExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class VarDeclExprAST : public ExprAST {
@@ -152,7 +153,7 @@ class VarDeclExprAST : public ExprAST {
       : type_(std::move(type)), name_(std::move(name)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   std::string name_;
@@ -165,7 +166,7 @@ class DeclAssignExprAST : public InnerExprAST {
       : type_(std::move(t)), name_(std::move(n)), InnerExprAST(a) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   std::string type_;
@@ -181,7 +182,7 @@ class SetExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a)), name_(std::move(n)), sub_(std::move(s)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   std::string name_;
@@ -194,7 +195,7 @@ class SeqExprAST : public InnerExprAST {
       : InnerExprAST(std::move(a)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
   void add(std::shared_ptr<ExprAST> node);
 };
@@ -205,7 +206,7 @@ class FileAST : public SeqExprAST {
       : SeqExprAST(std::move(a)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class FunctionDefAST : public ExprAST {
@@ -223,7 +224,7 @@ class FunctionDefAST : public ExprAST {
   std::string getName() const;
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   std::string name_;
@@ -242,7 +243,7 @@ class CallExprAST : public ExprAST {
       : callee_(std::move(s)), args_(std::move(v)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   CallExprAST(const CallExprAST &);
@@ -262,7 +263,7 @@ class MethodCallExprAST : public ExprAST {
         args_(std::move(v)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   MethodCallExprAST(const MethodCallExprAST &);
@@ -280,7 +281,7 @@ class AddExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class SubExprAST : public InnerExprAST {
@@ -289,7 +290,7 @@ class SubExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class MulExprAST : public InnerExprAST {
@@ -298,7 +299,7 @@ class MulExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class DivExprAST : public InnerExprAST {
@@ -307,7 +308,7 @@ class DivExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class LtExprAST : public InnerExprAST {
@@ -316,7 +317,7 @@ class LtExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class GtExprAST : public InnerExprAST {
@@ -325,7 +326,7 @@ class GtExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class LteExprAST : public InnerExprAST {
@@ -334,7 +335,7 @@ class LteExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class GteExprAST : public InnerExprAST {
@@ -343,7 +344,7 @@ class GteExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class NeqExprAST : public InnerExprAST {
@@ -352,7 +353,7 @@ class NeqExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class EqExprAST : public InnerExprAST {
@@ -361,7 +362,7 @@ class EqExprAST : public InnerExprAST {
       : InnerExprAST(std::move(l), std::move(r)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 };
 
 class WhileExprAST : public ExprAST {
@@ -370,7 +371,7 @@ class WhileExprAST : public ExprAST {
       : cond_(std::move(c)), block_(std::move(b)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   std::shared_ptr<ExprAST> cond_;
@@ -383,7 +384,7 @@ class IfExprAST : public ExprAST {
       : cond_(std::move(c)), block_(std::move(b)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   std::shared_ptr<ExprAST> cond_;
@@ -399,7 +400,7 @@ class IfElseExprAST : public ExprAST {
         else_block_(std::move(e)) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   std::shared_ptr<ExprAST> cond_;
@@ -414,7 +415,7 @@ class RetExprAST : public ExprAST {
   RetExprAST() : v(nullptr) {}
 
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   std::shared_ptr<ExprAST> v;
@@ -424,7 +425,7 @@ class StringExprAST : public ExprAST {
  public:
   explicit StringExprAST(std::string s) : str_(std::move(s)) {}
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   std::string str_;
@@ -441,7 +442,7 @@ class ClassDefExprAST : public ExprAST {
         vars_(vs),
         functions_(std::move(fs)){};
   Value *codegen() const override;
-  bool wellFormed() override;
+  types::LemurTypes wellFormed() override;
 
  private:
   std::string name_;
@@ -449,6 +450,25 @@ class ClassDefExprAST : public ExprAST {
   std::vector<std::string> types_;
   std::vector<std::string> vars_;
   std::vector<FunctionDefAST *> functions_;
+};
+
+class CastExprAST : public InnerExprAST {
+ public:
+  explicit CastExprAST(const std::shared_ptr<ExprAST> &a);
+};
+
+class BoolCastExprAST : public CastExprAST {
+ public:
+  explicit BoolCastExprAST(const std::shared_ptr<ExprAST> &a);
+  Value *codegen() const override;
+  types::LemurTypes wellFormed() override;
+};
+
+class FloatCastExprAST : public CastExprAST {
+ public:
+  explicit FloatCastExprAST(const std::shared_ptr<ExprAST> &a);
+  Value *codegen() const override;
+  types::LemurTypes wellFormed() override;
 };
 
 AllocaInst *CreateEntryBlockAlloca(Type *t, Function *the_function,

@@ -103,5 +103,20 @@ void InitializeTypeTable() {
   type_table["void"] = Type::getIntNTy(TheContext, VOID_BITS);
   type_names[type_table["void"]] = "void";
 }
+LemurTypes getLemurType(std::string name) {
+  if(name == "int") {
+    return kInt;
+  }
+  if(name == "float") {
+    return kFloat;
+  }
+  if(name == "bool") {
+    return kBool;
+  }
+  if(name == "string") {
+    return kString;
+  }
+  return kClass;
+}
 }  // namespace types
 }  // namespace backend

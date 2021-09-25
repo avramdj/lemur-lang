@@ -16,7 +16,7 @@ bool backend::codegen(const std::shared_ptr<backend::ExprAST>& root){
   return ret;
 }
 bool backend::isWellFormed(const std::shared_ptr<backend::ExprAST>& root){
-  bool ret = root->wellFormed();
+  types::LemurTypes ret = root->wellFormed();
   named_values.clear();
-  return ret;
+  return ret != types::kError;
 }

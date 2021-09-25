@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "ast_util.h"
-#include "types.h"
 #include "context.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LegacyPassManager.h"
@@ -12,6 +11,8 @@
 #include "llvm/Support/TargetRegistry.h"
 #include "llvm/Target/TargetOptions.h"
 #include "llvm/Transforms/Scalar.h"
+#include "logger.h"
+#include "types.h"
 
 #define _LIBCPP_DEBUG 1
 
@@ -63,20 +64,24 @@ Value *IntExprAST::codegen() const {
   return types::getTypeConstant(
       "int", val_);  // NOLINT(cppcoreguidelines-narrowing-conversions)
 }
-bool IntExprAST::wellFormed() { return true; }
+types::LemurTypes IntExprAST::wellFormed() { return types::kInt; }
 
 Value *FloatExprAST::codegen() const {
   return types::getTypeConstant("float", val_);
 }
-bool FloatExprAST::wellFormed() { return true; }
+types::LemurTypes FloatExprAST::wellFormed() { return types::kFloat; }
 
 Value *VariableExprAST::codegen() const {
   Value *v = getPtrToValue(name_, sub_);
   Type *t = v->getType()->getPointerElementType();
   return Builder.CreateLoad(t, v, name_);
 }
-bool VariableExprAST::wellFormed() {
-  return named_analysis_values[name_] != types::kError;
+types::LemurTypes VariableExprAST::wellFormed() {
+  types::LemurTypes type = named_analysis_values[name_];
+  if (type == types::kError) {
+    log::warn("Reference to undefined variable "s + name_);
+  }
+  return type;
 }
 
 Value *AndExprAST::codegen() const {
@@ -95,7 +100,20 @@ Value *AndExprAST::codegen() const {
   }
   return Builder.CreateAnd(lC, dC, "andtmp");
 }
-bool AndExprAST::wellFormed() { return false; }
+types::LemurTypes AndExprAST::wellFormed() {
+  auto left = nodes_[0]->wellFormed();
+  auto right = nodes_[1]->wellFormed();
+  if (left == types::kError || right == types::kError) {
+    return types::kError;
+  }
+  if (left != types::kBool) {
+    nodes_[0] = std::shared_ptr<ExprAST>(new BoolCastExprAST(nodes_[0]));
+  }
+  if (right != types::kBool) {
+    nodes_[1] = std::shared_ptr<ExprAST>(new BoolCastExprAST(nodes_[1]));
+  }
+  return types::kBool;
+}
 
 Value *OrExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -113,7 +131,20 @@ Value *OrExprAST::codegen() const {
   }
   return Builder.CreateOr(lC, dC, "ortmp");
 }
-bool OrExprAST::wellFormed() { return false; }
+types::LemurTypes OrExprAST::wellFormed() {
+  auto left = nodes_[0]->wellFormed();
+  auto right = nodes_[1]->wellFormed();
+  if (left == types::kError || right == types::kError) {
+    return types::kError;
+  }
+  if (left != types::kBool) {
+    nodes_[0] = std::shared_ptr<ExprAST>(new BoolCastExprAST(nodes_[0]));
+  }
+  if (right != types::kBool) {
+    nodes_[1] = std::shared_ptr<ExprAST>(new BoolCastExprAST(nodes_[1]));
+  }
+  return types::kBool;
+}
 
 Value *XorExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -131,7 +162,20 @@ Value *XorExprAST::codegen() const {
   }
   return Builder.CreateXor(lC, dC, "xortmp");
 }
-bool XorExprAST::wellFormed() { return false; }
+types::LemurTypes XorExprAST::wellFormed() {
+  auto left = nodes_[0]->wellFormed();
+  auto right = nodes_[1]->wellFormed();
+  if (left == types::kError || right == types::kError) {
+    return types::kError;
+  }
+  if (left != types::kBool) {
+    nodes_[0] = std::shared_ptr<ExprAST>(new BoolCastExprAST(nodes_[0]));
+  }
+  if (right != types::kBool) {
+    nodes_[1] = std::shared_ptr<ExprAST>(new BoolCastExprAST(nodes_[1]));
+  }
+  return types::kBool;
+}
 
 Value *ShlExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -143,7 +187,7 @@ Value *ShlExprAST::codegen() const {
   Value *dC = d;
   return Builder.CreateShl(lC, dC, "shltmp");
 }
-bool ShlExprAST::wellFormed() { return false; }
+types::LemurTypes ShlExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *ShrExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -155,7 +199,7 @@ Value *ShrExprAST::codegen() const {
   Value *dC = d;
   return Builder.CreateLShr(lC, dC, "shrtmp");
 }
-bool ShrExprAST::wellFormed() { return false; }
+types::LemurTypes ShrExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *NotExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -167,7 +211,16 @@ Value *NotExprAST::codegen() const {
   }
   return Builder.CreateNot(lC, "nottmp");
 }
-bool NotExprAST::wellFormed() { return false; }
+types::LemurTypes NotExprAST::wellFormed() {
+  auto node = nodes_[0]->wellFormed();
+  if (node == types::kError) {
+    return types::kError;
+  }
+  if (node != types::kBool) {
+    nodes_[0] = std::shared_ptr<ExprAST>(new BoolCastExprAST(nodes_[0]));
+  }
+  return types::kBool;
+}
 
 Value *PrintExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -195,7 +248,12 @@ Value *PrintExprAST::codegen() const {
   Builder.CreateCall(libc::print, args_v, "printCall");
   return l;
 }
-bool PrintExprAST::wellFormed() { return false; }
+types::LemurTypes PrintExprAST::wellFormed() {
+  if(nodes_[0]->wellFormed() == types::kError) {
+    return types::kError;
+  }
+  return types::LemurTypes::kNone;
+}
 
 Value *DeclAssignExprAST::codegen() const {
   VarDeclExprAST decl(type_, name_);
@@ -203,13 +261,11 @@ Value *DeclAssignExprAST::codegen() const {
   SetExprAST set(nodes_[0], name_);
   return set.codegen();
 }
-bool DeclAssignExprAST::wellFormed() { return false; }
+types::LemurTypes DeclAssignExprAST::wellFormed() {
+  return types::LemurTypes::kNone;
+}
 
 Value *VarDeclExprAST::codegen() const {
-  if (named_values.isInCurrentScope(name_)) {
-    cerr << "Variable " << name_ << " already defined" << endl;
-    return nullptr;
-  }
   Function *F = Builder.GetInsertBlock()->getParent();
   llvm::Type *t = types::getType(type_);
   if (!t) {
@@ -226,7 +282,15 @@ Value *VarDeclExprAST::codegen() const {
   named_values.set(name_, Alloca);
   return Alloca;
 }
-bool VarDeclExprAST::wellFormed() { return false; }
+types::LemurTypes VarDeclExprAST::wellFormed() {
+  if (named_analysis_values.isInCurrentScope(name_)) {
+    log::err("Variable "s + name_ + " already defined"s);
+    return types::kError;
+  }
+  auto type = types::getLemurType(type_);
+  named_analysis_values.set(name_, type);
+  return types::kError;
+}
 
 Value *SetExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -239,7 +303,9 @@ Value *SetExprAST::codegen() const {
   }
   return Builder.CreateStore(l, el);
 }
-bool SetExprAST::wellFormed() { return false; }
+types::LemurTypes SetExprAST::wellFormed() {
+
+}
 
 Value *SeqExprAST::codegen() const {
   named_values.pushScope();
@@ -255,7 +321,7 @@ Value *SeqExprAST::codegen() const {
   return tmp;
 }
 void SeqExprAST::add(shared_ptr<ExprAST> node) { nodes_.push_back(node); }
-bool SeqExprAST::wellFormed() { return false; }
+types::LemurTypes SeqExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *FileAST::codegen() const {
   named_values.pushScope();
@@ -266,7 +332,7 @@ Value *FileAST::codegen() const {
   named_values.popScope();
   return tmp;
 }
-bool FileAST::wellFormed() { return SeqExprAST::wellFormed(); }
+types::LemurTypes FileAST::wellFormed() { return SeqExprAST::wellFormed(); }
 
 Value *FunctionDefAST::codegen() const {
   vector<Type *> tmp;
@@ -351,7 +417,9 @@ Value *FunctionDefAST::codegen() const {
 }
 
 std::string FunctionDefAST::getName() const { return name_; }
-bool FunctionDefAST::wellFormed() { return false; }
+types::LemurTypes FunctionDefAST::wellFormed() {
+  return types::LemurTypes::kError;
+}
 
 Value *CallExprAST::codegen() const {
   Function *f = TheModule->getFunction(callee_);
@@ -375,7 +443,9 @@ Value *CallExprAST::codegen() const {
 
   return Builder.CreateCall(f, ArgsV, "calltmp");
 }
-bool CallExprAST::wellFormed() { return false; }
+types::LemurTypes CallExprAST::wellFormed() {
+  return types::LemurTypes::kError;
+}
 
 Value *MethodCallExprAST::codegen() const {
   Value *tmp = named_values[name_];
@@ -414,7 +484,9 @@ Value *MethodCallExprAST::codegen() const {
 
   return Builder.CreateCall(f, ArgsV, "methodcalltmp");
 }
-bool MethodCallExprAST::wellFormed() { return false; }
+types::LemurTypes MethodCallExprAST::wellFormed() {
+  return types::LemurTypes::kError;
+}
 
 Value *AddExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -432,7 +504,7 @@ Value *AddExprAST::codegen() const {
   Value *dC = types::floatCast(d);
   return Builder.CreateFAdd(lC, dC, "addtmp");
 }
-bool AddExprAST::wellFormed() { return false; }
+types::LemurTypes AddExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *SubExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -450,7 +522,7 @@ Value *SubExprAST::codegen() const {
   Value *dC = types::floatCast(d);
   return Builder.CreateFSub(lC, dC, "subtmp");
 }
-bool SubExprAST::wellFormed() { return false; }
+types::LemurTypes SubExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *MulExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -468,7 +540,7 @@ Value *MulExprAST::codegen() const {
   Value *dC = types::floatCast(d);
   return Builder.CreateFMul(lC, dC, "multmp");
 }
-bool MulExprAST::wellFormed() { return false; }
+types::LemurTypes MulExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *DivExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -486,7 +558,7 @@ Value *DivExprAST::codegen() const {
   Value *dC = types::floatCast(d);
   return Builder.CreateFDiv(lC, dC, "divtmp");
 }
-bool DivExprAST::wellFormed() { return false; }
+types::LemurTypes DivExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *LtExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -504,7 +576,7 @@ Value *LtExprAST::codegen() const {
   Value *dC = types::floatCast(d);
   return Builder.CreateFCmpOLT(lC, dC, "lttmp");
 }
-bool LtExprAST::wellFormed() { return false; }
+types::LemurTypes LtExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *GtExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -522,7 +594,7 @@ Value *GtExprAST::codegen() const {
   Value *dC = types::floatCast(d);
   return Builder.CreateFCmpOGT(lC, dC, "lttmp");
 }
-bool GtExprAST::wellFormed() { return false; }
+types::LemurTypes GtExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *EqExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -540,7 +612,7 @@ Value *EqExprAST::codegen() const {
   Value *dC = types::floatCast(d);
   return Builder.CreateFCmpOEQ(lC, dC, "eqtmp");
 }
-bool EqExprAST::wellFormed() { return false; }
+types::LemurTypes EqExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *NeqExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -558,7 +630,7 @@ Value *NeqExprAST::codegen() const {
   Value *dC = types::floatCast(d);
   return Builder.CreateFCmpONE(lC, dC, "netmp");
 }
-bool NeqExprAST::wellFormed() { return false; }
+types::LemurTypes NeqExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *LteExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -576,7 +648,7 @@ Value *LteExprAST::codegen() const {
   Value *dC = types::floatCast(d);
   return Builder.CreateFCmpOLE(lC, dC, "letmp");
 }
-bool LteExprAST::wellFormed() { return false; }
+types::LemurTypes LteExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *GteExprAST::codegen() const {
   Value *l = nodes_[0]->codegen();
@@ -594,7 +666,7 @@ Value *GteExprAST::codegen() const {
   Value *dC = types::floatCast(d);
   return Builder.CreateFCmpOGE(lC, dC, "getmp");
 }
-bool GteExprAST::wellFormed() { return false; }
+types::LemurTypes GteExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *WhileExprAST::codegen() const {
   Function *f = Builder.GetInsertBlock()->getParent();
@@ -628,7 +700,9 @@ Value *WhileExprAST::codegen() const {
 
   return ConstantInt::get(TheContext, APInt(1, 0));
 }
-bool WhileExprAST::wellFormed() { return false; }
+types::LemurTypes WhileExprAST::wellFormed() {
+  return types::LemurTypes::kError;
+}
 
 Value *IfExprAST::codegen() const {
   Function *f = Builder.GetInsertBlock()->getParent();
@@ -661,7 +735,7 @@ Value *IfExprAST::codegen() const {
   Builder.SetInsertPoint(mergeBB);
   return ConstantInt::get(TheContext, APInt(1, 0));
 }
-bool IfExprAST::wellFormed() { return false; }
+types::LemurTypes IfExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 Value *IfElseExprAST::codegen() const {
   Function *f = Builder.GetInsertBlock()->getParent();
@@ -710,7 +784,9 @@ Value *IfElseExprAST::codegen() const {
 
   return ConstantInt::get(TheContext, APInt(32, 0));
 }
-bool IfElseExprAST::wellFormed() { return false; }
+types::LemurTypes IfElseExprAST::wellFormed() {
+  return types::LemurTypes::kError;
+}
 
 Value *RetExprAST::codegen() const {
   Function *f = Builder.GetInsertBlock()->getParent();
@@ -728,7 +804,7 @@ Value *RetExprAST::codegen() const {
   }
   return Builder.CreateRet(ret);
 }
-bool RetExprAST::wellFormed() { return false; }
+types::LemurTypes RetExprAST::wellFormed() { return types::LemurTypes::kError; }
 
 AllocaInst *CreateEntryBlockAlloca(Type *t, Function *the_function,
                                    const std::string &var_name) {
@@ -761,7 +837,9 @@ Value *StringExprAST::codegen() const {
   return llvm::ConstantExpr::getBitCast(globalDeclaration,
                                         charType->getPointerTo());
 }
-bool StringExprAST::wellFormed() { return false; }
+types::LemurTypes StringExprAST::wellFormed() {
+  return types::LemurTypes::kError;
+}
 
 Value *ClassDefExprAST::codegen() const {
   if (types::type_table.find(name_) != types::type_table.end()) {
@@ -791,5 +869,23 @@ Value *ClassDefExprAST::codegen() const {
   }
   return nullptr;
 }
-bool ClassDefExprAST::wellFormed() { return false; }
+types::LemurTypes ClassDefExprAST::wellFormed() {
+  return types::LemurTypes::kError;
+}
+CastExprAST::CastExprAST(const shared_ptr<ExprAST> &a) : InnerExprAST(a) {}
+
+BoolCastExprAST::BoolCastExprAST(const shared_ptr<ExprAST> &a)
+    : CastExprAST(a) {}
+
+Value *BoolCastExprAST::codegen() const {
+  Value *expr = nodes_[0]->codegen();
+  return types::boolCast(expr);
+}
+types::LemurTypes BoolCastExprAST::wellFormed() { return types::kBool; }
+
+Value *FloatCastExprAST::codegen() const {
+  Value *expr = nodes_[0]->codegen();
+  return types::floatCast(expr);
+}
+types::LemurTypes FloatCastExprAST::wellFormed() { return types::kFloat; }
 }  // namespace backend

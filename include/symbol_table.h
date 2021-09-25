@@ -27,8 +27,8 @@ class SymbolTable {
   T operator[](const std::string& name) {
     auto searchScope = currentScope;
     while (searchScope) {
-      auto it = searchScope->symbols.find(name);
-      if (it != searchScope->symbols.end()) {
+      auto it = searchScope->variables.find(name);
+      if (it != searchScope->variables.end()) {
         return it->second;
       }
       searchScope = searchScope->parent;
@@ -36,11 +36,11 @@ class SymbolTable {
     return T();
   }
   void set(const std::string& name, T val) {
-    currentScope->symbols[name] = val;
+    currentScope->variables[name] = val;
   }
   T get(const std::string& name) { return operator[](name); }
   bool isInCurrentScope(const std::string& name) {
-    return currentScope->symbols.find(name) != currentScope->symbols.end();
+    return currentScope->variables.find(name) != currentScope->variables.end();
   }
   void clear() { currentScope = nullptr; }
   void swapLastTwo() {
@@ -54,7 +54,8 @@ class SymbolTable {
  private:
   struct Scope {
     std::shared_ptr<Scope> parent;
-    std::map<std::string, T> symbols;
+    std::map<std::string, T> variables;
+    std::map<std::string, std::shared_ptr<llvm::Function>> functions;
     static std::shared_ptr<Scope> get() { return std::make_shared<Scope>(); };
     explicit Scope() = default;
     explicit Scope(Scope* parent_) : parent(std::make_shared<Scope>(parent_)) {}

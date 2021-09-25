@@ -8,6 +8,7 @@
 #include "ast_builder.h"
 #include "ast_core.h"
 #include "context.h"
+#include "logger.h"
 #include "parser_error_listener.h"
 
 int main(int argc, char* argv[]) {
@@ -17,11 +18,12 @@ int main(int argc, char* argv[]) {
   std::basic_istream<char>* source;
   std::ifstream infile;
   if (argc > 1) {
-    infile.open(argv[1]);
+    infile.open(argv[argc - 1]);
     source = &infile;
   } else {
     source = &std::cin;
   }
+  backend::log::logLevel = backend::log::lWarn;
   std::string str((std::istreambuf_iterator<char>(*source)),
                   std::istreambuf_iterator<char>());
 
