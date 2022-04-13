@@ -55,7 +55,7 @@ Statically typed.
 
 Weakly typed.
 
-Class objects are passed by reference.
+Objects are passed by reference.
 
 Built-in types: `int`, `float`, `bool`, `string`
 
